@@ -6,3 +6,7 @@ folium
 streamlit-folium
 matplotlib
 anyio 
+geopy
+shapely
+rapidfuzz
+openpyxl
