@@ -10,3 +10,4 @@ geopy
 shapely
 rapidfuzz
 openpyxl
+plotly
