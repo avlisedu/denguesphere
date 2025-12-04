@@ -1,7 +1,8 @@
 import streamlit as st
+from i18n import t
 
 # ============================================================
-# ESTILO VISUAL
+# ESTILO VISUAL  
 # ============================================================
 st.markdown("""
 <style>
@@ -34,39 +35,22 @@ h1, h2, h3 {
 # ============================================================
 # CONTEÚDO
 # ============================================================
-st.title("Sobre o DengueSphere")
+st.title(t("about_title"))
 
-st.markdown("""
+st.markdown(f"""
 <div class="info-box">
-    <p><strong>DengueSphere</strong> é uma plataforma interativa desenvolvida para 
-    apoiar a análise, o tratamento e a visualização de dados geográficos relacionados à dengue. 
-    Seu objetivo é facilitar a integração de informações, o mapeamento de áreas de risco 
-    e o suporte à tomada de decisões estratégicas no controle da doença.</p>
+    {t("about_infobox")}
 </div>
 """, unsafe_allow_html=True)
 
-st.subheader("Equipe de desenvolvimento")
-st.markdown("""
-- **Eduardo da Silva** — Doutorando do Programa de Pós-Graduação em Engenharia de Produção (PPGEP/UFPE) - (2025 - Atual) 
-- **Profa. Dra. Maísa Mendonça Silva** — Orientadora, Docente Permanente do PPGEP/UFPE  
-- **Grupo de Pesquisa em Sistemas de Informação e Decisão (GPSID)** — PPGEP/UFPE  
-""")
+st.subheader(t("about_team_header"))
+st.markdown(t("about_team_list"))
 
-st.subheader("Objetivos principais")
-st.markdown("""
-- Integrar dados geográficos e epidemiológicos.  
-- Permitir análises espaciais e temporais de casos de dengue.  
-- Apoiar gestores públicos e pesquisadores na tomada de decisão.  
-- Disponibilizar ferramentas modulares, incluindo:
-  - Tratamento de CEP e Geocodificação  
-  - Clusterização geográfica  
-  - Visualização interativa em mapas
-  - Análises estatísticas
-""")
+st.subheader(t("about_objectives_header"))
+st.markdown(t("about_objectives_list"))
 
-st.markdown("""
+st.markdown(f"""
 <div class="footer-box">
-    Versão 1.0 – Desenvolvido por Eduardo da Silva sob orientação da Profa. Dra. Maísa Mendonça Silva.<br>
-    Grupo de Pesquisa em Sistemas de Informação e Decisão (GPSID) – PPGEP/UFPE.
+    {t("about_footer")}
 </div>
 """, unsafe_allow_html=True)

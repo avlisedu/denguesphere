@@ -8,7 +8,7 @@ from folium import Polygon, Circle
 from streamlit_folium import st_folium
 import plotly.express as px
 from datetime import datetime
-
+from i18n import t
 
 st.markdown("""
 <style>
@@ -23,7 +23,7 @@ h1 {
 </style>
 """, unsafe_allow_html=True)
 
-st.title("Clusterização Geográfica de Casos de Dengue")
+st.title(t("cluster_title"))
 
 # ------------------------------------------------------------
 # FUNÇÕES AUXILIARES
@@ -93,7 +93,7 @@ def desenhar_clusters(mapa, df, cores, eps_km):
 # ------------------------------------------------------------
 # UPLOAD E PRÉ-PROCESSAMENTO
 # ------------------------------------------------------------
-uploaded_file = st.file_uploader("Selecione um arquivo CSV ou XLSX", type=["csv", "xlsx"])
+uploaded_file = st.file_uploader(t("cluster_upload_label"), type=["csv", "xlsx"])
 
 if uploaded_file:
     # leitura 
@@ -106,7 +106,7 @@ if uploaded_file:
     df.rename(columns={"lat": "latitude", "long": "longitude"}, inplace=True)
 
     if "dt_notificacao" not in df.columns:
-        st.error("A base precisa conter a coluna 'dt_notificacao'.")
+        st.error(t("cluster_error_dt"))
         st.stop()
 
     # adiciona colunas epidemiológicas
@@ -116,33 +116,32 @@ if uploaded_file:
     # --------------------------------------------------------
     # PARÂMETROS DBSCAN
     # --------------------------------------------------------
-    st.sidebar.header("Parâmetros DBSCAN")
+    st.sidebar.header(t("cluster_sidebar_header"))
 
     eps_km = st.sidebar.slider(
-        "EPS (distância em quilômetros)",
+        t("cluster_eps_label"),
         min_value=0.05,
         max_value=5.0,
         value=0.3,
         step=0.05,
-        help="Define o raio máximo de vizinhança entre casos (em quilômetros). "
-             "Valores menores detectam microáreas; valores maiores agrupam bairros próximos."
+        help=t("cluster_eps_help")
     )
     eps = eps_km / 6371.0088  # conversão para radianos
 
-    min_samples = st.sidebar.slider("Mínimo de pontos por cluster", 2, 20, 5, 1)
+    min_samples = st.sidebar.slider(t("cluster_min_samples_label"), 2, 20, 5, 1)
 
     anos_disp = sorted(df["ano_epi"].dropna().unique())
-    ano_sel = st.sidebar.selectbox("Ano epidemiológico", anos_disp)
+    ano_sel = st.sidebar.selectbox(t("cluster_year_label"), anos_disp)
 
     semanas_disp = sorted(df.loc[df["ano_epi"] == ano_sel, "semana_epi"].dropna().unique())
     semanas_sel = st.sidebar.multiselect(
-        "Semanas epidemiológicas", semanas_disp, default=semanas_disp[:1]
+        t("cluster_weeks_label"), semanas_disp, default=semanas_disp[:1]
     )
 
     df_filtro = df[(df["ano_epi"] == ano_sel) & (df["semana_epi"].isin(semanas_sel))].copy()
 
     if df_filtro.empty:
-        st.warning("Não há registros para o período selecionado.")
+        st.warning(t("cluster_warning_empty_period"))
         st.stop()
 
     # --------------------------------------------------------
@@ -165,13 +164,16 @@ if uploaded_file:
 
     desenhar_clusters(mapa, df_cluster, cores, eps_km)
 
-    st.markdown(f"### Ano: {ano_sel} | Semanas selecionadas: {', '.join(semanas_sel)}")
+    semanas_str = ", ".join(semanas_sel)
+    st.markdown(
+        "### " + t("cluster_header_period").format(year=ano_sel, weeks=semanas_str)
+    )
     st_folium(mapa, width=1200, height=650)
 
     # --------------------------------------------------------
     # ESTATÍSTICAS
     # --------------------------------------------------------
-    st.markdown("### Estatísticas Descritivas dos Clusters")
+    st.markdown("### " + t("cluster_stats_title"))
 
     if df_cluster["cluster"].max() >= 0:
         resumo = (
@@ -191,13 +193,13 @@ if uploaded_file:
         with col1:
             st.dataframe(resumo, hide_index=True, use_container_width=True)
         with col2:
-            st.metric("Clusters identificados", len(resumo))
-            st.metric("Pontos isolados (ruído)", int((df_cluster["cluster"] == -1).sum()))
+            st.metric(t("cluster_metric_n_clusters"), len(resumo))
+            st.metric(t("cluster_metric_noise"), int((df_cluster["cluster"] == -1).sum()))
 
         # --------------------------------------------------------
         # ESTATÍSTICAS COMPLEMENTARES
         # --------------------------------------------------------
-        st.markdown("#### Estatísticas Complementares dos Clusters")
+        st.markdown("#### " + t("cluster_stats_comp_title"))
         total_casos = resumo["N_Casos"].sum()
         maior_cluster = resumo.loc[resumo["N_Casos"].idxmax(), "cluster"]
         maior_qtd = resumo["N_Casos"].max()
@@ -207,19 +209,19 @@ if uploaded_file:
 
         colA, colB, colC = st.columns(3)
         with colA:
-            st.metric("Total de Casos Agrupados", int(total_casos))
-            st.metric("Maior Cluster (ID)", int(maior_cluster))
+            st.metric(t("cluster_metric_total_cases"), int(total_casos))
+            st.metric(t("cluster_metric_biggest_cluster_id"), int(maior_cluster))
         with colB:
-            st.metric("Casos no Maior Cluster", int(maior_qtd))
-            st.metric("Média de Casos/Cluster", f"{media_cluster:.2f}")
+            st.metric(t("cluster_metric_biggest_cluster_cases"), int(maior_qtd))
+            st.metric(t("cluster_metric_mean_cases"), f"{media_cluster:.2f}")
         with colC:
-            st.metric("Mediana de Casos/Cluster", f"{mediana_cluster:.2f}")
-            st.metric("Desvio Padrão", f"{desvio_cluster:.2f}")
+            st.metric(t("cluster_metric_median_cases"), f"{mediana_cluster:.2f}")
+            st.metric(t("cluster_metric_sd_cases"), f"{desvio_cluster:.2f}")
 
         # --------------------------------------------------------
         # GRÁFICOS
         # --------------------------------------------------------
-        st.markdown("#### Distribuição de Casos por Cluster")
+        st.markdown("#### " + t("cluster_plot_cases_bar_title"))
         fig_bar = px.bar(
             resumo,
             x="cluster",
@@ -227,14 +229,17 @@ if uploaded_file:
             color="N_Casos",
             color_continuous_scale="Blues",
             text="N_Casos",
-            labels={"cluster": "Cluster", "N_Casos": "Número de Casos"},
-            title="Distribuição de Casos por Cluster"
+            labels={
+                "cluster": t("cluster_plot_cases_bar_x"),
+                "N_Casos": t("cluster_plot_cases_bar_y")
+            },
+            title=t("cluster_plot_cases_bar_title")
         )
         fig_bar.update_traces(textposition="outside", marker_line_color="black", marker_line_width=1)
         fig_bar.update_layout(showlegend=False, plot_bgcolor="white", paper_bgcolor="white")
         st.plotly_chart(fig_bar, use_container_width=True)
 
-        st.markdown("#### Pontos Focais (Latitude e Longitude Médias)")
+        st.markdown("#### " + t("cluster_plot_centers_title"))
         fig_scatter = px.scatter(
             resumo,
             x="Lon_Média", y="Lat_Média",
@@ -242,14 +247,17 @@ if uploaded_file:
             color="cluster",
             color_continuous_scale="Viridis",
             hover_name="Semanas",
-            labels={"Lon_Média": "Longitude Média", "Lat_Média": "Latitude Média"},
-            title="Centros Geográficos dos Clusters"
+            labels={
+                "Lon_Média": t("cluster_plot_centers_x"),
+                "Lat_Média": t("cluster_plot_centers_y")
+            },
+            title=t("cluster_plot_centers_title")
         )
         fig_scatter.update_traces(marker=dict(line=dict(width=1, color='black')))
         fig_scatter.update_layout(plot_bgcolor="white", paper_bgcolor="white")
         st.plotly_chart(fig_scatter, use_container_width=True)
 
-        st.markdown("#### Evolução de Casos por Semana Epidemiológica")
+        st.markdown("#### " + t("cluster_plot_trend_title"))
         df_cluster["semana_num"] = df_cluster["semana_epi"].str.extract(r"S(\d+)").astype(float)
         tendencia = (
             df_cluster.groupby(["semana_num", "semana_epi"])
@@ -262,8 +270,11 @@ if uploaded_file:
             x="semana_epi",
             y="Casos",
             markers=True,
-            title="Tendência de Casos por Semana Epidemiológica",
-            labels={"semana_epi": "Semana Epidemiológica", "Casos": "Número de Casos"},
+            title=t("cluster_plot_trend_title"),
+            labels={
+                "semana_epi": t("cluster_plot_trend_x"),
+                "Casos": t("cluster_plot_trend_y")
+            },
             line_shape="spline",
             color_discrete_sequence=["#E53935"]
         )
@@ -272,11 +283,11 @@ if uploaded_file:
         st.plotly_chart(fig_line, use_container_width=True)
 
     else:
-        st.info("Nenhum cluster identificado para os parâmetros atuais.")
+        st.info(t("cluster_info_no_clusters"))
 else:
-    st.info("Carregue a base de dados para iniciar.")
+    st.info(t("cluster_info_upload_start"))
 
 # ------------------------------------------------------------
 # RODAPÉ
 # ------------------------------------------------------------
-st.info("Versão 1.0 – Desenvolvido pelo Grupo de Pesquisa em Sistemas de Informação e Decisão (GPSID) - PPGEP/UFPE.")
+st.info(t("cluster_footer"))

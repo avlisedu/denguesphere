@@ -4,6 +4,7 @@ from geopy.geocoders import Nominatim
 from rapidfuzz import process, fuzz
 import unicodedata, re
 from time import sleep
+from i18n import t
 
 st.markdown("""
 <style>
@@ -21,37 +22,31 @@ h1 {
 # ============================================================
 # CONFIGURAÇÃO GERAL
 # ============================================================
-st.title("Tratamento de CEP e Geocodificação")
+st.title(t("coords_title"))
 
-st.write(
-    """
-    Esta ferramenta permite:
-    - Escolher colunas com CEP, Rua e Bairro de qualquer planilha Excel  
-    - Corrigir nomes de ruas automaticamente (fuzzy matching)  
-    - Obter coordenadas geográficas via OpenStreetMap (Nominatim)  
-    - Gerar e baixar um arquivo Excel com os resultados geocodificados
-    """
-)
+st.write(t("coords_intro"))
 
 # ============================================================
 # UPLOAD DE ARQUIVO
 # ============================================================
-uploaded_file = st.file_uploader("Selecione o arquivo Excel (.xlsx)", type=["xlsx"])
+uploaded_file = st.file_uploader(t("coords_uploader_label"), type=["xlsx"])
 
 if uploaded_file is not None:
     df = pd.read_excel(uploaded_file)
-    st.success(f"Arquivo carregado com {len(df)} linhas e {len(df.columns)} colunas.")
+    st.success(
+        t("coords_file_loaded").format(n_rows=len(df), n_cols=len(df.columns))
+    )
 
-    st.subheader("Selecione as colunas correspondentes")
+    st.subheader(t("coords_select_columns_subheader"))
 
     # Seletores dinâmicos de colunas
     col1, col2, col3 = st.columns(3)
     with col1:
-        cep_col = st.selectbox("Coluna do CEP", options=df.columns)
+        cep_col = st.selectbox(t("coords_select_cep"), options=df.columns)
     with col2:
-        rua_col = st.selectbox("Coluna do nome da rua/logradouro", options=df.columns)
+        rua_col = st.selectbox(t("coords_select_rua"), options=df.columns)
     with col3:
-        bairro_col = st.selectbox("Coluna do bairro", options=df.columns)
+        bairro_col = st.selectbox(t("coords_select_bairro"), options=df.columns)
 
     # ============================================================
     # 1. Função de normalização de texto
@@ -129,8 +124,8 @@ if uploaded_file is not None:
     # ============================================================
     # 5. Executar processamento
     # ============================================================
-    if st.button("Iniciar Geocodificação"):
-        st.info("Processando endereços, isso pode levar alguns minutos dependendo da base...")
+    if st.button(t("coords_button_start")):
+        st.info(t("coords_processing_info"))
         progress_bar = st.progress(0)
         results = []
 
@@ -139,7 +134,7 @@ if uploaded_file is not None:
             progress_bar.progress((i + 1) / len(df))
 
         progress_bar.empty()
-        st.success("Geocodificação concluída.")
+        st.success(t("coords_processing_done"))
 
         # Resultado final
         df[['CEP_processado', 'latitude', 'longitude', 'bairro_utilizado']] = pd.DataFrame(results)
@@ -152,11 +147,11 @@ if uploaded_file is not None:
         df.to_excel(output_file, index=False)
         with open(output_file, "rb") as f:
             st.download_button(
-                label="Baixar arquivo Excel",
+                label=t("coords_download_button"),
                 data=f,
                 file_name=output_file,
                 mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             )
 
 else:
-    st.info("Envie um arquivo Excel para começar.")
+    st.info(t("coords_no_file_info"))

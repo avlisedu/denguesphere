@@ -1,7 +1,7 @@
 import streamlit as st
 import base64
 from pathlib import Path
-
+from i18n import t
 
 # ======================================
 # CONFIGURAÇÃO DE ESTILO
@@ -49,7 +49,6 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-
 logo_path = Path("img/logo.png")
 if logo_path.exists():
     st.markdown(f"""
@@ -58,37 +57,19 @@ if logo_path.exists():
     </div>
     """, unsafe_allow_html=True)
 else:
-    st.warning("Logo não encontrada. Coloque o arquivo **logo.png** na pasta raiz do projeto.")
+    st.warning(t("coords_logo_warning"))
 
-
-st.markdown("""
+st.markdown(f"""
 <div class="content">
-    <h2><strong>DengueSphere v1.0</strong></h2>
-    <p><em>Sistema Interativo de Clusterização Espacial da Dengue</em></p>
+    <h2><strong>{t("home_title_h2")}</strong></h2>
+    <p><em>{t("home_subtitle")}</em></p>
 </div>
 """, unsafe_allow_html=True)
 
 st.markdown("---")
 
-st.header("Bem-vindo ao DengueSphere v1.0")
+st.header(t("home_welcome_header"))
 
-st.markdown("""
-O **DengueSphere** é uma plataforma interativa para análise espacial e clusterização de casos de dengue,
-baseada no algoritmo **DBSCAN (Density-Based Spatial Clustering)**.
+st.markdown(t("home_main_text"))
 
-Com o sistema, é possível:
-
-- Carregar bases de dados geográficas (latitude, longitude e data);
-- Definir parâmetros de clusterização;
-- Visualizar agrupamentos em mapas interativos;
-- Gerar estatísticas de distribuição dos clusters.
-
-> **Dica:** Caso sua base **não possua coordenadas geográficas**, utilize o módulo **"Coordenadas por CEP"** para **gerar as coordenadas automaticamente**, **baixar a base atualizada** e depois **inseri-la no módulo "Clusterizador"**.  
-> Dependendo do tamanho da base e da taxa de requisições, o processo pode **levar alguns minutos**.
-
-Utilize o menu no topo para navegar entre as seções.
-""")
-
-st.info(
-    "Versão atual: 1.0 – Desenvolvido pelo Grupo de Pesquisa em Sistemas de Informação e Decisão (GPSID) - PPGEP/UFPE."
-)
+st.info(t("home_footer_info"))
