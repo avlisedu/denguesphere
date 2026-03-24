@@ -6,7 +6,7 @@ from i18n import t, lang_selector
 # CONFIGURAÇÃO GERAL DO SISTEMA
 # ======================================
 st.set_page_config(
-    page_title="DengueSphere v1.0",
+    page_title="DengueSphere - Web App",
     page_icon=str(Path("img/barra.png")),
     layout="wide",
 )
@@ -27,9 +27,8 @@ st.markdown(
 )
 
 # ======================================
-# SELETOR DE IDIOMA — FIXO NO TOPO
+# SELETOR DE IDIOMA
 # ======================================
-# Seletor precisa vir ANTES da navegação
 lang_area = st.empty()
 with lang_area:
     lang_selector()

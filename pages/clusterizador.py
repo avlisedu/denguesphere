@@ -9,6 +9,9 @@ from streamlit_folium import st_folium
 import plotly.express as px
 from datetime import datetime
 from i18n import t
+from sklearn.metrics import silhouette_score, silhouette_samples
+from sklearn.metrics import adjusted_rand_score
+
 
 st.markdown("""
 <style>
@@ -286,6 +289,206 @@ if uploaded_file:
         st.info(t("cluster_info_no_clusters"))
 else:
     st.info(t("cluster_info_upload_start"))
+
+
+# --------------------------------------------------------
+# ESTABILIDADE (ARI) - ROBUSTEZ A PEQUENAS VARIAÇÕES DE PARÂMETROS
+# --------------------------------------------------------
+def avaliar_estabilidade_ari(df_base, eps_base, min_samples_base, eps_fatores=(0.9, 1.1), delta_minpts=(-1, +1)):
+    """
+    Compara a clusterização base com pequenas variações de eps e min_samples usando ARI.
+    Importante: df_base precisa ter a mesma ordem de linhas em todas as execuções.
+    """
+    # garante ordem estável
+    df_base = df_base.sort_index()
+
+    df_ref = executar_clusterizacao(df_base.copy(), eps_base, min_samples_base).sort_index()
+    labels_ref = df_ref["cluster"].to_numpy()
+
+    resultados = []
+
+    # variações em eps
+    for f in eps_fatores:
+        eps_var = eps_base * f
+        df_var = executar_clusterizacao(df_base.copy(), eps_var, min_samples_base).sort_index()
+        ari = adjusted_rand_score(labels_ref, df_var["cluster"].to_numpy())
+        resultados.append(("eps", f"{f:.2f}×", ari))
+
+    # variações em min_samples
+    for d in delta_minpts:
+        m_var = min_samples_base + d
+        if m_var >= 2:
+            df_var = executar_clusterizacao(df_base.copy(), eps_base, m_var).sort_index()
+            ari = adjusted_rand_score(labels_ref, df_var["cluster"].to_numpy())
+            resultados.append(("min_samples", f"{m_var}", ari))
+
+    return resultados
+
+# ------------------------------------------------------------
+# ANÁLISE AVANÇADA DE QUALIDADE E ESTABILIDADE DOS CLUSTERS
+# ------------------------------------------------------------
+
+st.markdown("## Análise técnica do clustering")
+st.caption(
+    "Seção voltada à validação metodológica do modelo. "
+    "Para uso técnico, pesquisa e apoio à interpretação dos agrupamentos."
+)
+
+mostrar_analise_avancada = st.toggle(
+    "Mostrar análise avançada (Silhouette e ARI)",
+    value=False,
+    key="toggle_analise_avancada"
+)
+
+if mostrar_analise_avancada:
+
+    # segurança: df_cluster precisa existir
+    if "df_cluster" not in locals():
+        st.info(t("cluster_info_silhouette_not_defined"))
+    else:
+        # ignora ruídos
+        df_sil = df_cluster[df_cluster["cluster"] != -1].copy()
+
+        # precisa de pelo menos 2 clusters
+        if df_sil["cluster"].nunique() < 2:
+            st.info(t("cluster_info_silhouette_not_defined"))
+        else:
+            coords_rad = np.radians(df_sil[["latitude", "longitude"]].values)
+            labels = df_sil["cluster"].values
+
+            silhouette_global = silhouette_score(
+                coords_rad,
+                labels,
+                metric="haversine"
+            )
+
+            df_sil["silhouette"] = silhouette_samples(
+                coords_rad,
+                labels,
+                metric="haversine"
+            )
+
+            # ------------------------------------------------------------
+            # BLOCO 1 - SILHOUETTE
+            # ------------------------------------------------------------
+            with st.container(border=True):
+                st.markdown("### Qualidade dos clusters (Silhouette)")
+                st.caption(
+                    "Avalia o quão bem cada ponto está associado ao seu próprio cluster "
+                    "em comparação com os demais."
+                )
+
+                colS1, colS2 = st.columns([1, 2], gap="large")
+
+                with colS1:
+                    st.metric("Silhouette média", f"{silhouette_global:.3f}")
+
+                    if silhouette_global >= 0.70:
+                        st.success("Separação muito boa entre os clusters.")
+                    elif silhouette_global >= 0.50:
+                        st.info("Boa estrutura de agrupamento, com separação razoável.")
+                    elif silhouette_global >= 0.30:
+                        st.warning("Estrutura moderada, com alguma sobreposição entre clusters.")
+                    else:
+                        st.error("Baixa separação entre clusters.")
+
+                with colS2:
+                    st.write(
+                        "Valores mais altos indicam agrupamentos mais coesos e melhor "
+                        "separação entre grupos. Em dados espaciais reais, valores moderados "
+                        "já podem representar uma estrutura útil de organização territorial."
+                    )
+
+                st.markdown("#### Distribuição da silhouette por cluster")
+
+                fig_sil = px.box(
+                    df_sil,
+                    x="cluster",
+                    y="silhouette",
+                    points="all",
+                    labels={
+                        "cluster": "Cluster",
+                        "silhouette": "Silhouette"
+                    }
+                )
+
+                fig_sil.update_layout(
+                    plot_bgcolor="white",
+                    paper_bgcolor="white",
+                    margin=dict(l=20, r=20, t=20, b=20),
+                    title=None
+                )
+
+                st.plotly_chart(fig_sil, use_container_width=True)
+
+            # ------------------------------------------------------------
+            # BLOCO 2 - ARI
+            # ------------------------------------------------------------
+            with st.container(border=True):
+                st.markdown("### Estabilidade do clustering (ARI)")
+                st.caption(
+                    "Compara a solução base com pequenas variações de ε e MinPts "
+                    "no mesmo período, verificando a robustez da estrutura encontrada."
+                )
+
+                if "mostrar_ari" not in st.session_state:
+                    st.session_state["mostrar_ari"] = False
+
+                colA1, colA2 = st.columns([1, 3], gap="large")
+
+                with colA1:
+                    if st.button(
+                        "Calcular estabilidade",
+                        use_container_width=True,
+                        type="primary",
+                        key="btn_calcular_ari"
+                    ):
+                        st.session_state["mostrar_ari"] = True
+
+                with colA2:
+                    st.write(
+                        "Esse teste é útil para verificar se pequenas mudanças nos parâmetros "
+                        "alteram significativamente a solução de clustering."
+                    )
+
+                if st.session_state["mostrar_ari"]:
+                    with st.spinner("Calculando estabilidade do clustering..."):
+                        resultados_ari = avaliar_estabilidade_ari(
+                            df_validos,
+                            eps,
+                            min_samples
+                        )
+
+                    if resultados_ari:
+                        melhor_ari = max(ari for _, _, ari in resultados_ari)
+
+                        st.markdown("#### Resultados")
+                        cols_ari = st.columns(len(resultados_ari))
+
+                        for col, (param, var, ari) in zip(cols_ari, resultados_ari):
+                            with col:
+                                destaque = "Melhor resultado" if ari == melhor_ari else ""
+                                st.metric(
+                                    label=f"{param} = {var}",
+                                    value=f"{ari:.3f}",
+                                    delta=destaque if destaque else None
+                                )
+
+                        st.markdown("#### Interpretação")
+                        if melhor_ari >= 0.80:
+                            st.success(
+                                "Alta estabilidade: a solução de clustering se manteve robusta "
+                                "mesmo com pequenas variações dos parâmetros."
+                            )
+                        elif melhor_ari >= 0.65:
+                            st.info(
+                                "Estabilidade moderada: a estrutura geral dos clusters foi preservada, "
+                                "com pequenas variações."
+                            )
+                        else:
+                            st.warning(
+                                "Baixa estabilidade: os clusters parecem sensíveis aos parâmetros adotados."
+                            )
 
 # ------------------------------------------------------------
 # RODAPÉ

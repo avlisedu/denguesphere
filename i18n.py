@@ -9,7 +9,7 @@ TRANSLATIONS = {
         # ---------------- Globais / Navegação ----------------
         "app_title": "DengueSphere v1.0",
         "nav_home": "Início",
-        "nav_coords": "Gerar Coordenadas por CEP",
+        "nav_coords": "Coordenadas",
         "nav_cluster": "Clusterizador",
         "nav_about": "Sobre o Projeto",
         "lang_label": "Idioma / Language",
@@ -125,6 +125,38 @@ Esta ferramenta permite:
         "cluster_info_no_clusters": "Nenhum cluster identificado para os parâmetros atuais.",
         "cluster_info_upload_start": "Carregue a base de dados para iniciar.",
         "cluster_footer": "Versão 1.0 – Desenvolvido pelo Grupo de Pesquisa em Sistemas de Informação e Decisão (GPSID) - PPGEP/UFPE.",
+    
+            # ---------------- Análise Avançada / Validação ----------------
+        "cluster_advanced_title": "Análise técnica do clustering",
+        "cluster_advanced_caption": "Seção voltada à validação metodológica do modelo. Para uso técnico, pesquisa e apoio à interpretação dos agrupamentos.",
+        "cluster_advanced_toggle": "Mostrar análise avançada (Silhouette e ARI)",
+        "cluster_info_silhouette_not_defined": "A análise de Silhouette não pode ser calculada para a configuração atual.",
+
+        # ---------------- Silhouette ----------------
+        "cluster_silhouette_title": "Qualidade dos clusters (Silhouette)",
+        "cluster_silhouette_caption": "Avalia o quão bem cada ponto está associado ao seu próprio cluster em comparação com os demais.",
+        "cluster_silhouette_metric": "Silhouette média",
+        "cluster_silhouette_interp_high": "Separação muito boa entre os clusters.",
+        "cluster_silhouette_interp_good": "Boa estrutura de agrupamento, com separação razoável.",
+        "cluster_silhouette_interp_mid": "Estrutura moderada, com alguma sobreposição entre clusters.",
+        "cluster_silhouette_interp_low": "Baixa separação entre clusters.",
+        "cluster_silhouette_explanation": "Valores mais altos indicam agrupamentos mais coesos e melhor separação entre grupos. Em dados espaciais reais, valores moderados já podem representar uma estrutura útil de organização territorial.",
+        "cluster_silhouette_dist_title": "Distribuição da silhouette por cluster",
+        "cluster_silhouette_label_cluster": "Cluster",
+        "cluster_silhouette_label_value": "Silhouette",
+
+        # ---------------- ARI ----------------
+        "cluster_ari_title": "Estabilidade do clustering (ARI)",
+        "cluster_ari_caption": "Compara a solução base com pequenas variações de ε e MinPts no mesmo período, verificando a robustez da estrutura encontrada.",
+        "cluster_ari_button": "Calcular estabilidade",
+        "cluster_ari_help": "Esse teste é útil para verificar se pequenas mudanças nos parâmetros alteram significativamente a solução de clustering.",
+        "cluster_ari_spinner": "Calculando estabilidade do clustering...",
+        "cluster_ari_results_title": "Resultados",
+        "cluster_ari_best_result": "Melhor resultado",
+        "cluster_ari_interp_title": "Interpretação",
+        "cluster_ari_interp_high": "Alta estabilidade: a solução de clustering se manteve robusta mesmo com pequenas variações dos parâmetros.",
+        "cluster_ari_interp_mid": "Estabilidade moderada: a estrutura geral dos clusters foi preservada, com pequenas variações.",
+        "cluster_ari_interp_low": "Baixa estabilidade: os clusters parecem sensíveis aos parâmetros adotados.",
     },
 
     "en": {
@@ -246,6 +278,37 @@ This tool allows you to:
         "cluster_info_no_clusters": "No clusters identified for the current parameters.",
         "cluster_info_upload_start": "Upload a dataset to start.",
         "cluster_footer": "Version 1.0 – Developed by the Information and Decision Systems Research Group (GPSID) - PPGEP/UFPE.",
+            # ---------------- Advanced Analysis / Validation ----------------
+        "cluster_advanced_title": "Technical clustering analysis",
+        "cluster_advanced_caption": "Section intended for methodological validation of the model. For technical use, research, and support in interpreting the identified clusters.",
+        "cluster_advanced_toggle": "Show advanced analysis (Silhouette and ARI)",
+        "cluster_info_silhouette_not_defined": "Silhouette analysis cannot be calculated for the current configuration.",
+
+        # ---------------- Silhouette ----------------
+        "cluster_silhouette_title": "Cluster quality (Silhouette)",
+        "cluster_silhouette_caption": "Evaluates how well each point is associated with its own cluster compared with the others.",
+        "cluster_silhouette_metric": "Average silhouette",
+        "cluster_silhouette_interp_high": "Very good separation between clusters.",
+        "cluster_silhouette_interp_good": "Good clustering structure, with reasonable separation.",
+        "cluster_silhouette_interp_mid": "Moderate structure, with some overlap between clusters.",
+        "cluster_silhouette_interp_low": "Low separation between clusters.",
+        "cluster_silhouette_explanation": "Higher values indicate more cohesive groupings and better separation between groups. In real spatial data, moderate values may already represent a useful territorial organization structure.",
+        "cluster_silhouette_dist_title": "Silhouette distribution by cluster",
+        "cluster_silhouette_label_cluster": "Cluster",
+        "cluster_silhouette_label_value": "Silhouette",
+
+        # ---------------- ARI ----------------
+        "cluster_ari_title": "Clustering stability (ARI)",
+        "cluster_ari_caption": "Compares the baseline solution with small variations in ε and MinPts for the same period, checking the robustness of the identified structure.",
+        "cluster_ari_button": "Calculate stability",
+        "cluster_ari_help": "This test is useful to verify whether small changes in the parameters significantly alter the clustering solution.",
+        "cluster_ari_spinner": "Calculating clustering stability...",
+        "cluster_ari_results_title": "Results",
+        "cluster_ari_best_result": "Best result",
+        "cluster_ari_interp_title": "Interpretation",
+        "cluster_ari_interp_high": "High stability: the clustering solution remained robust even with small parameter variations.",
+        "cluster_ari_interp_mid": "Moderate stability: the general cluster structure was preserved, with small variations.",
+        "cluster_ari_interp_low": "Low stability: the clusters appear to be sensitive to the adopted parameters.",
     },
 }
 

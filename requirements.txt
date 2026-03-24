@@ -11,3 +11,4 @@ shapely
 rapidfuzz
 openpyxl
 plotly
+pyarrow
