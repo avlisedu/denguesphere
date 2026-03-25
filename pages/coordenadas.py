@@ -63,6 +63,11 @@ if uploaded_file is not None:
         texto = re.sub(r'\s+', ' ', texto).strip()
         return texto
 
+    def limpar_cep(valor):
+        if pd.isna(valor):
+            return ""
+        return re.sub(r"\D", "", str(valor))
+
     # ============================================================
     # 2. Preparação da base
     # ============================================================
@@ -91,35 +96,77 @@ if uploaded_file is not None:
     # ============================================================
     def get_coordinates(row):
         bairro = normalizar_texto(row[bairro_col])
-        rua_raw = normalizar_texto(row[rua_col])
-        cep = str(row[cep_col]).split('.')[0] if pd.notna(row[cep_col]) else ""
+        rua = normalizar_texto(row[rua_col])
+        cep = limpar_cep(row[cep_col])
+        rua_corrigida = corrigir_nome_rua(rua)
+        cache_key = f"cep:{cep}|rua:{rua_corrigida}|bairro:{bairro}"
 
-        rua_corrigida = corrigir_nome_rua(rua_raw)
-        chave = f"{rua_corrigida}_{bairro}"
+        def build_payload(latitude=None, longitude=None, tipo_match="nao_encontrado"):
+            return {
+                "CEP_processado": cep,
+                "latitude": latitude,
+                "longitude": longitude,
+                "bairro_utilizado": bairro,
+                "tipo_match": tipo_match,
+            }
 
-        # Cache para otimizar consultas repetidas
-        if chave in cache:
-            return pd.Series([cep, *cache[chave], bairro])
+        if cache_key in cache:
+            return cache[cache_key].copy()
 
-        tentativas = [
-            f"{rua_corrigida}, {bairro}, Brasil",
-            f"rua {rua_corrigida}, {bairro}, Brasil",
-            f"travessa {rua_corrigida}, {bairro}, Brasil",
-            f"avenida {rua_corrigida}, {bairro}, Brasil"
-        ]
+        def tentar_geocodificar(consultas, tipo_match):
+            for consulta in consultas:
+                try:
+                    location = geolocator.geocode(consulta, timeout=10)
+                    sleep(1)
+                    if location:
+                        return build_payload(
+                            latitude=location.latitude,
+                            longitude=location.longitude,
+                            tipo_match=tipo_match,
+                        )
+                except Exception:
+                    sleep(1)
+                    continue
+            return None
 
-        for endereco in tentativas:
-            try:
-                location = geolocator.geocode(endereco, timeout=10)
-                sleep(1)
-                if location:
-                    lat, lon = location.latitude, location.longitude
-                    cache[chave] = (lat, lon, "endereco_exato")
-                    return pd.Series([cep, lat, lon, bairro])
-            except Exception:
-                continue
+        if cep:
+            resultado = tentar_geocodificar(
+                [
+                    f"{cep}, Brasil",
+                    f"CEP {cep}, Brasil",
+                ],
+                "cep",
+            )
+            if resultado:
+                cache[cache_key] = resultado.copy()
+                return resultado
 
-        return pd.Series([cep, None, None, bairro])
+        if rua_corrigida and bairro:
+            resultado = tentar_geocodificar(
+                [
+                    f"{rua_corrigida}, {bairro}, Recife, Pernambuco, Brasil",
+                    f"rua {rua_corrigida}, {bairro}, Recife, Pernambuco, Brasil",
+                    f"avenida {rua_corrigida}, {bairro}, Recife, Pernambuco, Brasil",
+                    f"travessa {rua_corrigida}, {bairro}, Recife, Pernambuco, Brasil",
+                ],
+                "rua_bairro",
+            )
+            if resultado:
+                cache[cache_key] = resultado.copy()
+                return resultado
+
+        if bairro:
+            resultado = tentar_geocodificar(
+                [f"{bairro}, Recife, Pernambuco, Brasil"],
+                "bairro",
+            )
+            if resultado:
+                cache[cache_key] = resultado.copy()
+                return resultado
+
+        resultado = build_payload(tipo_match="nao_encontrado")
+        cache[cache_key] = resultado.copy()
+        return resultado
 
     # ============================================================
     # 5. Executar processamento
@@ -128,16 +175,35 @@ if uploaded_file is not None:
         st.info(t("coords_processing_info"))
         progress_bar = st.progress(0)
         results = []
+        required_columns = [
+            "CEP_processado",
+            "latitude",
+            "longitude",
+            "bairro_utilizado",
+            "tipo_match",
+        ]
 
         for i, row in df.iterrows():
-            results.append(get_coordinates(row))
+            result = get_coordinates(row)
+            if not isinstance(result, dict):
+                st.error(f"Resultado invalido na linha {i + 1}.")
+                result = {column: None for column in required_columns}
+            results.append(result)
             progress_bar.progress((i + 1) / len(df))
 
         progress_bar.empty()
         st.success(t("coords_processing_done"))
 
-        # Resultado final
-        df[['CEP_processado', 'latitude', 'longitude', 'bairro_utilizado']] = pd.DataFrame(results)
+        results_df = pd.DataFrame(results)
+        for column in required_columns:
+            if column not in results_df.columns:
+                results_df[column] = None
+        results_df = results_df[required_columns]
+
+        df = pd.concat(
+            [df.reset_index(drop=True), results_df.reset_index(drop=True)],
+            axis=1,
+        )
         st.dataframe(df.head())
 
         # ============================================================
