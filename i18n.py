@@ -48,7 +48,7 @@ e o suporte à tomada de decisões estratégicas no controle da doença.
 """,
         "about_team_header": "Equipe de desenvolvimento",
         "about_team_list": """
-- **Eduardo da Silva** — Doutorando do Programa de Pós-Graduação em Engenharia de Produção (PPGEP/UFPE) - (2025 - Atual) 
+- **Eduardo da Silva** — Doutorando do Programa de Pós-Graduação em Engenharia de Produção (PPGEP/UFPE) - (2025 - Atual) <eduardo.es@ufpe.br>
 - **Profa. Dra. Maísa Mendonça Silva** — Orientadora, Docente Permanente do PPGEP/UFPE  
 - **Grupo de Pesquisa em Sistemas de Informação e Decisão (GPSID)** — PPGEP/UFPE  
 """,
