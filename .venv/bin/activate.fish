@@ -33,7 +33,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV '/Users/eduardo/Library/CloudStorage/GoogleDrive-eduardo.avlis15@gmail.com/Meu Drive/PPGEP-UFPE/DOUTORADO/Artigos/MMS. DengueSphere - SAD and Papers/gpsid-dbscan/.venv'
+set -gx VIRTUAL_ENV '/Users/eduardo/Downloads/denguesphere/.venv'
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/"bin $PATH

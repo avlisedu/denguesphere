@@ -201,7 +201,7 @@ the mapping of risk areas, and to support strategic decision-making in disease c
 """,
         "about_team_header": "Development team",
         "about_team_list": """
-- **Eduardo da Silva** — PhD student, Graduate Program in Production Engineering (PPGEP/UFPE) - (2025 - Present) 
+- **Eduardo da Silva** — PhD student, Graduate Program in Production Engineering (PPGEP/UFPE) - (2025 - Present) <eduardo.es@ufpe.br>
 - **Prof. Maísa Mendonça Silva, PhD** — Supervisor, permanent faculty member of PPGEP/UFPE  
 - **Information and Decision Systems Research Group (GPSID)** — PPGEP/UFPE  
 """,
