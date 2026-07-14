@@ -1,7 +1,13 @@
 import axios from "axios";
 
+// In production (Render Static Site), VITE_API_URL points at the deployed
+// Node backend, e.g. https://denguesphere-api.onrender.com. Locally it's
+// unset, so apiRoot is "" and requests hit /api, which vite.config.js
+// proxies to http://127.0.0.1:3001 during `npm run dev`.
+const apiRoot = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
+
 const api = axios.create({
-  baseURL: "/api",
+  baseURL: `${apiRoot}/api`,
   timeout: 120_000,
 });
 
