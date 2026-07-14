@@ -19,7 +19,7 @@ TRANSLATIONS = {
         # ---------------- Página Home ----------------
         "home_title_h2": "DengueSphere v1.0",
         "home_subtitle": "Sistema Interativo de Clusterização Espacial da Dengue",
-        "home_welcome_header": "Bem-vindo ao DengueSphere v1.0",
+        "home_welcome_header": "Bem-vindo ao DengueSphere",
         "home_main_text": """
 O **DengueSphere** é uma plataforma interativa para análise espacial e clusterização de casos de dengue,
 baseada no algoritmo **DBSCAN (Density-Based Spatial Clustering)**.
