@@ -1,0 +1,223 @@
+:root {
+  color-scheme: light;
+
+  /* surfaces */
+  --bg: #f2f5f3;
+  --surface: #ffffff;
+  --border: #e2e6e3;
+  --border-strong: #cfd6d2;
+
+  /* text */
+  --text: #1c2321;
+  --text-dim: #55605b;
+  --text-mute: #838f89;
+
+  /* brand (teal-green) */
+  --brand: #0e6b52;
+  --brand-dark: #0b5340;
+  --brand-light: #e5f2ec;
+  --brand-rgb: 14, 107, 82;
+
+  /* signal colors */
+  --danger: #c0392b;
+  --danger-light: #fbebe9;
+  --warning: #b8860b;
+  --warning-light: #fbf3df;
+  --success: #0e6b52;
+  --success-light: #e5f2ec;
+  --info: #2563a8;
+  --info-light: #e8f1fa;
+
+  --font-body: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+
+  --radius-sm: 8px;
+  --radius: 12px;
+  --radius-lg: 16px;
+
+  --shadow-card: 0 1px 2px rgba(20, 30, 25, 0.04), 0 1px 8px rgba(20, 30, 25, 0.04);
+
+  font: 15px/1.55 var(--font-body);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: var(--font-body);
+  color: var(--text);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.5em;
+}
+
+p {
+  color: var(--text-dim);
+}
+
+a {
+  color: var(--brand);
+  text-decoration: none;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 24px 0;
+}
+
+small {
+  color: var(--text-mute);
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  border-bottom: 1px solid var(--border);
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 0.87rem;
+}
+
+th {
+  color: var(--text-mute);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  background: #fafbfa;
+}
+
+tbody tr:hover {
+  background: #fafbfa;
+}
+
+td {
+  color: var(--text-dim);
+}
+
+/* ---------- buttons ---------- */
+
+button {
+  font-family: var(--font-body);
+  background: var(--brand);
+  color: #fff;
+  border: 1px solid var(--brand);
+  border-radius: var(--radius-sm);
+  padding: 10px 18px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+button:hover:not(:disabled) {
+  background: var(--brand-dark);
+  border-color: var(--brand-dark);
+}
+
+button:disabled {
+  background: #e2e6e3;
+  border-color: #e2e6e3;
+  color: var(--text-mute);
+  cursor: not-allowed;
+}
+
+button.btn-ghost {
+  background: #fff;
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+}
+
+button.btn-ghost:hover:not(:disabled) {
+  background: #fafbfa;
+  border-color: var(--border-strong);
+}
+
+/* ---------- form controls ---------- */
+
+select,
+input[type="text"],
+input[type="file"] {
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  padding: 9px 12px;
+  color: var(--text);
+  background: #fff;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+}
+
+select:focus,
+input:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(var(--brand-rgb), 0.14);
+}
+
+input[type="file"] {
+  color: var(--text-dim);
+}
+
+select[multiple] {
+  padding: 4px;
+}
+
+select[multiple] option {
+  padding: 6px 8px;
+  border-radius: 6px;
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 5px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--brand) 0%, var(--brand) var(--fill, 50%), var(--border) var(--fill, 50%));
+  outline: none;
+  margin: 6px 0;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--brand);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--brand);
+  cursor: pointer;
+}
+
+input[type="range"]::-moz-range-track {
+  height: 5px;
+  border-radius: 999px;
+  background: var(--border);
+}
+
+input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  accent-color: var(--brand);
+}
+
