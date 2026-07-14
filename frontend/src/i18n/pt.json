@@ -40,6 +40,7 @@
   "coords_title": "Tratamento de CEP e Geocodificação",
   "coords_intro": "Esta ferramenta permite:\n- Escolher colunas com CEP, Rua e Bairro de qualquer planilha Excel\n- Corrigir nomes de ruas automaticamente (fuzzy matching)\n- Obter coordenadas geográficas via OpenStreetMap (Nominatim)\n- Gerar e baixar um arquivo Excel com os resultados geocodificados",
   "coords_uploader_label": "Selecione o arquivo Excel (.xlsx) ou CSV",
+  "coords_loading_preview": "Lendo o arquivo... Isso pode levar até um minuto se o servidor estiver iniciando.",
   "coords_file_loaded": "Arquivo carregado com {{n_rows}} linhas e {{n_cols}} colunas.",
   "coords_select_columns_subheader": "Selecione as colunas correspondentes",
   "coords_select_cep": "Coluna do CEP",
@@ -55,6 +56,7 @@
 
   "cluster_title": "Clusterização Geográfica de Casos de Dengue",
   "cluster_upload_label": "Selecione um arquivo CSV ou XLSX",
+  "cluster_loading_periods": "Lendo o arquivo e carregando os períodos disponíveis... Isso pode levar até um minuto se o servidor estiver iniciando.",
   "cluster_error_dt": "A base precisa conter a coluna 'dt_notificacao'.",
   "cluster_sidebar_header": "Parâmetros DBSCAN",
   "cluster_button_apply": "Aplicar",

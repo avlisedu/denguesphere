@@ -37,6 +37,7 @@ export default function Clusterizador() {
   const [error, setError] = useState(null);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [stabilityLoading, setStabilityLoading] = useState(false);
+  const [loadingPeriods, setLoadingPeriods] = useState(false);
 
   async function handleFileChange(e) {
     const selected = e.target.files?.[0];
@@ -46,6 +47,7 @@ export default function Clusterizador() {
     setFile(selected ?? null);
     if (!selected) return;
 
+    setLoadingPeriods(true);
     try {
       const data = await fetchClusterPeriods(selected);
       setPeriods(data.periods);
@@ -54,6 +56,8 @@ export default function Clusterizador() {
       setSemanas(first ? first.semanas.slice(0, 1) : []);
     } catch (err) {
       setError(err.response?.data?.detail ?? err.message);
+    } finally {
+      setLoadingPeriods(false);
     }
   }
 
@@ -129,6 +133,10 @@ export default function Clusterizador() {
       </label>
 
       {error && <div className="alert alert-error">{error}</div>}
+
+      {loadingPeriods && (
+        <div className="alert alert-info">{t("cluster_loading_periods")}</div>
+      )}
 
       {periods && (
         <div className="cluster-layout">
@@ -486,7 +494,7 @@ export default function Clusterizador() {
         </div>
       )}
 
-      {!periods && <div className="alert alert-info">{t("cluster_info_upload_start")}</div>}
+      {!file && <div className="alert alert-info">{t("cluster_info_upload_start")}</div>}
     </div>
   );
 }

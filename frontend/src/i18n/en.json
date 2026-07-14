@@ -40,6 +40,7 @@
   "coords_title": "ZIP Code Processing and Geocoding",
   "coords_intro": "This tool allows you to:\n- Choose columns with ZIP Code, Street and Neighborhood from any Excel spreadsheet\n- Automatically correct street names (fuzzy matching)\n- Obtain geographic coordinates via OpenStreetMap (Nominatim)\n- Generate and download an Excel file with geocoded results",
   "coords_uploader_label": "Select the Excel (.xlsx) or CSV file",
+  "coords_loading_preview": "Reading the file... This can take up to a minute if the server is starting up.",
   "coords_file_loaded": "File loaded with {{n_rows}} rows and {{n_cols}} columns.",
   "coords_select_columns_subheader": "Select the corresponding columns",
   "coords_select_cep": "ZIP Code column",
@@ -55,6 +56,7 @@
 
   "cluster_title": "Geographical Clustering of Dengue Cases",
   "cluster_upload_label": "Select a CSV or XLSX file",
+  "cluster_loading_periods": "Reading the file and loading available periods... This can take up to a minute if the server is starting up.",
   "cluster_error_dt": "The dataset must contain the 'dt_notificacao' column.",
   "cluster_sidebar_header": "DBSCAN Parameters",
   "cluster_button_apply": "Apply",

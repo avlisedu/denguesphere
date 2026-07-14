@@ -19,6 +19,7 @@ export default function Coordenadas() {
   const [progress, setProgress] = useState(null); // { processed, total }
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
+  const [loadingPreview, setLoadingPreview] = useState(false);
   const activeJobRef = useRef(null);
 
   useEffect(() => () => { activeJobRef.current = null; }, []);
@@ -33,6 +34,7 @@ export default function Coordenadas() {
     setFile(selected ?? null);
     if (!selected) return;
 
+    setLoadingPreview(true);
     try {
       const data = await fetchCoordsPreview(selected);
       setPreview(data);
@@ -41,6 +43,8 @@ export default function Coordenadas() {
       setBairroCol(data.columns[2] ?? data.columns[0] ?? "");
     } catch (err) {
       setError(err.response?.data?.detail ?? err.message);
+    } finally {
+      setLoadingPreview(false);
     }
   }
 
@@ -96,6 +100,10 @@ export default function Coordenadas() {
       </label>
 
       {error && <div className="alert alert-error">{error}</div>}
+
+      {loadingPreview && (
+        <div className="alert alert-info">{t("coords_loading_preview")}</div>
+      )}
 
       {preview && (
         <>
