@@ -300,6 +300,51 @@
 .alert-error { background: var(--danger-light); color: var(--danger); border-color: #f2d3ce; }
 .alert-info { background: var(--info-light); color: var(--info); border-color: #cfe0f0; }
 
+.alert-loading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ================= spinner / indeterminate loading ================= */
+
+.spinner {
+  flex-shrink: 0;
+  animation: spin 0.85s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-card {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding: 22px 26px;
+  margin: 16px 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  color: var(--brand-dark);
+}
+
+.loading-card .spinner {
+  color: var(--brand);
+}
+
+.loading-card strong {
+  display: block;
+  margin-bottom: 2px;
+}
+
+.loading-card p {
+  margin: 0;
+  color: var(--text-dim);
+  font-size: 0.87rem;
+}
+
 /* ================= shared: uploads / metrics / tables ================= */
 
 .file-input {
@@ -422,6 +467,49 @@
   font-size: 0.65rem;
   color: var(--text-mute);
 }
+
+.caption {
+  color: var(--text-mute);
+  font-size: 0.84rem;
+  margin: -6px 0 12px;
+}
+
+.map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin: -10px 0 22px;
+}
+
+.map-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+.map-legend-item i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.match-badge {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.match-badge.match-cep { background: var(--success-light); color: var(--success); }
+.match-badge.match-rua_bairro { background: var(--info-light); color: var(--info); }
+.match-badge.match-bairro { background: #fdecd8; color: #c96a10; }
+.match-badge.match-nao_encontrado { background: #eef0ef; color: var(--text-mute); }
+.match-badge.match-erro_geocodificacao { background: var(--danger-light); color: var(--danger); }
 
 /* ================= clusterizador dashboard ================= */
 

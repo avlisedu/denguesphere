@@ -6,6 +6,7 @@ import "leaflet/dist/leaflet.css";
 
 import { fetchClusterPeriods, runCluster } from "../api/client";
 import { chartLayout, plotConfig } from "../utils/plotTheme";
+import Spinner from "../components/Spinner";
 
 const CORES = [
   "#C62828", "#1565C0", "#2E7D32", "#EF6C00", "#6A1B9A",
@@ -125,7 +126,12 @@ export default function Clusterizador() {
 
   return (
     <div className="page page-clusterizador">
-      <h1>{t("cluster_title")}</h1>
+      <div className="page-header">
+        <div>
+          <span className="page-eyebrow">{t("cluster_hero_badge")}</span>
+          <h1>{t("cluster_title")}</h1>
+        </div>
+      </div>
 
       <label className="file-input">
         {t("cluster_upload_label")}
@@ -135,7 +141,10 @@ export default function Clusterizador() {
       {error && <div className="alert alert-error">{error}</div>}
 
       {loadingPeriods && (
-        <div className="alert alert-info">{t("cluster_loading_periods")}</div>
+        <div className="alert alert-info alert-loading">
+          <Spinner size={14} />
+          {t("cluster_loading_periods")}
+        </div>
       )}
 
       {periods && (
@@ -204,11 +213,22 @@ export default function Clusterizador() {
             </label>
 
             <button disabled={processing || !semanas.length} onClick={() => handleProcess(false)}>
-              {processing ? "..." : t("cluster_button_apply")}
+              {processing && <Spinner size={14} />}
+              {t("cluster_button_apply")}
             </button>
           </aside>
 
           <main className="cluster-main">
+            {processing && !result && (
+              <div className="loading-card">
+                <Spinner size={40} />
+                <div>
+                  <strong>{t("cluster_processing_title")}</strong>
+                  <p>{t("cluster_processing_info")}</p>
+                </div>
+              </div>
+            )}
+
             {result && (
               <h3>
                 {t("cluster_header_period", { year: ano, weeks: semanas.join(", ") })}
@@ -454,9 +474,20 @@ export default function Clusterizador() {
                         <h4>{t("cluster_ari_title")}</h4>
                         <p className="caption">{t("cluster_ari_caption")}</p>
                         <button disabled={stabilityLoading} onClick={() => handleProcess(true)}>
+                          {stabilityLoading && <Spinner size={14} />}
                           {stabilityLoading ? t("cluster_ari_spinner") : t("cluster_ari_button")}
                         </button>
                         <p>{t("cluster_ari_help")}</p>
+
+                        {stabilityLoading && (
+                          <div className="loading-card">
+                            <Spinner size={32} />
+                            <div>
+                              <strong>{t("cluster_ari_spinner")}</strong>
+                              <p>{t("cluster_ari_help")}</p>
+                            </div>
+                          </div>
+                        )}
 
                         {result.stability && (
                           <>
