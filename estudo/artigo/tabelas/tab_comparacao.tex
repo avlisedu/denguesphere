@@ -1,0 +1,22 @@
+\begin{table*}[htbp]
+\centering
+\small
+\caption{Validação prospectiva: DBSCAN ($\varepsilon$ = 0,3 km, min\_samples = 3) e métodos de referência na previsão dos casos das 4 semanas seguintes (medianas por janela com alerta).}
+\label{tab:comparacao}
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{lrrrrrrr}
+\toprule
+& \multicolumn{2}{c}{Treino} & \multicolumn{5}{c}{Teste (2020--2025)} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-8}
+Método & PAI & PAI$_\text{pop}$ & Capt. \% & Área \% & Pop. \% & PAI [IIQ] & PAI$_\text{pop}$ [IIQ] \\
+\midrule
+\textbf{DBSCAN (DengueSphere)} & 4,86 & 2,13 & 13,3 & 1,77 & 4,11 & 4,73 [3,54--7,97] & 2,14 [1,58--3,42] \\
+KDE (mesma área) & 5,38 & 2,32 & 15,7 & 1,77 & 4,25 & 5,52 [3,97--8,65] & 2,34 [1,72--3,63] \\
+Ranking de bairros (incidência) & 2,53 & 1,82 & 9,7 & 3,28 & 3,63 & 2,16 [1,31--3,64] & 2,13 [1,54--3,16] \\
+População (mesma área) & 3,04 & 0,81 & 6,6 & 1,77 & 9,86 & 3,22 [2,28--4,03] & 0,70 [0,41--0,96] \\
+Todos os casos (sem clusterizar) & 3,20 & 1,54 & 45,0 & 11,85 & 24,20 & 3,37 [2,72--4,14] & 1,68 [1,34--1,99] \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\par\smallskip\begin{minipage}{0.95\linewidth}\footnotesize PAI = captura/\% da área; PAI$_\text{pop}$ = captura/\% da população residente (Censo 2022) na área sinalizada. KDE: células com maior densidade kernel ($\sigma$ = $\varepsilon$) até a mesma área do DBSCAN. Ranking de bairros: bairros inteiros por incidência (casos/habitante) na janela até atingir a área do DBSCAN. População: células mais populosas, com a mesma área do DBSCAN, sem informação de casos. Todos os casos: buffer de raio $\varepsilon$ em torno de todos os casos da janela, sem clusterização.\end{minipage}
+\end{table*}

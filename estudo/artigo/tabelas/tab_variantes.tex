@@ -1,0 +1,20 @@
+\begin{table*}[htbp]
+\centering
+\small
+\caption{Análise de sensibilidade da validação prospectiva (2013--2025, configuração principal; medianas nas janelas com alerta).}
+\label{tab:variantes}
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{lrrrrrrrr}
+\toprule
+& & & & \multicolumn{2}{c}{DBSCAN} & \multicolumn{3}{c}{PAI$_\text{pop}$ das referências} \\
+\cmidrule(lr){5-6}\cmidrule(lr){7-9}
+Variante & Janelas & Alerta \% & Capt. \% & PAI & PAI$_\text{pop}$ & KDE & Bairros & População \\
+\midrule
+Principal: confirmados, nível de rua & 593 & 91 & 15,1 & 4,79 & 2,14 & 2,33 & 2,00 & 0,75 \\
+Não descartados (tempo real), nível de rua & 595 & 91 & 15,1 & 4,64 & 2,05 & 2,26 & 1,90 & 0,78 \\
+Confirmados, incluindo centroides de bairro & 606 & 95 & 17,6 & 5,33 & 2,41 & 2,68 & 2,17 & 0,78 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\par\smallskip\begin{minipage}{0.95\linewidth}\footnotesize Não descartados: confirmados, inconclusivos e sem classificação final --- o conjunto disponível à vigilância antes do encerramento das investigações. Com centroides de bairro, casos empilhados no mesmo ponto formam clusters artificiais, o que infla a captura.\end{minipage}
+\end{table*}

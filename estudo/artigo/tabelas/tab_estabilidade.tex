@@ -1,0 +1,27 @@
+\begin{table}[htbp]
+\centering
+\small
+\caption{Estabilidade dos agrupamentos: ARI mediano entre a solução de referência e a solução perturbada.}
+\label{tab:estabilidade}
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{rrrrrrrr}
+\toprule
+eps (km) & min\_samples & Janelas & eps $\times$0,9 & eps $\times$1,1 & min\_samples $-$1 & min\_samples $+$1 & Subamostra 90\% \\
+\midrule
+0,20 & 3 & 128 & 0,90 & 0,89 & 0,50 & 0,65 & 0,93 \\
+0,20 & 5 & 78 & 0,88 & 0,91 & 0,78 & 0,76 & 0,91 \\
+0,20 & 10 & 41 & 0,88 & 0,90 & 0,93 & 0,91 & 0,92 \\
+0,30 & 3 & 136 & 0,89 & 0,88 & 0,52 & 0,65 & 0,92 \\
+0,30 & 5 & 94 & 0,87 & 0,89 & 0,79 & 0,81 & 0,92 \\
+0,30 & 10 & 53 & 0,86 & 0,88 & 0,93 & 0,93 & 0,93 \\
+0,50 & 3 & 148 & 0,86 & 0,86 & 0,61 & 0,68 & 0,92 \\
+0,50 & 5 & 124 & 0,83 & 0,86 & 0,79 & 0,77 & 0,92 \\
+0,50 & 10 & 68 & 0,84 & 0,80 & 0,91 & 0,94 & 0,93 \\
+0,75 & 3 & 153 & 0,83 & 0,86 & 0,82 & 0,79 & 0,93 \\
+0,75 & 5 & 140 & 0,80 & 0,88 & 0,80 & 0,80 & 0,92 \\
+0,75 & 10 & 88 & 0,79 & 0,87 & 0,93 & 0,94 & 0,93 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\par\smallskip\begin{minipage}{0.95\linewidth}\footnotesize ARI: índice de Rand ajustado (1 = partições idênticas). Perturbações de parâmetros calculadas com \texttt{stability\_analysis} do DengueSphere; subamostra: 10 réplicas por janela, ARI sobre os casos retidos. Excluídas as janelas sem cluster na referência, em que o ARI seria 1 trivialmente.\end{minipage}
+\end{table}

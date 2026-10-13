@@ -1,0 +1,29 @@
+\begin{table}[htbp]
+\centering
+\small
+\caption{Distância entre a geocodificação local (OSM) e a do DengueSphere (Nominatim) na amostra de 2021 ($n = 1.219$).}
+\label{tab:validacao}
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{llrrrrrr}
+\toprule
+Nominatim & Local (OSM) & $n$ & Mediana (m) & P90 (m) & $\leq$250 m & $\leq$500 m & $\leq$1 km \\
+\midrule
+Endereço exato & Centroide do bairro & 60 & 298 & 1.103 & 35,0 & 65,0 & 86,7 \\
+ & Rua no bairro & 794 & 55 & 278 & 88,5 & 95,1 & 98,7 \\
+ & Rua em bairro vizinho & 11 & 158 & 489 & 63,6 & 90,9 & 100,0 \\
+\addlinespace
+Fallback bairro & Centroide do bairro & 61 & 276 & 840 & 42,6 & 88,5 & 90,2 \\
+ & Rua no bairro & 148 & 471 & 1.056 & 25,0 & 52,7 & 87,2 \\
+ & Rua em bairro vizinho & 9 & 1.279 & 1.872 & 0,0 & 0,0 & 44,4 \\
+\addlinespace
+Fallback bairro corrigido & Centroide do bairro & 9 & 513 & 1.609 & 0,0 & 33,3 & 88,9 \\
+ & Rua no bairro & 31 & 1.156 & 2.371 & 6,5 & 16,1 & 41,9 \\
+\addlinespace
+Rua sem bairro & Centroide do bairro & 31 & 5.497 & 23.520 & 0,0 & 0,0 & 0,0 \\
+ & Rua no bairro & 16 & 6.138 & 12.549 & 0,0 & 0,0 & 0,0 \\
+ & Rua em bairro vizinho & 41 & 102 & 317 & 82,9 & 90,2 & 92,7 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\par\smallskip\begin{minipage}{0.95\linewidth}\footnotesize Colunas $\leq$: percentual de casos a até a distância indicada. Categorias com $n < 9$ omitidas.\end{minipage}
+\end{table}

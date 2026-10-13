@@ -1,0 +1,18 @@
+\begin{table*}[htbp]
+\centering
+\small
+\caption{Parâmetros escolhidos no treino para cada nível de incidência e seu desempenho no teste.}
+\label{tab:guia}
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{lrrrrrrrrr}
+\toprule
+Incidência (casos/4 sem.) & $\varepsilon$ & min\_s. & Alerta treino \% & Alerta teste \% & PAI treino & PAI teste & PAI KDE teste & PAI$_\text{pop}$ teste & Área teste \% \\
+\midrule
+Baixa ($<$100) & 0,5 & 3 & 88 & 99 & 4,06 & 4,72 & 4,85 & 2,21 & 3,49 \\
+Média (100--400) & 0,2 & 5 & 80 & 62 & 12,00 & 12,78 & 16,47 & 4,59 & 0,13 \\
+Alta ($>$400) & 0,2 & 10 & 94 & 85 & 4,74 & 6,15 & 8,19 & 2,34 & 0,43 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\par\smallskip\begin{minipage}{0.95\linewidth}\footnotesize Mesmo critério de escolha da Tabela~\ref{tab:grade}, aplicado dentro de cada estrato.\end{minipage}
+\end{table*}

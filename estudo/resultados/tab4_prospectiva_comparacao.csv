@@ -1,0 +1,11 @@
+conjunto,metodo,janelas,pct_alerta,captura_med,area_med,pai_med,pai_p25,pai_p75,pop_med,pai_pop_med,pai_pop_p25,pai_pop_p75
+teste,DBSCAN (DengueSphere),285,97.19,12.39,1.74,4.73,3.54,7.97,4.04,2.14,1.58,3.42
+teste,KDE (mesma área),277,100.0,15.66,1.77,5.52,3.97,8.65,4.25,2.34,1.72,3.63
+teste,População (mesma área),277,100.0,6.61,1.77,3.22,2.28,4.03,9.86,0.7,0.41,0.96
+teste,Ranking de bairros,277,100.0,9.72,3.28,2.16,1.31,3.64,3.63,2.13,1.54,3.16
+teste,Todos os casos (sem clusterizar),277,100.0,44.96,11.85,3.37,2.72,4.14,24.2,1.68,1.34,1.99
+treino,DBSCAN (DengueSphere),308,85.06,12.29,1.31,4.86,2.79,7.77,3.2,2.13,1.32,3.16
+treino,KDE (mesma área),262,100.0,20.82,2.21,5.38,2.92,9.03,5.38,2.32,1.35,3.43
+treino,População (mesma área),262,100.0,8.58,2.21,3.04,2.12,4.14,11.8,0.81,0.43,1.01
+treino,Ranking de bairros,262,100.0,16.07,3.52,2.53,1.45,4.14,4.66,1.82,1.28,2.86
+treino,Todos os casos (sem clusterizar),262,100.0,46.71,13.98,3.2,2.56,3.91,28.89,1.54,1.28,1.82

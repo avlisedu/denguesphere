@@ -1,0 +1,15 @@
+fonte_nominatim,tipo_local,n,mediana_m,p75_m,p90_m,pct_ate_250m,pct_ate_500m,pct_ate_1km
+endereco_exato,bairro,60,297.7,686.2,1103.3,35.0,65.0,86.7
+endereco_exato,nao_encontrado,3,,,,,,
+endereco_exato,rua_bairro,794,55.0,124.4,277.7,88.5,95.1,98.7
+endereco_exato,rua_cidade,4,203.9,1565.0,3838.0,50.0,75.0,75.0
+endereco_exato,rua_vizinha,11,157.8,364.9,489.0,63.6,90.9,100.0
+fallback_bairro,bairro,61,275.8,398.0,839.5,42.6,88.5,90.2
+fallback_bairro,nao_encontrado,1,,,,,,
+fallback_bairro,rua_bairro,148,471.1,789.5,1055.8,25.0,52.7,87.2
+fallback_bairro,rua_vizinha,9,1279.2,1493.6,1872.4,0.0,0.0,44.4
+fallback_bairro_corrigido,bairro,9,513.0,662.9,1609.0,0.0,33.3,88.9
+fallback_bairro_corrigido,rua_bairro,31,1156.1,1825.3,2370.8,6.5,16.1,41.9
+rua_sem_bairro,bairro,31,5497.4,8199.8,23519.6,0.0,0.0,0.0
+rua_sem_bairro,rua_bairro,16,6138.5,8393.2,12548.8,0.0,0.0,0.0
+rua_sem_bairro,rua_vizinha,41,101.6,178.2,317.4,82.9,90.2,92.7

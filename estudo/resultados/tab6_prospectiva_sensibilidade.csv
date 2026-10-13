@@ -1,0 +1,16 @@
+variante,metodo,janelas,pct_alerta,captura_med,area_med,pai_med,pai_pop_med
+"confirmados, incl. centroide de bairro",DBSCAN (DengueSphere),606,95.05,16.67,1.97,5.33,2.41
+"confirmados, incl. centroide de bairro",KDE (mesma área),576,100.0,20.06,2.14,6.34,2.68
+"confirmados, incl. centroide de bairro",População (mesma área),576,100.0,8.55,2.14,3.27,0.78
+"confirmados, incl. centroide de bairro",Ranking de bairros,576,100.0,11.87,4.46,2.44,2.17
+"confirmados, incl. centroide de bairro",Todos os casos (sem clusterizar),576,100.0,48.98,12.75,3.43,1.7
+"confirmados, nível de rua",DBSCAN (DengueSphere),593,90.89,12.33,1.52,4.79,2.14
+"confirmados, nível de rua",KDE (mesma área),539,100.0,17.98,1.93,5.46,2.33
+"confirmados, nível de rua",População (mesma área),539,100.0,6.78,1.93,3.16,0.75
+"confirmados, nível de rua",Ranking de bairros,539,100.0,11.35,3.32,2.27,2.0
+"confirmados, nível de rua",Todos os casos (sem clusterizar),539,100.0,45.98,12.31,3.3,1.58
+"não descartados, nível de rua",DBSCAN (DengueSphere),595,91.43,12.79,1.74,4.64,2.05
+"não descartados, nível de rua",KDE (mesma área),544,100.0,18.58,2.1,5.21,2.26
+"não descartados, nível de rua",População (mesma área),544,100.0,7.52,2.1,3.24,0.78
+"não descartados, nível de rua",Ranking de bairros,544,100.0,10.92,3.56,2.2,1.9
+"não descartados, nível de rua",Todos os casos (sem clusterizar),544,100.0,46.5,12.74,3.18,1.54

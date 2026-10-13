@@ -1,0 +1,394 @@
+% Estudo numérico retrospectivo do DengueSphere — seções de métodos do estudo, resultados e discussão.
+% Tabelas geradas por estudo/gerar_latex.py a partir de estudo/resultados/*.csv; figuras por estudo/analises.py.
+% Compilar:  cd estudo/artigo && latexmk -pdf resultados.tex
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[brazilian]{babel}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[margin=2.3cm]{geometry}
+\usepackage{amsmath}
+\usepackage{siunitx}
+\sisetup{group-separator={.}, output-decimal-marker={,}, group-minimum-digits=4}
+\usepackage{booktabs}
+\usepackage{adjustbox}
+\usepackage{graphicx}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage[hidelinks]{hyperref}
+\usepackage[capitalise,noabbrev,brazilian]{cleveref}
+\graphicspath{{../figuras/}}
+\setlength{\parskip}{0.35em}
+\renewcommand{\arraystretch}{1.12}
+
+\title{Avaliação numérica retrospectiva do DengueSphere:\\ 13 anos de casos de dengue no Recife (2013--2025)}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Desenho do estudo numérico}
+\label{sec:desenho}
+
+Como o DengueSphere ainda não foi adotado na rotina da vigilância municipal, a avaliação foi conduzida como um
+\emph{estudo numérico retrospectivo}: o software foi reexecutado sobre o histórico de notificações e suas saídas foram
+confrontadas com o que efetivamente ocorreu nas semanas seguintes. Todas as clusterizações usam as funções do próprio
+serviço de processamento do DengueSphere (\texttt{executar\_clusterizacao} e \texttt{stability\_analysis}, DBSCAN com
+métrica haversine), sem reimplementação.
+
+\paragraph{Dados.} Foram utilizadas as notificações de dengue do SINAN publicadas no portal de dados abertos do Recife
+(licença ODbL) para 2013--2025. Os 13 arquivos anuais apresentam dois esquemas de nomes de colunas, três formatos de CSV
+e três codificações de caracteres, padronizados em uma única base. Incluíram-se residentes no Recife (IBGE 261160) com
+classificação final confirmada --- códigos 1 a 4 da classificação vigente até 2014 (dengue clássico, dengue com
+complicações, febre hemorrágica, síndrome do choque) e 10 a 12 da classificação revisada (dengue, dengue com sinais de
+alarme, dengue grave). Descartados e inconclusivos foram excluídos da análise principal. A data de referência é a do
+início dos sintomas (ou da notificação, quando ausente).
+
+\paragraph{Geocodificação.} Os arquivos públicos não contêm coordenadas. Para geocodificar os \num{69681} registros não
+descartados (\num{29043} pares únicos logradouro--bairro) sem violar os limites de uso do serviço Nominatim, a cascata
+de geocodificação do DengueSphere (logradouro $\rightarrow$ bairro $\rightarrow$ não encontrado) foi reproduzida sobre
+uma base local do OpenStreetMap: \num{18739} trechos de logradouros nomeados recortados pelos 94 polígonos de bairros
+(219,3~km$^2$). Os nomes foram normalizados (abreviações, ordinais, números por extenso, caracteres corrompidos) e casados
+por similaridade textual (\emph{token sort ratio} $\geq 85$). A concordância com o geocodificador original foi medida na
+amostra de 2021 já processada pelo DengueSphere.
+
+\paragraph{População.} Os denominadores vêm do Censo Demográfico 2022 do IBGE, usando a malha de setores censitários
+com atributos (\num{2836} setores, \num{1488924} habitantes no Recife). A população de cada setor foi distribuída
+entre as células de uma grade regular de 100~m na proporção da área de interseção (ponderação areal). A soma por bairro
+reproduziu os totais publicados pelo IBGE com correlação de 0,9995 e diferença absoluta mediana de 1,9\%. A mesma
+população de 2022 foi usada em todos os anos; a população do município variou pouco no período (cerca de $-3\%$
+entre os Censos de 2010 e 2022). A \cref{fig:ponderacao} ilustra o procedimento.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.95\linewidth]{fig12_ponderacao_areal.pdf}
+  \caption{Distribuição da população do Censo 2022 na grade de 100~m por ponderação areal. (a) Resultado para todo o
+  município. (b) Setores censitários de um recorte de 1,6~km na zona norte, coloridos pela densidade populacional.
+  (c) Ampliação de um setor de 826 habitantes: cada célula recebe a fração da população proporcional à área do setor
+  que ela cobre (números: habitantes atribuídos à célula; soma = 826). (d) População por célula no mesmo recorte, na
+  mesma escala de cores de (b).}
+  \label{fig:ponderacao}
+\end{figure}
+
+\paragraph{Janelas de análise.} A unidade de avaliação é a \emph{janela} de 4 semanas epidemiológicas de casos
+geocodificados no nível de logradouro, que reproduz o uso pretendido do software (seleção de semanas recentes e
+clusterização). As janelas foram estratificadas pelo nível de incidência: baixa ($<100$ casos), média (100--400) e alta
+($>400$).
+
+\paragraph{Métricas.} (i) \emph{Sensibilidade} aos parâmetros: número de clusters, proporção de ruído e silhueta na
+grade $\varepsilon \in \{0{,}1;\,0{,}2;\,0{,}3;\,0{,}5;\,0{,}75;\,1{,}0\}$~km $\times$ \texttt{min\_samples}
+$\in \{3, 5, 10, 15, 20\}$. (ii) \emph{Estabilidade}: índice de Rand ajustado (ARI) entre a solução de referência e soluções
+com $\varepsilon \pm 10\%$, \texttt{min\_samples} $\pm 1$ e subamostras de 90\% dos casos. (iii) \emph{Validação
+prospectiva}: a cada semana $t$, o DBSCAN é aplicado às semanas $t-3,\dots,t$; a área sinalizada é o conjunto de células
+de 100~m a até $\varepsilon$ de um caso pertencente a algum cluster. Mede-se a captura (fração dos casos das semanas
+$t+1,\dots,t+4$ dentro da área) e o \emph{Predictive Accuracy Index},
+\begin{equation}
+  \text{PAI} = \frac{\text{casos futuros na área}\,/\,\text{casos futuros}}{\text{área sinalizada}\,/\,\text{área do município}},
+\end{equation}
+em que PAI $=1$ equivale a uma escolha aleatória de áreas. Como áreas densamente povoadas tendem a ter mais casos
+apenas por terem mais moradores, calculou-se também o PAI populacional,
+\begin{equation}
+  \text{PAI}_\text{pop} = \frac{\text{casos futuros na área}\,/\,\text{casos futuros}}{\text{população na área}\,/\,\text{população do município}},
+\end{equation}
+que vale 1 quando a área sinalizada tem o mesmo risco por habitante que a média da cidade. O DBSCAN é comparado com
+quatro referências: estimativa de densidade kernel (KDE) com a mesma área; ranking de bairros por incidência (casos
+por habitante) na janela; as células mais populosas com a mesma área, sem nenhuma informação sobre casos; e um
+\emph{buffer} de todos os casos da janela sem clusterização. Os parâmetros foram escolhidos em 2013--2019 (treino) e avaliados em 2020--2025 (teste),
+com comparação pareada por janela pelo teste de postos sinalizados de Wilcoxon. (iv) \emph{Persistência interanual}:
+correlação de Spearman entre anos dos casos por célula de 500~m e da incidência por bairro. (v) \emph{Desempenho computacional}.
+
+\section{Resultados}
+
+\subsection{Base de dados e geocodificação}
+
+Entre 2013 e 2025 foram registradas \num{110468} notificações de dengue de residentes no Recife, das quais \num{63347}
+(57,3\%) foram confirmadas (\cref{tab:casos}). A série é dominada pela epidemia de 2015--2016, que concentra
+\num{35659} confirmações (56,3\% do período), com pico de \num{1573} casos na semana epidemiológica 14 de 2015
+(\cref{fig:curva}). Seguem-se 2021 (\num{7435} casos) e 2025 (\num{5066}). A incidência média foi de 327 casos por 100 mil habitantes
+por ano, variando de 64 (2017) a \num{1583} por 100 mil (2015). O arquivo de 2014 termina em julho, o que produz uma
+lacuna de cinco meses na série e subestima a incidência daquele ano.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\linewidth]{fig1_curva_epidemica.pdf}
+  \caption{Casos confirmados de dengue por semana epidemiológica, Recife, 2013--2025. A faixa cinza indica o período sem
+  dados no arquivo de 2014.}
+  \label{fig:curva}
+\end{figure}
+
+\input{tabelas/tab_casos_ano}
+
+A geocodificação local posicionou 82,4\% dos casos confirmados no nível de logradouro, 17,1\% no ponto representativo do
+bairro e deixou 0,5\% sem localização. A proporção no nível de rua variou de 80,8\% (2015) a 87,8\% (2024), com tendência
+de melhora nos anos recentes (\cref{fig:geocod}).
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\linewidth]{fig2_geocodificacao.pdf}
+  \caption{Nível de precisão da geocodificação por ano.}
+  \label{fig:geocod}
+\end{figure}
+
+Na amostra de 2021 processada pelo próprio DengueSphere (\cref{tab:validacao}), nos 809 casos em que ambos os métodos
+encontraram o logradouro, a distância mediana entre as coordenadas foi de 56~m (percentil 90: 291~m), e 94,9\% ficaram a
+até 500~m --- distância inferior ao menor $\varepsilon$ útil identificado adiante. A base local também resolveu no nível
+de rua 148 casos que o Nominatim só localizou pelo bairro. No sentido inverso, os 47 casos marcados pelo Nominatim como
+``rua sem bairro'' e que a base local situou no bairro informado ficaram a uma mediana de 5,5--6,1~km, provavelmente por
+logradouros homônimos em outros pontos da cidade escolhidos erroneamente pelo serviço externo.
+
+\input{tabelas/tab_validacao}
+
+\subsection{Padrões espaciais}
+
+Os mapas de calor anuais da densidade de casos (\cref{fig:mapas}) mostram concentração recorrente na zona norte
+(Água Fria, Casa Amarela, Nova Descoberta) e no extremo sudoeste (Cohab, Ibura), com focos variáveis no oeste (Várzea,
+Iputinga) e na orla sul. Contagens absolutas, porém, refletem em parte onde mora mais gente. Ajustada pela população
+(\cref{tab:incidencia,fig:bairros}), a incidência média anual variou de 99 a 993 casos por 100 mil habitantes entre os
+72 bairros com pelo menos 5 mil moradores (mediana 326). Boa Viagem, segundo bairro em número absoluto de casos
+(\num{2592}), tem incidência de 164 por 100 mil e ocupa a 62\textsuperscript{a} posição; Campina do Barreto, com
+\num{1091} casos em \num{8452} habitantes, tem incidência seis vezes maior (993 por 100 mil). O mapa de risco relativo por bairro
+(\cref{fig:rr}) confirma o padrão: nos anos epidêmicos, risco acima da média nos morros da zona norte e no sudoeste, e
+abaixo da média na orla e em bairros como Boa Viagem, Espinheiro e Graças (121 a 164 casos por 100 mil).
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.92\linewidth]{fig8_mapas_calor_anuais.pdf}
+  \caption{Mapas de calor da distribuição dos casos confirmados geocodificados no nível de logradouro nos seis anos com
+  mais casos (os demais anos têm entre 311 e \num{1251} casos geocodificados; todos os 13 anos estão na
+  \cref{fig:mapas_todos}). Cada hexágono (cerca de 350~m) é classificado pelo percentil do seu número de casos entre os hexágonos
+  com casos no mesmo ano, o que torna os anos comparáveis apesar das diferenças de magnitude. Mapa base:
+  OpenStreetMap (ruas, rios e mangues).}
+  \label{fig:mapas}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.95\linewidth]{fig10_bairro_ano.pdf}
+  \caption{Mapa de calor da incidência anual de dengue (casos confirmados por 100 mil habitantes, escala logarítmica)
+  nos 25 bairros de maior incidência média, entre os que têm pelo menos 5 mil moradores.}
+  \label{fig:bairros}
+\end{figure}
+
+\input{tabelas/tab_incidencia}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.92\linewidth]{fig11_risco_relativo_bairros.pdf}
+  \caption{Risco relativo de dengue por bairro nos seis anos com mais casos (todos os anos na \cref{fig:rr_todos}): incidência do bairro (casos confirmados por
+  habitante, Censo 2022) dividida pela incidência do Recife no mesmo ano. Vermelho: risco acima da média da cidade;
+  azul: abaixo. Bairros com menos de \num{1000} habitantes (hachurados) foram omitidos por instabilidade da taxa.}
+  \label{fig:rr}
+\end{figure}
+
+Entre anos consecutivos, a correlação de Spearman dos casos por célula de 500~m foi em média 0,52 (0,37 a 0,79;
+\cref{tab:persistencia,fig:persistencia}). As células no decil superior de um ano, que ocupam cerca de 12\% das células
+com casos, concentraram em média 26,2\% dos casos do ano seguinte, pouco mais que o dobro do esperado ao acaso. Em
+incidência por bairro, a correlação entre anos consecutivos foi menor (média 0,35; negativa apenas entre 2014, ano
+incompleto, e 2015). A persistência existe, mas é moderada: a distribuição espacial de um ano explica apenas parcialmente a do seguinte, o que
+justifica uma ferramenta de detecção recorrente em vez de mapas de risco estáticos.
+
+\input{tabelas/tab_persistencia}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.55\linewidth]{fig7_persistencia.pdf}
+  \caption{Mapa de calor da correlação de Spearman entre anos dos casos por célula de 500~m.}
+  \label{fig:persistencia}
+\end{figure}
+
+\subsection{Sensibilidade aos parâmetros}
+
+Foram avaliadas 154 janelas não sobrepostas de 4 semanas com pelo menos 30 casos (67 de baixa, 59 de média e 28 de alta
+incidência). O comportamento do DBSCAN depende fortemente do nível de incidência (\cref{tab:sensibilidade,fig:sens}).
+Com \texttt{min\_samples} = 10, no máximo 4\% das janelas de baixa incidência produziram algum cluster com $\varepsilon \leq
+0{,}5$~km; com \texttt{min\_samples} = 3 e $\varepsilon = 0{,}3$~km, 73\%. Nas janelas de alta incidência, a mesma
+configuração $\varepsilon = 0{,}3$~km e \texttt{min\_samples} = 3 gera uma mediana de 60 clusters e classifica só 20\% dos
+casos como ruído. Ou seja, parâmetros fixos adequados a períodos epidêmicos silenciam o software em períodos
+interepidêmicos, e vice-versa. A silhueta diminui com o aumento de $\varepsilon$ (de 0,95 a 0,48 com
+\texttt{min\_samples} = 3), refletindo a fusão de agregados vizinhos em clusters maiores e menos compactos.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\linewidth]{fig3_sensibilidade.pdf}
+  \caption{Mapas de calor do número mediano de clusters por janela de 4 semanas na grade de parâmetros, por nível de
+  incidência.}
+  \label{fig:sens}
+\end{figure}
+
+\input{tabelas/tab_sensibilidade}
+
+\subsection{Estabilidade dos agrupamentos}
+
+As soluções foram estáveis a perturbações de $\pm10\%$ em $\varepsilon$ (ARI mediano de 0,79 a 0,91) e à remoção
+aleatória de 10\% dos casos (ARI de 0,91 a 0,93) em todas as configurações (\cref{tab:estabilidade}). A estabilidade a
+\texttt{min\_samples} $\pm 1$ é alta para \texttt{min\_samples} = 10 (0,91--0,94), mas cai para 0,50--0,82 quando
+\texttt{min\_samples} = 3. Nesse caso a perturbação representa uma variação relativa de 33\%, e com
+\texttt{min\_samples} = 2 qualquer par de casos próximos forma um cluster. Em resumo, as áreas detectadas não
+dependem de um ajuste fino dos parâmetros nem de casos individuais.
+
+\input{tabelas/tab_estabilidade}
+
+\subsection{Validação prospectiva}
+
+Foram avaliadas 593 janelas semanais (308 no treino e 285 no teste). Na grade de parâmetros (\cref{tab:grade,fig:grade})
+há um compromisso claro entre concentração e cobertura. Configurações restritivas ($\varepsilon = 0{,}2$~km,
+\texttt{min\_samples} = 10) atingem PAI mediano de 9,8 no teste, mas só emitem alerta em 22\% das janelas.
+Configurações permissivas ($\varepsilon = 0{,}75$~km, \texttt{min\_samples} = 3) capturam 61\% dos casos futuros, porém
+com PAI de 2,3. Pelo critério definido no treino (maior PAI entre as configurações com alerta em $\geq 80\%$ das
+janelas), foi selecionada a configuração $\varepsilon = 0{,}3$~km e \texttt{min\_samples} = 3.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\linewidth]{fig9_pai_grade_parametros.pdf}
+  \caption{Mapas de calor do desempenho prospectivo do DBSCAN no período de teste (2020--2025): PAI mediano (janelas com
+  alerta), captura mediana dos casos das 4 semanas seguintes e proporção de janelas com ao menos um cluster.}
+  \label{fig:grade}
+\end{figure}
+
+\input{tabelas/tab_grade_prospectiva}
+
+Com essa configuração, no período de teste, as áreas sinalizadas pelo DengueSphere ocuparam em mediana 1,8\% do
+município e capturaram 13,3\% dos casos das 4 semanas seguintes: PAI mediano de 4,73 (IIQ 3,54--7,97), quase cinco vezes
+o esperado ao acaso (\cref{tab:comparacao,fig:pai}). O desempenho no teste foi equivalente ao do treino (PAI 4,86), sem
+sinal de sobreajuste.
+
+Parte dessa concentração, porém, decorre da densidade demográfica: as células mais populosas da cidade, escolhidas sem
+nenhuma informação sobre casos e com a mesma área, já alcançam PAI de 3,22. O PAI populacional isola esse efeito. As
+áreas sinalizadas pelo DBSCAN abrigavam 4,1\% da população e receberam 13,3\% dos casos seguintes, um risco por
+habitante 2,14 vezes maior que a média do Recife (IIQ 1,58--3,42; treino 2,13). Para as células mais populosas, esse
+valor foi de 0,70: as áreas mais densas da cidade têm \emph{menos} casos por habitante que a média. O DBSCAN superou
+essa referência populacional em 96,8\% das janelas de teste ($\Delta$PAI$_\text{pop}$ $+1{,}41$; $p<0{,}001$), o que
+mostra que o software identifica risco além do que a distribuição da população explica (\cref{tab:pareada}).
+
+Na comparação com as demais referências, os dois PAIs contam histórias complementares. Por área, o DBSCAN superou o
+ranking de bairros por incidência em 91,3\% das janelas ($\Delta$PAI $+2{,}40$) e o \emph{buffer} de todos os casos em
+88,8\% ($+1{,}49$), ambos com $p<0{,}001$. Por habitante, a vantagem sobre o \emph{buffer} se mantém (83,8\% das
+janelas; $+0{,}55$), mas o ranking de bairros por incidência alcança risco por habitante equivalente (PAI$_\text{pop}$
+2,13 contra 2,14; $p = 0{,}29$). Ou seja, priorizar bairros inteiros pela incidência atinge a mesma proporção de
+casos por morador visitado, mas exige cobrir quase o dobro da área (3,3\% contra 1,8\% do município). A KDE de mesma
+área foi ligeiramente superior ao DBSCAN nas duas métricas ($\Delta$PAI $-0{,}36$; $\Delta$PAI$_\text{pop}$ $-0{,}10$).
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\linewidth]{fig4_pai_metodos.pdf}
+  \caption{Distribuição, por janela do período de teste (2020--2025), do PAI por área (a) e por população (b) na
+  previsão dos casos das 4 semanas seguintes ($\varepsilon = 0{,}3$~km, \texttt{min\_samples} = 3). A linha pontilhada
+  (valor 1) corresponde, em (a), à seleção aleatória de áreas e, em (b), ao risco médio por habitante da cidade.}
+  \label{fig:pai}
+\end{figure}
+
+\input{tabelas/tab_comparacao}
+\input{tabelas/tab_pareada}
+
+A captura acompanha a dinâmica epidêmica (\cref{fig:captura}): ultrapassa 90\% no pico de 2015, quando os clusters
+cobrem grande parte da área urbana, e fica abaixo de 10\% em períodos interepidêmicos, quando a transmissão é dispersa.
+A \cref{fig:exemplo} ilustra uma janela de 2015 com os parâmetros do estrato de alta incidência. Os 73 clusters
+detectados delimitam 17,1\% do município, onde ocorreram 58\% dos casos das quatro semanas seguintes.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\linewidth]{fig5_captura_temporal.pdf}
+  \caption{Captura dos casos das 4 semanas seguintes ao longo do tempo (média móvel de 4 semanas; interrupções indicam
+  semanas sem casos suficientes).}
+  \label{fig:captura}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\linewidth]{fig6_mapa_exemplo_2015.pdf}
+  \caption{Exemplo de uso do DengueSphere no pico de 2015, com os parâmetros do estrato de alta incidência
+  ($\varepsilon = 0{,}2$~km, \texttt{min\_samples} = 10). (a) Casos das quatro semanas analisadas: em azul, os
+  atribuídos a algum cluster; em cinza, os classificados como ruído. (b) Área sinalizada (união dos círculos de raio
+  $\varepsilon$ em torno dos casos em cluster) e casos ocorridos nas quatro semanas seguintes.}
+  \label{fig:exemplo}
+\end{figure}
+
+A estratificação por incidência (\cref{tab:guia}) dá parâmetros práticos. Em baixa incidência, $\varepsilon = 0{,}5$~km e
+\texttt{min\_samples} = 3 emitiram alerta em 99\% das janelas de teste, com PAI de 4,72 (praticamente igual ao da KDE,
+4,85) e risco por habitante 2,21 vezes a média. Em alta incidência, $\varepsilon = 0{,}2$~km e \texttt{min\_samples} = 10 produziram áreas compactas (0,4\% do
+município) com PAI de 6,15 e PAI$_\text{pop}$ de 2,34. No estrato intermediário, a configuração escolhida no treino ($\varepsilon = 0{,}2$~km,
+\texttt{min\_samples} = 5) teve a taxa de alerta reduzida de 80\% para 62\% no teste, sinal de que esse estrato
+demanda parâmetros menos restritivos.
+
+\input{tabelas/tab_guia}
+
+Os resultados se mantiveram quando a análise usou todas as notificações não descartadas, que é o que a vigilância
+dispõe em tempo real (PAI 4,64 contra 4,79 e PAI$_\text{pop}$ 2,05 contra 2,14 na análise principal;
+\cref{tab:variantes}). Incluir os casos localizados
+apenas pelo centroide do bairro elevou o PAI para 5,33. Esse ganho, porém, é em parte artificial: casos empilhados no
+mesmo ponto formam clusters densos.
+
+\input{tabelas/tab_variantes}
+
+\subsection{Desempenho computacional}
+
+A clusterização do DengueSphere processou \num{40000} casos em 0,35~s ($\varepsilon = 0{,}3$~km) e 0,50~s
+($\varepsilon = 0{,}5$~km), com crescimento moderadamente superlinear no número de casos (40 vezes mais casos, cerca de 115 vezes mais tempo) (\cref{tab:desempenho}). Isso é
+mais que o maior volume semanal observado (\num{1573} casos) e que o total do ano de 2015 (\num{23576}). Varreduras de
+parâmetros como as deste estudo são, portanto, viáveis em tempo interativo.
+
+\input{tabelas/tab_desempenho}
+
+\section{Discussão}
+
+Aplicado ao histórico de 13 anos do Recife, o DengueSphere sinaliza áreas que concentram os casos das semanas seguintes
+cerca de cinco vezes mais do que o acaso por unidade de área e duas vezes mais do que a média por habitante. O
+desempenho foi estável entre treino e teste, robusto a perturbações dos parâmetros e dos dados e mantido com as
+notificações disponíveis em tempo real. O ajuste pela população do Censo 2022 é essencial para essa leitura. Sem ele,
+seria possível atribuir ao software um mérito que é apenas da densidade demográfica; com ele, fica claro que as áreas
+detectadas têm risco por habitante acima da média, enquanto as áreas simplesmente mais populosas têm risco abaixo dela.
+
+A comparação com o ranking de bairros por incidência mostra onde está o ganho do DBSCAN. Por habitante, as duas
+estratégias se equivalem; por área, o DBSCAN concentra o mesmo rendimento em cerca de metade do território. Como as
+ações de controle vetorial (visitas domiciliares, eliminação de criadouros, bloqueio de transmissão) são planejadas por
+território e quarteirão, delimitar agregados de algumas centenas de metros em vez de bairros inteiros reduz o esforço de
+campo para um mesmo número de casos alcançados.
+
+A KDE de mesma área obteve desempenho ligeiramente superior (diferença mediana de 0,36 no PAI e de 0,10 no
+PAI$_\text{pop}$). Essa diferença deve ser lida à luz das funções distintas dos dois métodos. A KDE produz uma superfície
+contínua que exige a escolha externa de um limiar de área. O DBSCAN decide por si quantos agregados existem e quais casos
+são isolados, e entrega unidades discretas, enumeráveis e com contagem de casos, mais diretamente convertíveis em ordens
+de serviço para as equipes de campo. A comparação mostra que esse ganho operacional custa pouca precisão preditiva, e o
+resultado sugere incorporar ao software uma camada de densidade kernel complementar.
+
+O achado com maior implicação prática é a dependência dos parâmetros em relação ao nível de incidência. Valores fixos
+de \texttt{min\_samples} adequados a epidemias tornam o software mudo em períodos interepidêmicos, justamente quando a
+detecção precoce de agregados é mais útil. As configurações da \cref{tab:guia} podem servir como valores padrão
+adaptativos, selecionados automaticamente pelo número de casos da janela.
+
+\paragraph{Limitações.} (i) A geocodificação usa uma base local do OpenStreetMap, e não o serviço Nominatim do software.
+A concordância de 56~m (mediana) indica que isso não altera as conclusões em escala de bairro, mas logradouros ausentes
+do OSM, sobretudo em áreas de ocupação informal, foram localizados pelo bairro e excluídos da análise principal
+(17,1\% dos casos). (ii) Cerca de 90\% das confirmações foram por critério clínico-epidemiológico
+(\cref{tab:classificacao}), e o segundo pico de 2015--2016 coincide com a epidemia de Zika no Recife, o que sugere
+alguma má classificação entre arboviroses. (iii) A população do Censo 2022 foi usada para todos os anos e
+distribuída dentro de cada setor censitário de modo uniforme (ponderação areal), o que ignora mudanças demográficas
+intercensitárias e a distribuição interna das moradias. Além disso, a proporção de casos geocodificados no nível de rua
+pode ser menor em áreas de ocupação informal, o que subestimaria a incidência justamente nas áreas mais vulneráveis. (iv) Faltam dados de agosto a dezembro de 2014. (v) A validação mede concentração espacial de casos
+futuros, e não o efeito de intervenções, que só poderá ser avaliado com o uso operacional do software.
+
+\appendix
+\section{Material suplementar}
+\input{tabelas/tab_classificacao}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\linewidth]{fig8_mapas_calor_anuais_todos_anos.pdf}
+  \caption{Mapas de calor da distribuição dos casos confirmados em todos os anos do estudo (mesma construção da
+  \cref{fig:mapas}). Em 2014 há dados apenas até julho.}
+  \label{fig:mapas_todos}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\linewidth]{fig11_risco_relativo_bairros_todos_anos.pdf}
+  \caption{Risco relativo de dengue por bairro em todos os anos do estudo (mesma construção da \cref{fig:rr}). Em
+  anos de baixa incidência, bairros pouco populosos e extensos, como Guabiraba, alternam entre classes extremas por
+  instabilidade da taxa.}
+  \label{fig:rr_todos}
+\end{figure}
+
+\end{document}

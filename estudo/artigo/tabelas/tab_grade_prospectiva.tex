@@ -1,0 +1,29 @@
+\begin{table*}[htbp]
+\centering
+\small
+\caption{Desempenho prospectivo do DBSCAN na grade de parâmetros (medianas por janela). Em negrito, a configuração escolhida no treino.}
+\label{tab:grade}
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{rrrrrrrrrrr}
+\toprule
+& & \multicolumn{4}{c}{Treino (2013--2019)} & \multicolumn{5}{c}{Teste (2020--2025)} \\
+\cmidrule(lr){3-6}\cmidrule(lr){7-11}
+eps & min\_s. & Alerta \% & Capt. \% & Área \% & PAI & Alerta \% & Capt. \% & Área \% & PAI & PAI$_\text{pop}$ \\
+\midrule
+0,20 & 3 & 77 & 4,9 & 0,33 & 6,76 & 88 & 4,4 & 0,43 & 6,53 & 2,64 \\
+0,20 & 5 & 53 & 0,0 & 0,10 & 7,74 & 52 & 0,0 & 0,08 & 8,75 & 3,20 \\
+0,20 & 10 & 35 & 0,0 & 0,00 & 6,94 & 22 & 0,0 & 0,00 & 9,76 & 3,31 \\
+\textbf{0,30} & \textbf{3} & \textbf{85} & \textbf{12,3} & \textbf{1,31} & \textbf{4,86} & \textbf{97} & \textbf{12,4} & \textbf{1,74} & \textbf{4,73} & \textbf{2,14} \\
+0,30 & 5 & 62 & 3,1 & 0,31 & 5,59 & 68 & 3,5 & 0,43 & 5,73 & 2,47 \\
+0,30 & 10 & 39 & 0,0 & 0,00 & 5,20 & 32 & 0,0 & 0,00 & 6,81 & 2,81 \\
+0,50 & 3 & 94 & 31,1 & 6,45 & 3,13 & 100 & 36,6 & 8,75 & 3,29 & 1,66 \\
+0,50 & 5 & 78 & 14,6 & 2,18 & 3,64 & 88 & 18,3 & 3,15 & 3,71 & 1,79 \\
+0,50 & 10 & 46 & 0,0 & 0,00 & 3,78 & 45 & 0,0 & 0,00 & 4,40 & 2,29 \\
+0,75 & 3 & 99 & 54,6 & 20,45 & 2,38 & 100 & 61,1 & 24,02 & 2,33 & 1,36 \\
+0,75 & 5 & 88 & 37,6 & 10,02 & 2,66 & 95 & 44,0 & 13,92 & 2,67 & 1,52 \\
+0,75 & 10 & 58 & 10,6 & 2,31 & 2,65 & 62 & 11,5 & 2,46 & 2,56 & 1,54 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\par\smallskip\begin{minipage}{0.95\linewidth}\footnotesize Alerta: \% de janelas em que o DBSCAN encontrou ao menos um cluster. Captura: \% dos casos das 4 semanas seguintes dentro da área sinalizada (zero quando não há alerta). Área: \% da área do município (219,3 km$^2$). PAI = Captura/Área e PAI$_\text{pop}$ = Captura/\% da população, calculados apenas nas janelas com alerta. Critério de escolha: maior PAI mediano no treino entre as configurações com alerta em $\geq$80\% das janelas.\end{minipage}
+\end{table*}

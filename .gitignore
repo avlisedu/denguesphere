@@ -10,3 +10,15 @@ __pycache__/
 
 # OS
 .DS_Store
+
+# estudo numérico
+estudo/.venv/
+estudo/dados/
+Casos Dengue/
+Dengue - Recife/
+estudo/resultados/log_*.txt
+estudo/artigo/*.aux
+estudo/artigo/*.log
+estudo/artigo/*.fls
+estudo/artigo/*.fdb_latexmk
+estudo/artigo/*.out

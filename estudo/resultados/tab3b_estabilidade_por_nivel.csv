@@ -1,0 +1,4 @@
+nivel,eps 0.90x,eps 1.10x,min_samples 11,min_samples 2,min_samples 4,min_samples 6,min_samples 9,subamostra 90%
+alta (>400),0.828,0.854,0.914,0.971,0.873,0.862,0.897,0.921
+baixa (<100 casos/4 sem),0.927,0.924,1.0,0.5,0.644,0.708,1.0,0.95
+média (100–400),0.862,0.874,0.951,0.592,0.715,0.761,0.954,0.919
