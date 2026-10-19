@@ -157,7 +157,7 @@ if uploaded_file:
     # MAPA INTERATIVO
     # --------------------------------------------------------
     centro = [df_cluster["latitude"].mean(), df_cluster["longitude"].mean()]
-    mapa = folium.Map(location=centro, zoom_start=12, tiles="CartoDB positron")
+    mapa = folium.Map(location=centro, zoom_start=12, tiles="Esri.WorldGrayCanvas")
 
     cores = [
         "#C62828", "#1565C0", "#2E7D32", "#EF6C00", "#6A1B9A",
