@@ -157,7 +157,20 @@ if uploaded_file:
     # MAPA INTERATIVO
     # --------------------------------------------------------
     centro = [df_cluster["latitude"].mean(), df_cluster["longitude"].mean()]
-    mapa = folium.Map(location=centro, zoom_start=12, tiles="Esri.WorldGrayCanvas")
+    mapa = folium.Map(location=centro, zoom_start=12, tiles=None)
+
+    # Mapas base gratuitos (sem chave de API); o primeiro é o padrão
+    esri = "https://server.arcgisonline.com/ArcGIS/rest/services/{}/MapServer/tile/{{z}}/{{y}}/{{x}}"
+    atrib_esri = "Tiles &copy; Esri &mdash; Esri, HERE, Garmin, &copy; OpenStreetMap contributors"
+    folium.TileLayer(esri.format("Canvas/World_Light_Gray_Base"), attr=atrib_esri, name="Cinza claro").add_to(mapa)
+    folium.TileLayer("OpenStreetMap", name="OpenStreetMap").add_to(mapa)
+    folium.TileLayer(esri.format("World_Street_Map"), attr=atrib_esri, name="Ruas").add_to(mapa)
+    folium.TileLayer(esri.format("World_Imagery"), attr=atrib_esri, name="Satélite").add_to(mapa)
+    # Nomes de bairros e ruas sobrepostos ao mapa base
+    folium.TileLayer(
+        esri.format("Canvas/World_Light_Gray_Reference"), attr=atrib_esri,
+        name="Nomes (bairros e ruas)", overlay=True, control=True,
+    ).add_to(mapa)
 
     cores = [
         "#C62828", "#1565C0", "#2E7D32", "#EF6C00", "#6A1B9A",
@@ -166,6 +179,7 @@ if uploaded_file:
     ]
 
     desenhar_clusters(mapa, df_cluster, cores, eps_km)
+    folium.LayerControl(collapsed=True).add_to(mapa)
 
     semanas_str = ", ".join(semanas_sel)
     st.markdown(
