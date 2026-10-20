@@ -13,8 +13,6 @@ TRANSLATIONS = {
         "nav_cluster": "Clusterizar Casos",
         "nav_about": "Sobre o Projeto",
         "lang_label": "Idioma / Language",
-        "lang_pt": "Português",
-        "lang_en": "Inglês",
 
         # ---------------- Página Home ----------------
         "home_title": "DengueSphere",
@@ -232,8 +230,6 @@ Utilize o menu no topo para navegar entre as seções.
         "nav_cluster": "Clustering Tool",
         "nav_about": "About the Project",
         "lang_label": "Idioma / Language",
-        "lang_pt": "Portuguese",
-        "lang_en": "English",
 
         # ---------------- Home Page ----------------
         "home_title": "DengueSphere",
@@ -451,21 +447,32 @@ def init_lang():
         st.session_state["lang"] = "pt"
 
 
+def _ao_trocar_idioma():
+    escolha = st.session_state.get("lang_choice")
+    if escolha:
+        st.session_state["lang"] = escolha
+    else:
+        # clicar no botão já ativo desmarcaria a opção; mantém o idioma atual
+        st.session_state["lang_choice"] = st.session_state["lang"]
+
+
 def lang_selector():
     """
-    Exibe um seletor de idioma no topo da tela e atualiza st.session_state['lang'].
+    Exibe os botões de idioma (PT-BR / EN) no topo da tela e atualiza st.session_state['lang'].
     """
     init_lang()
-    col1, col2 = st.columns([8, 2])
-    with col2:
-        lang = st.selectbox(
+    if not st.session_state.get("lang_choice"):
+        st.session_state["lang_choice"] = st.session_state["lang"]
+    with st.container(horizontal=True, horizontal_alignment="right"):
+        st.segmented_control(
             TRANSLATIONS[st.session_state["lang"]]["lang_label"],
             options=["pt", "en"],
-            index=["pt", "en"].index(st.session_state["lang"]),
-            format_func=lambda x: TRANSLATIONS[x]["lang_pt"] if x == "pt" else TRANSLATIONS[x]["lang_en"],
+            format_func=lambda x: {"pt": "PT-BR", "en": "EN"}[x],
+            key="lang_choice",
+            on_change=_ao_trocar_idioma,
+            label_visibility="collapsed",
         )
-    st.session_state["lang"] = lang
-    return lang
+    return st.session_state["lang"]
 
 
 def t(key: str) -> str:
