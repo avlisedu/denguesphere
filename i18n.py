@@ -20,7 +20,7 @@ TRANSLATIONS = {
         "home_welcome_header": "Bem-vindo ao DengueSphere",
         "home_main_text": """
 O **DengueSphere** é uma plataforma interativa para análise espacial e clusterização de casos de dengue,
-baseada no algoritmo **DBSCAN (Density-Based Spatial Clustering of Applications with Noise)**.
+baseada no algoritmo **[DBSCAN (Density-Based Spatial Clustering of Applications with Noise)](https://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html)**.
 
 Com o sistema, é possível:
 
@@ -237,7 +237,7 @@ Utilize o menu no topo para navegar entre as seções.
         "home_welcome_header": "Welcome to DengueSphere",
         "home_main_text": """
 **DengueSphere** is an interactive platform for spatial analysis and clustering of dengue cases,
-based on the **DBSCAN (Density-Based Spatial Clustering of Applications with Noise)** algorithm.
+based on the **[DBSCAN (Density-Based Spatial Clustering of Applications with Noise)](https://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html)** algorithm.
 
 With the system, you can:
 
