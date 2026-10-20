@@ -39,6 +39,15 @@ Utilize o menu no topo para navegar entre as seções.
         "home_anim_caption": "DBSCAN em ação",
         "home_anim_cluster": "cluster",
         "home_anim_noise": "ruído",
+        "home_dataset_header": "Base de dados de exemplo",
+        "home_dataset_badge": "Dados abertos · Prefeitura do Recife",
+        "home_dataset_title": "Casos de Dengue, Zika e Chikungunya",
+        "home_dataset_text": "Notificações registradas nas unidades de saúde públicas e privadas do Recife. Os arquivos de dengue trazem bairro, logradouro e CEP, mas não latitude e longitude: use primeiro o módulo <strong>Localizar Coordenadas</strong> e depois carregue a base no <strong>Clusterizador</strong>.",
+        "home_dataset_years": "Dengue: 2013–2025, um CSV por ano",
+        "home_dataset_publisher": "Secretaria de Saúde do Recife",
+        "home_dataset_license": "Licença ODbL",
+        "home_dataset_update": "Atualização trimestral",
+        "home_dataset_button": "Acessar a base no portal",
         "home_footer": "Desenvolvido pelo Grupo de Pesquisa em Sistemas de Informação e Decisão (GPSID) – PPGEP/UFPE",
 
         # ---------------- Página Sobre ----------------
@@ -218,6 +227,15 @@ Use the top menu to navigate between sections.
         "home_anim_caption": "DBSCAN in action",
         "home_anim_cluster": "cluster",
         "home_anim_noise": "noise",
+        "home_dataset_header": "Sample dataset",
+        "home_dataset_badge": "Open data · City of Recife",
+        "home_dataset_title": "Dengue, Zika and Chikungunya Cases",
+        "home_dataset_text": "Cases reported by public and private health units in Recife. The dengue files include neighborhood, street and ZIP code, but no latitude and longitude: run them through <strong>Generate Coordinates by ZIP Code</strong> first, then load the dataset into the <strong>Clustering Tool</strong>.",
+        "home_dataset_years": "Dengue: 2013–2025, one CSV per year",
+        "home_dataset_publisher": "Recife Health Department",
+        "home_dataset_license": "ODbL license",
+        "home_dataset_update": "Updated quarterly",
+        "home_dataset_button": "Open the dataset on the portal",
         "home_footer": "Developed by the Information and Decision Systems Research Group (GPSID) – PPGEP/UFPE",
 
         # ---------------- About Page ----------------

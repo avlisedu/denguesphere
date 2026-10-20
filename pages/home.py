@@ -3,7 +3,9 @@ import streamlit.components.v1 as components
 import base64
 from pathlib import Path
 from i18n import t
-from ui import inject_styles, html, footer
+from ui import inject_styles, html, section, footer
+
+DATASET_URL = "https://dados.recife.pe.gov.br/sv/dataset/casos-de-dengue-zika-e-chikungunya"
 
 # ======================================
 # CONFIGURAÇÃO DE ESTILO (paleta da página Sobre)
@@ -63,6 +65,24 @@ st.markdown("""
         color: #004d55;
     }
     [data-testid="stMarkdownContainer"] blockquote strong { color: #006064; }
+
+    .ds-dataset .ds-pub-icon { color: #0d47a1; background: #e3f2fd; }
+    .ds-dataset p { margin: 0 0 12px 0; font-size: 0.94rem; line-height: 1.55; color: #37474f; }
+    .ds-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 16px;
+        padding: 9px 16px;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #ffffff !important;
+        text-decoration: none !important;
+        background: linear-gradient(135deg, #0d47a1, #00838f);
+        transition: filter 0.15s ease;
+    }
+    .ds-btn:hover { filter: brightness(1.12); }
 </style>
 """, unsafe_allow_html=True)
 
@@ -98,5 +118,27 @@ with col_texto:
     st.header(t("home_welcome_header"))
 
     st.markdown(t("home_main_text"))
+
+# ======================================
+# BASE DE DADOS DE EXEMPLO
+# ======================================
+html(f"""
+{section("fi-rr-database", t("home_dataset_header"))}
+<div class="ds-pub ds-dataset">
+    <div class="ds-pub-icon"><i class="fi fi-rr-file-csv"></i></div>
+    <div>
+        <div class="ds-badges"><span class="ds-badge teal">{t("home_dataset_badge")}</span></div>
+        <h3>{t("home_dataset_title")}</h3>
+        <p>{t("home_dataset_text")}</p>
+        <div class="ds-pub-meta">
+            <span><i class="fi fi-rr-calendar"></i>{t("home_dataset_years")}</span>
+            <span><i class="fi fi-rr-building"></i>{t("home_dataset_publisher")}</span>
+            <span><i class="fi fi-rr-license"></i>{t("home_dataset_license")}</span>
+            <span><i class="fi fi-rr-refresh"></i>{t("home_dataset_update")}</span>
+        </div>
+        <a class="ds-btn" href="{DATASET_URL}" target="_blank" rel="noopener">{t("home_dataset_button")}<i class="fi fi-rr-arrow-up-right-from-square"></i></a>
+    </div>
+</div>
+""")
 
 footer(t("home_footer"))
