@@ -20,9 +20,9 @@ BIBTEX = r"""@inproceedings{Silva:DengueSphere:2026,
 """
 
 PUB_TITLE = "A Decision Support System Applied to Dengue Epidemiological Surveillance: The DengueSphere Platform"
-PUB_AUTHORS = "Eduardo Silva · Theo Economou · Maisa Mendonça Silva"
+PUB_AUTHORS = "Eduardo Silva, Theo Economou, Maisa Mendonça Silva"
 PUB_VENUE = "International Conference on Decision Support System Technology (ICDSST 2026)"
-PUB_PUBLISHER = "University of Plymouth · Plymouth, United Kingdom"
+PUB_PUBLISHER = "University of Plymouth, Plymouth, United Kingdom"
 PUB_ISBN = "ISBN 978-1-84102-474-5"
 PUB_CITATION = (
     "Silva, E., Economou, T., &amp; Silva, M. M. (2026). "

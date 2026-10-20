@@ -40,7 +40,7 @@ Utilize o menu no topo para navegar entre as seções.
         "home_anim_cluster": "cluster",
         "home_anim_noise": "ruído",
         "home_dataset_header": "Base de dados de exemplo",
-        "home_dataset_badge": "Dados abertos · Prefeitura do Recife",
+        "home_dataset_badge": "Dados abertos da Prefeitura do Recife",
         "home_dataset_title": "Casos de Dengue, Zika e Chikungunya",
         "home_dataset_text": "Notificações registradas nas unidades de saúde públicas e privadas do Recife. Os arquivos de dengue trazem bairro, logradouro e CEP, mas não latitude e longitude: use primeiro o módulo <strong>Localizar Coordenadas</strong> e depois carregue a base no <strong>Clusterizador</strong>.",
         "home_dataset_years": "Dengue: 2013–2025, um CSV por ano",
@@ -48,10 +48,10 @@ Utilize o menu no topo para navegar entre as seções.
         "home_dataset_license": "Licença ODbL",
         "home_dataset_update": "Atualização trimestral",
         "home_dataset_button": "Acessar a base no portal",
-        "home_footer": "Desenvolvido pelo Grupo de Pesquisa em Sistemas de Informação e Decisão (GPSID) – PPGEP/UFPE",
+        "home_footer": "Desenvolvido pelo Grupo de Pesquisa em Sistemas de Informação e Decisão (GPSID) do PPGEP/UFPE",
 
         # ---------------- Página Sobre ----------------
-        "about_eyebrow": "Sistema de Apoio à Decisão · Vigilância Epidemiológica",
+        "about_eyebrow": "Sistema de apoio à decisão para vigilância epidemiológica",
         "about_title": "Sobre o DengueSphere",
         "about_lead": "Plataforma interativa para apoiar a análise, o tratamento e a visualização de dados geográficos da dengue, integrando informações, mapeando áreas de risco e apoiando decisões estratégicas no controle da doença.",
 
@@ -94,13 +94,13 @@ Utilize o menu no topo para navegar entre as seções.
         ],
 
         "about_team_header": "Equipe",
-        "about_team_eduardo_role": "Doutorando no Programa de Pós-Graduação em Engenharia de Produção (PPGEP/UFPE) · 2025 – atual",
+        "about_team_eduardo_role": "Doutorando no Programa de Pós-Graduação em Engenharia de Produção (PPGEP/UFPE) desde 2025",
         "about_team_maisa_name": "Profa. Dra. Maisa Mendonça Silva",
-        "about_team_maisa_role": "Orientadora · Docente permanente do PPGEP/UFPE",
+        "about_team_maisa_role": "Orientadora e docente permanente do PPGEP/UFPE",
         "about_team_gpsid_name": "GPSID",
-        "about_team_gpsid_role": "Grupo de Pesquisa em Sistemas de Informação e Decisão · PPGEP/UFPE",
+        "about_team_gpsid_role": "Grupo de Pesquisa em Sistemas de Informação e Decisão do PPGEP/UFPE",
 
-        "about_footer": "Desenvolvido por Eduardo da Silva sob orientação da Profa. Dra. Maisa Mendonça Silva · GPSID – PPGEP/UFPE",
+        "about_footer": "Desenvolvido por Eduardo da Silva sob orientação da Profa. Dra. Maisa Mendonça Silva, no GPSID do PPGEP/UFPE",
 
 
         # ---------------- Página Coordenadas ----------------
@@ -228,7 +228,7 @@ Use the top menu to navigate between sections.
         "home_anim_cluster": "cluster",
         "home_anim_noise": "noise",
         "home_dataset_header": "Sample dataset",
-        "home_dataset_badge": "Open data · City of Recife",
+        "home_dataset_badge": "Open data from the City of Recife",
         "home_dataset_title": "Dengue, Zika and Chikungunya Cases",
         "home_dataset_text": "Cases reported by public and private health units in Recife. The dengue files include neighborhood, street and ZIP code, but no latitude and longitude: run them through <strong>Generate Coordinates by ZIP Code</strong> first, then load the dataset into the <strong>Clustering Tool</strong>.",
         "home_dataset_years": "Dengue: 2013–2025, one CSV per year",
@@ -236,10 +236,10 @@ Use the top menu to navigate between sections.
         "home_dataset_license": "ODbL license",
         "home_dataset_update": "Updated quarterly",
         "home_dataset_button": "Open the dataset on the portal",
-        "home_footer": "Developed by the Information and Decision Systems Research Group (GPSID) – PPGEP/UFPE",
+        "home_footer": "Developed by the Information and Decision Systems Research Group (GPSID) at PPGEP/UFPE",
 
         # ---------------- About Page ----------------
-        "about_eyebrow": "Decision Support System · Epidemiological Surveillance",
+        "about_eyebrow": "Decision support system for epidemiological surveillance",
         "about_title": "About DengueSphere",
         "about_lead": "An interactive platform that supports the analysis, processing and visualization of dengue geographic data, integrating information, mapping risk areas and supporting strategic decisions in disease control.",
 
@@ -282,13 +282,13 @@ Use the top menu to navigate between sections.
         ],
 
         "about_team_header": "Team",
-        "about_team_eduardo_role": "PhD student, Graduate Program in Production Engineering (PPGEP/UFPE) · 2025 – present",
+        "about_team_eduardo_role": "PhD student, Graduate Program in Production Engineering (PPGEP/UFPE) since 2025",
         "about_team_maisa_name": "Prof. Maisa Mendonça Silva, PhD",
-        "about_team_maisa_role": "Supervisor · Permanent faculty member of PPGEP/UFPE",
+        "about_team_maisa_role": "Supervisor and permanent faculty member of PPGEP/UFPE",
         "about_team_gpsid_name": "GPSID",
-        "about_team_gpsid_role": "Information and Decision Systems Research Group · PPGEP/UFPE",
+        "about_team_gpsid_role": "Information and Decision Systems Research Group at PPGEP/UFPE",
 
-        "about_footer": "Developed by Eduardo da Silva under the supervision of Prof. Maisa Mendonça Silva, PhD · GPSID – PPGEP/UFPE",
+        "about_footer": "Developed by Eduardo da Silva under the supervision of Prof. Maisa Mendonça Silva, PhD, at GPSID, PPGEP/UFPE",
 
 
         # ---------------- Coordinates Page ----------------
