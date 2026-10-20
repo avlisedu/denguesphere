@@ -138,7 +138,10 @@ with st.expander(t("about_pub_bibtex")):
 # NOTAS DE VERSÃO
 # ============================================================
 def release_items(key, icon):
-    return "".join(f'<li><i class="fi {icon}"></i><span>{item}</span></li>' for item in t(key))
+    items = t(key)
+    if not isinstance(items, list):  # chave ausente: t() devolve o próprio nome da chave
+        return ""
+    return "".join(f'<li><i class="fi {icon}"></i><span>{item}</span></li>' for item in items)
 
 
 html(f"""

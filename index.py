@@ -1,5 +1,13 @@
 from anyio import Path
+import importlib
 import streamlit as st
+import i18n
+import ui
+
+# O Streamlit mantém em memória os módulos já importados; recarregá-los a cada
+# execução garante que mudanças em textos (i18n) e estilos (ui) apareçam sem reiniciar o servidor.
+importlib.reload(i18n)
+importlib.reload(ui)
 from i18n import t, lang_selector
 
 # ======================================

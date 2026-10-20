@@ -1,5 +1,4 @@
 import streamlit as st
-import streamlit.components.v1 as components
 import base64
 from pathlib import Path
 from i18n import t
@@ -14,6 +13,11 @@ inject_styles()
 
 st.markdown("""
 <style>
+    html, body { background: #ffffff; }
+    html body .stApp,
+    html body [data-testid="stAppViewContainer"],
+    html body [data-testid="stMain"] { background: transparent !important; }
+
     .logo-container {
         display: flex;
         justify-content: center;
@@ -99,14 +103,6 @@ with col_logo:
     else:
         st.warning(t("coords_logo_warning"))
 
-    # Animação: casos se agrupando em clusters (DBSCAN)
-    animacao = (
-        Path("assets/cluster_animation.html").read_text(encoding="utf-8")
-        .replace("__CAPTION__", t("home_anim_caption"))
-        .replace("__CLUSTER__", t("home_anim_cluster"))
-        .replace("__NOISE__", t("home_anim_noise"))
-    )
-    components.html(animacao, height=300)
 
 with col_texto:
     html(f"""
@@ -142,3 +138,11 @@ html(f"""
 """)
 
 footer(t("home_footer"))
+
+# ======================================
+# FUNDO ANIMADO (casos formando clusters)
+# ======================================
+st.html(
+    f"<script>{Path('assets/cluster_background.js').read_text(encoding='utf-8')}</script>",
+    unsafe_allow_javascript=True,
+)

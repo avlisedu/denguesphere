@@ -22,7 +22,7 @@ TRANSLATIONS = {
         "home_welcome_header": "Bem-vindo ao DengueSphere",
         "home_main_text": """
 O **DengueSphere** é uma plataforma interativa para análise espacial e clusterização de casos de dengue,
-baseada no algoritmo **DBSCAN (Density-Based Spatial Clustering)**.
+baseada no algoritmo **DBSCAN (Density-Based Spatial Clustering of Applications with Noise)**.
 
 Com o sistema, é possível:
 
@@ -36,9 +36,6 @@ Com o sistema, é possível:
 
 Utilize o menu no topo para navegar entre as seções.
 """,
-        "home_anim_caption": "DBSCAN em ação",
-        "home_anim_cluster": "cluster",
-        "home_anim_noise": "ruído",
         "home_dataset_header": "Base de dados de exemplo",
         "home_dataset_badge": "Dados abertos da Prefeitura do Recife",
         "home_dataset_title": "Casos de Dengue, Zika e Chikungunya",
@@ -210,7 +207,7 @@ Esta ferramenta permite:
         "home_welcome_header": "Welcome to DengueSphere",
         "home_main_text": """
 **DengueSphere** is an interactive platform for spatial analysis and clustering of dengue cases,
-based on the **DBSCAN (Density-Based Spatial Clustering)** algorithm.
+based on the **DBSCAN (Density-Based Spatial Clustering of Applications with Noise)** algorithm.
 
 With the system, you can:
 
@@ -224,9 +221,6 @@ With the system, you can:
 
 Use the top menu to navigate between sections.
 """,
-        "home_anim_caption": "DBSCAN in action",
-        "home_anim_cluster": "cluster",
-        "home_anim_noise": "noise",
         "home_dataset_header": "Sample dataset",
         "home_dataset_badge": "Open data from the City of Recife",
         "home_dataset_title": "Dengue, Zika and Chikungunya Cases",
