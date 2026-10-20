@@ -47,7 +47,7 @@ def milhar(n):
 
 def para_numero(serie):
     """Converte coordenadas, aceitando vírgula decimal ("-8,05")."""
-    if serie.dtype == object:
+    if not pd.api.types.is_numeric_dtype(serie):  # texto (object no pandas 2, str no pandas 3)
         serie = serie.astype(str).str.strip().str.replace(",", ".", regex=False)
     return pd.to_numeric(serie, errors="coerce")
 
