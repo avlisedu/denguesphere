@@ -1,76 +1,69 @@
 import streamlit as st
-import base64
-from pathlib import Path
 from i18n import t
+from ui import inject_styles, html, logo_html, chips, section, footer
 
-# ======================================
-# CONFIGURAÇÃO DE ESTILO
-# ======================================
-st.markdown("""
-<style>
-    /* Fundo branco fixo */
-    .stApp {
-        background-color: #ffffff !important;
-    }
+STACK = ["DBSCAN", "OpenStreetMap", "Python", "Streamlit"]
 
-    /* Logo à esquerda, centralizada na sua coluna */
-    .logo-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-top: 30px;
-        margin-bottom: 10px;
-    }
+inject_styles()
 
-    .logo-container img {
-        max-width: 280px;
-        height: auto;
-        border-radius: 0;
-        box-shadow: none;
-        pointer-events: none;
-    }
-
-    /* Título e subtítulo alinhados à esquerda, ao lado da logo */
-    .content {
-        text-align: left;
-    }
-
-    .content h2 {
-        color: #0d47a1;
-        margin-top: 15px;
-    }
-
-    .content em {
-        color: #1565c0;
-    }
-</style>
-""", unsafe_allow_html=True)
-
-col_logo, col_texto = st.columns([1, 2], gap="large", vertical_alignment="center")
-
-with col_logo:
-    logo_path = Path("img/logo.png")
-    if logo_path.exists():
-        st.markdown(f"""
-        <div class="logo-container">
-            <img src="data:image/png;base64,{base64.b64encode(open(logo_path, "rb").read()).decode()}">
-        </div>
-        """, unsafe_allow_html=True)
-    else:
-        st.warning(t("coords_logo_warning"))
-
-with col_texto:
-    st.markdown(f"""
-    <div class="content">
-        <h2><strong>{t("home_title_h2")}</strong></h2>
-        <p><em>{t("home_subtitle")}</em></p>
+# ============================================================
+# HERO
+# ============================================================
+html(f"""
+<div class="ds-hero">
+    {logo_html()}
+    <div class="ds-hero-body">
+        <span class="ds-eyebrow"><i class="fi fi-rr-microscope"></i>{t("home_eyebrow")}</span>
+        <h1>{t("home_title")}</h1>
+        <div class="ds-hero-sub">{t("home_subtitle")}</div>
+        <p>{t("home_lead")}</p>
+        <div class="ds-chips">{chips(STACK)}</div>
     </div>
-    """, unsafe_allow_html=True)
+</div>
+""")
 
-    st.markdown("---")
+# ============================================================
+# ATALHOS
+# ============================================================
+html(section("fi-rr-rocket-lunch", t("home_start_header")))
 
-    st.header(t("home_welcome_header"))
+col_coords, col_cluster, col_about = st.columns(3)
+with col_coords:
+    st.page_link("pages/coordenadas.py", label=t("home_link_coords"), icon=":material/my_location:", width="stretch")
+with col_cluster:
+    st.page_link("pages/clusterizador.py", label=t("home_link_cluster"), icon=":material/hub:", width="stretch")
+with col_about:
+    st.page_link("pages/sobre.py", label=t("home_link_about"), icon=":material/info:", width="stretch")
 
-    st.markdown(t("home_main_text"))
+# ============================================================
+# COMO FUNCIONA
+# ============================================================
+steps = [
+    ("fi-rr-file-upload", "home_step1_title", "home_step1_text", None),
+    ("fi-rr-map-location-track", "home_step2_title", "home_step2_text", "home_step2_tag"),
+    ("fi-rr-settings-sliders", "home_step3_title", "home_step3_text", None),
+    ("fi-rr-chart-network", "home_step4_title", "home_step4_text", None),
+]
+step_cards = "".join(
+    f"""
+    <div class="ds-card ds-step">
+        <span class="ds-step-num">0{number}</span>
+        <div class="ds-icon"><i class="fi {icon}"></i></div>
+        <h4>{t(title)}</h4>
+        <p>{t(text)}</p>
+        {f'<span class="ds-step-tag">{t(tag)}</span>' if tag else ""}
+    </div>
+    """
+    for number, (icon, title, text, tag) in enumerate(steps, start=1)
+)
 
-st.info(t("home_footer_info"))
+html(f"""
+{section("fi-rr-route", t("home_steps_header"))}
+<div class="ds-grid ds-grid-4">{step_cards}</div>
+<div class="ds-tip"><i class="fi fi-rr-bulb"></i><div>{t("home_tip")}</div></div>
+""")
+
+# ============================================================
+# RODAPÉ
+# ============================================================
+footer(t("home_footer"))

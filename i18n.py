@@ -17,26 +17,30 @@ TRANSLATIONS = {
         "lang_en": "Inglês",
 
         # ---------------- Página Home ----------------
-        "home_title_h2": "DengueSphere v1.0",
+        "home_eyebrow": "Plataforma de Vigilância Epidemiológica",
+        "home_title": "DengueSphere",
         "home_subtitle": "Sistema Interativo de Clusterização Espacial da Dengue",
-        "home_welcome_header": "Bem-vindo ao DengueSphere v1.0",
-        "home_main_text": """
-O **DengueSphere** é uma plataforma interativa para análise espacial e clusterização de casos de dengue,
-baseada no algoritmo **DBSCAN (Density-Based Spatial Clustering)**.
+        "home_lead": "Identifique aglomerados de casos de dengue a partir de dados geográficos, com o algoritmo DBSCAN, mapas interativos e estatísticas para apoiar a tomada de decisão.",
 
-Com o sistema, é possível:
+        "home_start_header": "Comece por aqui",
+        "home_link_coords": "Localizar Coordenadas",
+        "home_link_cluster": "Abrir o Clusterizador",
+        "home_link_about": "Sobre o projeto",
 
-- Carregar bases de dados geográficas (latitude, longitude e data);
-- Definir parâmetros de clusterização;
-- Visualizar agrupamentos em mapas interativos;
-- Gerar estatísticas de distribuição dos clusters.
+        "home_steps_header": "Como funciona",
+        "home_step1_title": "Carregue sua base",
+        "home_step1_text": "Envie uma planilha (.csv ou .xlsx) com latitude, longitude e data dos casos.",
+        "home_step2_title": "Gere as coordenadas",
+        "home_step2_text": "Sem latitude e longitude? Converta CEP e endereço em coordenadas automaticamente.",
+        "home_step2_tag": "Se necessário",
+        "home_step3_title": "Ajuste os parâmetros",
+        "home_step3_text": "Defina o raio (km) e o número mínimo de casos que formam um cluster no DBSCAN.",
+        "home_step4_title": "Analise os resultados",
+        "home_step4_text": "Visualize os clusters no mapa e consulte as estatísticas de distribuição.",
 
-> **Dica:** Caso sua base **não possua coordenadas geográficas**, utilize o módulo **"Coordenadas por CEP"** para **gerar as coordenadas automaticamente**, **baixar a base atualizada** e depois **inseri-la no módulo "Clusterizador"**.  
-> Dependendo do tamanho da base e da taxa de requisições, o processo pode **levar alguns minutos**.
+        "home_tip": "<strong>Dica:</strong> se sua base não tiver coordenadas geográficas, use o módulo <strong>Localizar Coordenadas</strong> para gerá-las, baixe a base atualizada e carregue-a no <strong>Clusterizador</strong>. Dependendo do tamanho da base e da taxa de requisições, o processo pode levar alguns minutos.",
 
-Utilize o menu no topo para navegar entre as seções.
-""",
-        "home_footer_info": "Versão atual: 1.0 – Desenvolvido pelo Grupo de Pesquisa em Sistemas de Informação e Decisão (GPSID) - PPGEP/UFPE.",
+        "home_footer": "Desenvolvido pelo Grupo de Pesquisa em Sistemas de Informação e Decisão (GPSID) – PPGEP/UFPE",
 
         # ---------------- Página Sobre ----------------
         "about_eyebrow": "Sistema de Apoio à Decisão · Vigilância Epidemiológica",
@@ -64,7 +68,22 @@ Utilize o menu no topo para navegar entre as seções.
         "about_pub_pages": "Vol. 1, pp. 154–160",
         "about_pub_cite_hint": "Ao usar o DengueSphere em trabalhos acadêmicos, cite:",
         "about_pub_bibtex": "Ver BibTeX",
-        "about_pub_download": "Baixar .bib",
+
+        "about_releases_header": "Notas de versão",
+        "about_release_current": "Versão atual",
+        "about_release_future": "Próximas versões",
+        "about_release_future_title": "Em desenvolvimento",
+        "about_release_10_items": [
+            "Geocodificação de CEP e endereços via OpenStreetMap, com correção automática de nomes de ruas",
+            "Clusterização espacial de casos com DBSCAN e parâmetros ajustáveis (raio e mínimo de casos)",
+            "Mapas interativos com seleção de mapa base e camada de bairros",
+            "Estatísticas de distribuição dos clusters e avaliação de estabilidade (ARI)",
+            "Interface em português e inglês",
+        ],
+        "about_release_future_items": [
+            "Nowcasting para corrigir o atraso de notificação e evitar clusters subestimados nas semanas mais recentes",
+            "Formação de clusters a partir de previsões (forecasting), antecipando aglomerados de casos",
+        ],
 
         "about_team_header": "Equipe",
         "about_team_eduardo_role": "Doutorando no Programa de Pós-Graduação em Engenharia de Produção (PPGEP/UFPE) · 2025 – atual",
@@ -73,7 +92,7 @@ Utilize o menu no topo para navegar entre as seções.
         "about_team_gpsid_name": "GPSID",
         "about_team_gpsid_role": "Grupo de Pesquisa em Sistemas de Informação e Decisão · PPGEP/UFPE",
 
-        "about_footer": "Versão 1.0 · Desenvolvido por Eduardo da Silva sob orientação da Profa. Dra. Maisa Mendonça Silva · GPSID – PPGEP/UFPE",
+        "about_footer": "Desenvolvido por Eduardo da Silva sob orientação da Profa. Dra. Maisa Mendonça Silva · GPSID – PPGEP/UFPE",
 
 
         # ---------------- Página Coordenadas ----------------
@@ -178,26 +197,30 @@ Esta ferramenta permite:
         "lang_en": "English",
 
         # ---------------- Home Page ----------------
-        "home_title_h2": "DengueSphere v1.0",
+        "home_eyebrow": "Epidemiological Surveillance Platform",
+        "home_title": "DengueSphere",
         "home_subtitle": "Interactive System for Spatial Clustering of Dengue Cases",
-        "home_welcome_header": "Welcome to DengueSphere v1.0",
-        "home_main_text": """
-**DengueSphere** is an interactive platform for spatial analysis and clustering of dengue cases,
-based on the **DBSCAN (Density-Based Spatial Clustering)** algorithm.
+        "home_lead": "Detect clusters of dengue cases from geographic data using the DBSCAN algorithm, interactive maps and statistics that support decision-making.",
 
-With the system, you can:
+        "home_start_header": "Get started",
+        "home_link_coords": "Locate Coordinates",
+        "home_link_cluster": "Open the Clustering Tool",
+        "home_link_about": "About the project",
 
-- Load geographic datasets (latitude, longitude and date);
-- Define clustering parameters;
-- Visualize clusters on interactive maps;
-- Generate statistics on the distribution of clusters.
+        "home_steps_header": "How it works",
+        "home_step1_title": "Load your dataset",
+        "home_step1_text": "Upload a spreadsheet (.csv or .xlsx) with the latitude, longitude and date of each case.",
+        "home_step2_title": "Generate coordinates",
+        "home_step2_text": "No latitude and longitude? Convert ZIP codes and addresses into coordinates automatically.",
+        "home_step2_tag": "If needed",
+        "home_step3_title": "Tune the parameters",
+        "home_step3_text": "Set the radius (km) and the minimum number of cases that form a DBSCAN cluster.",
+        "home_step4_title": "Analyze the results",
+        "home_step4_text": "See the clusters on the map and check the distribution statistics.",
 
-> **Tip:** If your dataset **does not contain geographic coordinates**, use the **\"Coordinates by ZIP Code\"** module to **automatically generate coordinates**, **download the updated dataset**, and then **load it into the \"Clustering Tool\" module**.  
-> Depending on the dataset size and request rate, this process may **take a few minutes**.
+        "home_tip": "<strong>Tip:</strong> if your dataset has no geographic coordinates, use the <strong>Locate Coordinates</strong> module to generate them, download the updated dataset and load it into the <strong>Clustering Tool</strong>. Depending on the dataset size and request rate, this may take a few minutes.",
 
-Use the top menu to navigate between sections.
-""",
-        "home_footer_info": "Current version: 1.0 – Developed by the Information and Decision Systems Research Group (GPSID) - PPGEP/UFPE.",
+        "home_footer": "Developed by the Information and Decision Systems Research Group (GPSID) – PPGEP/UFPE",
 
         # ---------------- About Page ----------------
         "about_eyebrow": "Decision Support System · Epidemiological Surveillance",
@@ -225,7 +248,22 @@ Use the top menu to navigate between sections.
         "about_pub_pages": "Vol. 1, pp. 154–160",
         "about_pub_cite_hint": "If you use DengueSphere in academic work, please cite:",
         "about_pub_bibtex": "Show BibTeX",
-        "about_pub_download": "Download .bib",
+
+        "about_releases_header": "Release notes",
+        "about_release_current": "Current version",
+        "about_release_future": "Upcoming versions",
+        "about_release_future_title": "In development",
+        "about_release_10_items": [
+            "Geocoding of ZIP codes and addresses via OpenStreetMap, with automatic street name correction",
+            "Spatial clustering of cases with DBSCAN and adjustable parameters (radius and minimum cases)",
+            "Interactive maps with base map selection and a neighborhood layer",
+            "Cluster distribution statistics and stability assessment (ARI)",
+            "Portuguese and English interface",
+        ],
+        "about_release_future_items": [
+            "Nowcasting to correct reporting delays and avoid underestimated clusters in the most recent weeks",
+            "Cluster formation from forecasts, anticipating clusters of cases",
+        ],
 
         "about_team_header": "Team",
         "about_team_eduardo_role": "PhD student, Graduate Program in Production Engineering (PPGEP/UFPE) · 2025 – present",
@@ -234,7 +272,7 @@ Use the top menu to navigate between sections.
         "about_team_gpsid_name": "GPSID",
         "about_team_gpsid_role": "Information and Decision Systems Research Group · PPGEP/UFPE",
 
-        "about_footer": "Version 1.0 · Developed by Eduardo da Silva under the supervision of Prof. Maisa Mendonça Silva, PhD · GPSID – PPGEP/UFPE",
+        "about_footer": "Developed by Eduardo da Silva under the supervision of Prof. Maisa Mendonça Silva, PhD · GPSID – PPGEP/UFPE",
 
 
         # ---------------- Coordinates Page ----------------
