@@ -9,7 +9,7 @@ TRANSLATIONS = {
         # ---------------- Globais / Navegação ----------------
         "app_title": "DengueSphere v1.0",
         "nav_home": "Início",
-        "nav_coords": "Coordenadas",
+        "nav_coords": "Localizar Coordenadas",
         "nav_cluster": "Clusterizador",
         "nav_about": "Sobre o Projeto",
         "lang_label": "Idioma / Language",
@@ -39,34 +39,41 @@ Utilize o menu no topo para navegar entre as seções.
         "home_footer_info": "Versão atual: 1.0 – Desenvolvido pelo Grupo de Pesquisa em Sistemas de Informação e Decisão (GPSID) - PPGEP/UFPE.",
 
         # ---------------- Página Sobre ----------------
+        "about_eyebrow": "Sistema de Apoio à Decisão · Vigilância Epidemiológica",
         "about_title": "Sobre o DengueSphere",
-        "about_infobox": """
-**DengueSphere** é uma plataforma interativa desenvolvida para 
-apoiar a análise, o tratamento e a visualização de dados geográficos relacionados à dengue. 
-Seu objetivo é facilitar a integração de informações, o mapeamento de áreas de risco 
-e o suporte à tomada de decisões estratégicas no controle da doença.
-""",
-        "about_team_header": "Equipe de desenvolvimento",
-        "about_team_list": """
-- **Eduardo da Silva** — Doutorando do Programa de Pós-Graduação em Engenharia de Produção (PPGEP/UFPE) - (2025 - Atual) <eduardo.es@ufpe.br>
-- **Profa. Dra. Maisa Mendonça Silva** — Orientadora, Docente Permanente do PPGEP/UFPE  
-- **Grupo de Pesquisa em Sistemas de Informação e Decisão (GPSID)** — PPGEP/UFPE  
-""",
-        "about_objectives_header": "Objetivos principais",
-        "about_objectives_list": """
-- Integrar dados geográficos e epidemiológicos.  
-- Permitir análises espaciais e temporais de casos de dengue.  
-- Apoiar gestores públicos e pesquisadores na tomada de decisão.  
-- Disponibilizar ferramentas modulares, incluindo:
-  - Tratamento de CEP e Geocodificação  
-  - Clusterização geográfica  
-  - Visualização interativa em mapas
-  - Análises estatísticas
-""",
-        "about_footer": """
-Versão 1.0 – Desenvolvido por Eduardo da Silva sob orientação da Profa. Dra. Maisa Mendonça Silva.<br>
-Grupo de Pesquisa em Sistemas de Informação e Decisão (GPSID) – PPGEP/UFPE.
-""",
+        "about_lead": "Plataforma interativa para apoiar a análise, o tratamento e a visualização de dados geográficos da dengue, integrando informações, mapeando áreas de risco e apoiando decisões estratégicas no controle da doença.",
+
+        "about_modules_header": "Módulos da plataforma",
+        "about_mod_geo_title": "Geocodificação",
+        "about_mod_geo_text": "Tratamento de CEP e endereços com correção automática de ruas e coordenadas via OpenStreetMap.",
+        "about_mod_cluster_title": "Clusterização espacial",
+        "about_mod_cluster_text": "Identificação de aglomerados de casos com o algoritmo DBSCAN e parâmetros ajustáveis.",
+        "about_mod_map_title": "Mapas interativos",
+        "about_mod_map_text": "Visualização dos clusters sobre mapas base, com camadas de bairros e navegação livre.",
+        "about_mod_stats_title": "Análises estatísticas",
+        "about_mod_stats_text": "Distribuição espacial e temporal dos clusters para apoiar a priorização de ações.",
+
+        "about_objectives_header": "Objetivos",
+        "about_obj_1": "Integrar dados geográficos e epidemiológicos.",
+        "about_obj_2": "Permitir análises espaciais e temporais de casos de dengue.",
+        "about_obj_3": "Apoiar gestores públicos e pesquisadores na tomada de decisão.",
+
+        "about_pub_header": "Publicação",
+        "about_pub_badge": "Artigo de conferência",
+        "about_pub_published": "Publicado nos anais do",
+        "about_pub_pages": "Vol. 1, pp. 154–160",
+        "about_pub_cite_hint": "Ao usar o DengueSphere em trabalhos acadêmicos, cite:",
+        "about_pub_bibtex": "Ver BibTeX",
+        "about_pub_download": "Baixar .bib",
+
+        "about_team_header": "Equipe",
+        "about_team_eduardo_role": "Doutorando no Programa de Pós-Graduação em Engenharia de Produção (PPGEP/UFPE) · 2025 – atual",
+        "about_team_maisa_name": "Profa. Dra. Maísa Mendonça Silva",
+        "about_team_maisa_role": "Orientadora · Docente permanente do PPGEP/UFPE",
+        "about_team_gpsid_name": "GPSID",
+        "about_team_gpsid_role": "Grupo de Pesquisa em Sistemas de Informação e Decisão · PPGEP/UFPE",
+
+        "about_footer": "Versão 1.0 · Desenvolvido por Eduardo da Silva sob orientação da Profa. Dra. Maísa Mendonça Silva · GPSID – PPGEP/UFPE",
 
 
         # ---------------- Página Coordenadas ----------------
@@ -193,33 +200,41 @@ Use the top menu to navigate between sections.
         "home_footer_info": "Current version: 1.0 – Developed by the Information and Decision Systems Research Group (GPSID) - PPGEP/UFPE.",
 
         # ---------------- About Page ----------------
+        "about_eyebrow": "Decision Support System · Epidemiological Surveillance",
         "about_title": "About DengueSphere",
-        "about_infobox": """
-**DengueSphere** is an interactive platform developed to support the analysis, processing and visualization 
-of geographic data related to dengue. Its goal is to facilitate the integration of information, 
-the mapping of risk areas, and to support strategic decision-making in disease control.
-""",
-        "about_team_header": "Development team",
-        "about_team_list": """
-- **Eduardo da Silva** — PhD student, Graduate Program in Production Engineering (PPGEP/UFPE) - (2025 - Present) <eduardo.es@ufpe.br>
-- **Prof. Maisa Mendonça Silva, PhD** — Supervisor, permanent faculty member of PPGEP/UFPE  
-- **Information and Decision Systems Research Group (GPSID)** — PPGEP/UFPE  
-""",
-        "about_objectives_header": "Main objectives",
-        "about_objectives_list": """
-- Integrate geographic and epidemiological data.  
-- Enable spatial and temporal analyses of dengue cases.  
-- Support public managers and researchers in decision-making.  
-- Provide modular tools, including:
-  - ZIP code processing and geocoding  
-  - Geographic clustering  
-  - Interactive map visualization
-  - Statistical analyses
-""",
-        "about_footer": """
-Version 1.0 – Developed by Eduardo da Silva under the supervision of Prof. Maisa Mendonça Silva, PhD.<br>
-Information and Decision Systems Research Group (GPSID) – PPGEP/UFPE.
-""",
+        "about_lead": "An interactive platform that supports the analysis, processing and visualization of dengue geographic data, integrating information, mapping risk areas and supporting strategic decisions in disease control.",
+
+        "about_modules_header": "Platform modules",
+        "about_mod_geo_title": "Geocoding",
+        "about_mod_geo_text": "ZIP code and address processing with automatic street correction and coordinates from OpenStreetMap.",
+        "about_mod_cluster_title": "Spatial clustering",
+        "about_mod_cluster_text": "Detection of case clusters with the DBSCAN algorithm and adjustable parameters.",
+        "about_mod_map_title": "Interactive maps",
+        "about_mod_map_text": "Clusters displayed over base maps, with neighborhood layers and free navigation.",
+        "about_mod_stats_title": "Statistical analyses",
+        "about_mod_stats_text": "Spatial and temporal distribution of clusters to help prioritize actions.",
+
+        "about_objectives_header": "Objectives",
+        "about_obj_1": "Integrate geographic and epidemiological data.",
+        "about_obj_2": "Enable spatial and temporal analyses of dengue cases.",
+        "about_obj_3": "Support public managers and researchers in decision-making.",
+
+        "about_pub_header": "Publication",
+        "about_pub_badge": "Conference paper",
+        "about_pub_published": "Published in the proceedings of the",
+        "about_pub_pages": "Vol. 1, pp. 154–160",
+        "about_pub_cite_hint": "If you use DengueSphere in academic work, please cite:",
+        "about_pub_bibtex": "Show BibTeX",
+        "about_pub_download": "Download .bib",
+
+        "about_team_header": "Team",
+        "about_team_eduardo_role": "PhD student, Graduate Program in Production Engineering (PPGEP/UFPE) · 2025 – present",
+        "about_team_maisa_name": "Prof. Maísa Mendonça Silva, PhD",
+        "about_team_maisa_role": "Supervisor · Permanent faculty member of PPGEP/UFPE",
+        "about_team_gpsid_name": "GPSID",
+        "about_team_gpsid_role": "Information and Decision Systems Research Group · PPGEP/UFPE",
+
+        "about_footer": "Version 1.0 · Developed by Eduardo da Silva under the supervision of Prof. Maísa Mendonça Silva, PhD · GPSID – PPGEP/UFPE",
 
 
         # ---------------- Coordinates Page ----------------

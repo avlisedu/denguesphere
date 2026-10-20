@@ -13,12 +13,11 @@ st.markdown("""
         background-color: #ffffff !important;
     }
 
-    /* Centralização da logo e layout */
+    /* Logo à esquerda, centralizada na sua coluna */
     .logo-container {
         display: flex;
         justify-content: center;
         align-items: center;
-        flex-direction: column;
         margin-top: 30px;
         margin-bottom: 10px;
     }
@@ -31,11 +30,9 @@ st.markdown("""
         pointer-events: none;
     }
 
-    /* Centraliza textos principais */
+    /* Título e subtítulo alinhados à esquerda, ao lado da logo */
     .content {
-        text-align: center;
-        margin: 0 auto;
-        max-width: 800px;
+        text-align: left;
     }
 
     .content h2 {
@@ -49,27 +46,31 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-logo_path = Path("img/logo.png")
-if logo_path.exists():
+col_logo, col_texto = st.columns([1, 2], gap="large", vertical_alignment="center")
+
+with col_logo:
+    logo_path = Path("img/logo.png")
+    if logo_path.exists():
+        st.markdown(f"""
+        <div class="logo-container">
+            <img src="data:image/png;base64,{base64.b64encode(open(logo_path, "rb").read()).decode()}">
+        </div>
+        """, unsafe_allow_html=True)
+    else:
+        st.warning(t("coords_logo_warning"))
+
+with col_texto:
     st.markdown(f"""
-    <div class="logo-container">
-        <img src="data:image/png;base64,{base64.b64encode(open(logo_path, "rb").read()).decode()}">
+    <div class="content">
+        <h2><strong>{t("home_title_h2")}</strong></h2>
+        <p><em>{t("home_subtitle")}</em></p>
     </div>
     """, unsafe_allow_html=True)
-else:
-    st.warning(t("coords_logo_warning"))
 
-st.markdown(f"""
-<div class="content">
-    <h2><strong>{t("home_title_h2")}</strong></h2>
-    <p><em>{t("home_subtitle")}</em></p>
-</div>
-""", unsafe_allow_html=True)
+    st.markdown("---")
 
-st.markdown("---")
+    st.header(t("home_welcome_header"))
 
-st.header(t("home_welcome_header"))
-
-st.markdown(t("home_main_text"))
+    st.markdown(t("home_main_text"))
 
 st.info(t("home_footer_info"))
