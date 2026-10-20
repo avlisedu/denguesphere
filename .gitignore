@@ -1,0 +1,11 @@
+# Ambientes virtuais e dependências (recriados via requirements.txt / package.json)
+.venv/
+venv/
+node_modules/
+
+# Cache do Python
+__pycache__/
+*.pyc
+
+# macOS
+.DS_Store
