@@ -46,10 +46,10 @@ with lang_area:
 # ======================================
 pg = st.navigation(
     [
-        st.Page("pages/home.py", title=t("nav_home")),
-        st.Page("pages/coordenadas.py", title=t("nav_coords")),
-        st.Page("pages/clusterizador.py", title=t("nav_cluster")),
-        st.Page("pages/sobre.py", title=t("nav_about")),
+        st.Page("pages/home.py", title=t("nav_home"), icon=":material/home:"),
+        st.Page("pages/coordenadas.py", title=t("nav_coords"), icon=":material/my_location:"),
+        st.Page("pages/clusterizador.py", title=t("nav_cluster"), icon=":material/hub:"),
+        st.Page("pages/sobre.py", title=t("nav_about"), icon=":material/info:"),
     ],
     position="top"
 )
