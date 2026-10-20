@@ -44,7 +44,9 @@ STYLES = """
     position: relative;
     z-index: 1;
 }
-.ds-hero-logo img { width: 170px; height: auto; display: block; pointer-events: none; filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.45)) drop-shadow(0 10px 22px rgba(0, 0, 0, 0.28)); }
+.ds-hero-logo { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.ds-hero-logo img { width: 170px; height: auto; display: block; pointer-events: none; filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.25)); }
+.ds-hero-logo span { color: #ffffff; font-size: 1.35rem; font-weight: 700; letter-spacing: 0.01em; }
 .ds-hero-body { position: relative; z-index: 1; }
 .ds-eyebrow {
     display: inline-flex;
@@ -482,12 +484,12 @@ def html(markup: str):
 
 
 def logo_html() -> str:
-    """Logo para fundos escuros (hero): versão com texto branco."""
+    """Logo para fundos escuros (hero): só o globo, com o nome em texto branco abaixo."""
     logo_path = Path("img/logo_dark.png")
     if not logo_path.exists():
         return ""
     logo_b64 = base64.b64encode(logo_path.read_bytes()).decode()
-    return f'<div class="ds-hero-logo"><img src="data:image/png;base64,{logo_b64}"></div>'
+    return f'<div class="ds-hero-logo"><img src="data:image/png;base64,{logo_b64}" alt=""><span>DengueSphere</span></div>'
 
 
 def chips(items) -> str:
