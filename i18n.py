@@ -68,12 +68,12 @@ Utilize o menu no topo para navegar entre as seções.
 
         "about_team_header": "Equipe",
         "about_team_eduardo_role": "Doutorando no Programa de Pós-Graduação em Engenharia de Produção (PPGEP/UFPE) · 2025 – atual",
-        "about_team_maisa_name": "Profa. Dra. Maísa Mendonça Silva",
+        "about_team_maisa_name": "Profa. Dra. Maisa Mendonça Silva",
         "about_team_maisa_role": "Orientadora · Docente permanente do PPGEP/UFPE",
         "about_team_gpsid_name": "GPSID",
         "about_team_gpsid_role": "Grupo de Pesquisa em Sistemas de Informação e Decisão · PPGEP/UFPE",
 
-        "about_footer": "Versão 1.0 · Desenvolvido por Eduardo da Silva sob orientação da Profa. Dra. Maísa Mendonça Silva · GPSID – PPGEP/UFPE",
+        "about_footer": "Versão 1.0 · Desenvolvido por Eduardo da Silva sob orientação da Profa. Dra. Maisa Mendonça Silva · GPSID – PPGEP/UFPE",
 
 
         # ---------------- Página Coordenadas ----------------
@@ -229,12 +229,12 @@ Use the top menu to navigate between sections.
 
         "about_team_header": "Team",
         "about_team_eduardo_role": "PhD student, Graduate Program in Production Engineering (PPGEP/UFPE) · 2025 – present",
-        "about_team_maisa_name": "Prof. Maísa Mendonça Silva, PhD",
+        "about_team_maisa_name": "Prof. Maisa Mendonça Silva, PhD",
         "about_team_maisa_role": "Supervisor · Permanent faculty member of PPGEP/UFPE",
         "about_team_gpsid_name": "GPSID",
         "about_team_gpsid_role": "Information and Decision Systems Research Group · PPGEP/UFPE",
 
-        "about_footer": "Version 1.0 · Developed by Eduardo da Silva under the supervision of Prof. Maísa Mendonça Silva, PhD · GPSID – PPGEP/UFPE",
+        "about_footer": "Version 1.0 · Developed by Eduardo da Silva under the supervision of Prof. Maisa Mendonça Silva, PhD · GPSID – PPGEP/UFPE",
 
 
         # ---------------- Coordinates Page ----------------

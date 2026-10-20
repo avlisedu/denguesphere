@@ -9,7 +9,7 @@ from i18n import t
 BIBTEX = r"""@inproceedings{Silva:DengueSphere:2026,
   title = {A Decision Support System Applied to Dengue Epidemiological Surveillance: {{The DengueSphere}} Platform},
   booktitle = {Proceedings of the 2026 International Conference on Decision Support System Technology ({{ICDSST}} 2026)},
-  author = {Silva, Eduardo and Economou, Theo and Silva, Ma{\'i}sa Mendon{\c c}a},
+  author = {Silva, Eduardo and Economou, Theo and Silva, Maisa Mendon{\c c}a},
   year = {2026},
   volume = {1},
   pages = {154--160},
@@ -21,7 +21,7 @@ BIBTEX = r"""@inproceedings{Silva:DengueSphere:2026,
 """
 
 PUB_TITLE = "A Decision Support System Applied to Dengue Epidemiological Surveillance: The DengueSphere Platform"
-PUB_AUTHORS = "Eduardo Silva · Theo Economou · Maísa Mendonça Silva"
+PUB_AUTHORS = "Eduardo Silva · Theo Economou · Maisa Mendonça Silva"
 PUB_VENUE = "International Conference on Decision Support System Technology (ICDSST 2026)"
 PUB_PUBLISHER = "University of Plymouth · Plymouth, United Kingdom"
 PUB_ISBN = "ISBN 978-1-84102-474-5"
