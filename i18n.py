@@ -10,7 +10,7 @@ TRANSLATIONS = {
         "app_title": "DengueSphere v1.0",
         "nav_home": "Início",
         "nav_coords": "Localizar Coordenadas",
-        "nav_cluster": "Clusterizador",
+        "nav_cluster": "Clusterizar Casos",
         "nav_about": "Sobre o Projeto",
         "lang_label": "Idioma / Language",
         "lang_pt": "Português",
@@ -31,7 +31,7 @@ Com o sistema, é possível:
 - Visualizar agrupamentos em mapas interativos;
 - Gerar estatísticas de distribuição dos clusters.
 
-> **Dica:** Caso sua base **não possua coordenadas geográficas**, utilize o módulo **"Localizar Coordenadas"** para **gerar as coordenadas automaticamente**, **baixar a base atualizada** e depois **inseri-la no módulo "Clusterizador"**.  
+> **Dica:** Caso sua base **não possua coordenadas geográficas**, utilize o módulo **"Localizar Coordenadas"** para **gerar as coordenadas automaticamente**, **baixar a base atualizada** e depois **inseri-la no módulo "Clusterizar Casos"**.  
 > Dependendo do tamanho da base e da taxa de requisições, o processo pode **levar alguns minutos**.
 
 Utilize o menu no topo para navegar entre as seções.
@@ -39,7 +39,7 @@ Utilize o menu no topo para navegar entre as seções.
         "home_dataset_header": "Base de dados de exemplo",
         "home_dataset_badge": "Dados abertos da Prefeitura do Recife",
         "home_dataset_title": "Casos de Dengue, Zika e Chikungunya",
-        "home_dataset_text": "Notificações registradas nas unidades de saúde públicas e privadas do Recife. Os arquivos de dengue trazem bairro, logradouro e CEP, mas não latitude e longitude: use primeiro o módulo <strong>Localizar Coordenadas</strong> e depois carregue a base no <strong>Clusterizador</strong>.",
+        "home_dataset_text": "Notificações registradas nas unidades de saúde públicas e privadas do Recife. Os arquivos de dengue trazem bairro, logradouro e CEP, mas não latitude e longitude: use primeiro o módulo <strong>Localizar Coordenadas</strong> e depois carregue a base em <strong>Clusterizar Casos</strong>.",
         "home_dataset_years": "Dengue: 2013–2025, um CSV por ano",
         "home_dataset_publisher": "Secretaria de Saúde do Recife",
         "home_dataset_license": "Licença ODbL",
@@ -102,7 +102,7 @@ Utilize o menu no topo para navegar entre as seções.
 
         # ---------------- Página Coordenadas ----------------
         "coords_title": "Localizar Coordenadas",
-        "coords_lead": "Converta CEP, rua e bairro em latitude e longitude usando o OpenStreetMap, e baixe a base pronta para o Clusterizador.",
+        "coords_lead": "Converta CEP, rua e bairro em latitude e longitude usando o OpenStreetMap, e baixe a base pronta para Clusterizar Casos.",
         "coords_feat_columns": "Escolha as colunas de CEP, rua e bairro de qualquer planilha",
         "coords_feat_fix": "Nomes de ruas são normalizados antes da busca",
         "coords_feat_osm": "Coordenadas obtidas no OpenStreetMap (Nominatim)",
@@ -138,7 +138,7 @@ Utilize o menu no topo para navegar entre as seções.
         "coords_logo_warning": "Logo não encontrada. Coloque o arquivo **logo.png** na pasta raiz do projeto.",
 
         # ---------------- Página Clusterizador ----------------
-        "cluster_title": "Clusterizador",
+        "cluster_title": "Clusterizar Casos",
         "cluster_table_title": "Casos por cluster",
         "cluster_req_link": "Sua base não tem coordenadas? Gere em Localizar Coordenadas",
         "cluster_req_format": "Arquivo CSV ou Excel (.xlsx)",
