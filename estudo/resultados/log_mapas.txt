@@ -1,0 +1,51 @@
+
+===== mapas_calor
+/Users/eduardo/Downloads/00. local/denguesphere/estudo/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py:4786: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+  arr.partition(
+/Users/eduardo/Downloads/00. local/denguesphere/estudo/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py:4786: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+  arr.partition(
+/Users/eduardo/Downloads/00. local/denguesphere/estudo/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py:4786: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+  arr.partition(
+/Users/eduardo/Downloads/00. local/denguesphere/estudo/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py:4786: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+  arr.partition(
+/Users/eduardo/Downloads/00. local/denguesphere/estudo/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py:4786: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+  arr.partition(
+/Users/eduardo/Downloads/00. local/denguesphere/estudo/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py:4786: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+  arr.partition(
+'created' timestamp seems very low; regarding as unix timestamp
+'modified' timestamp seems very low; regarding as unix timestamp
+'created' timestamp seems very low; regarding as unix timestamp
+'modified' timestamp seems very low; regarding as unix timestamp
+'created' timestamp seems very low; regarding as unix timestamp
+'modified' timestamp seems very low; regarding as unix timestamp
+/Users/eduardo/Downloads/00. local/denguesphere/estudo/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py:4786: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+  arr.partition(
+/Users/eduardo/Downloads/00. local/denguesphere/estudo/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py:4786: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+  arr.partition(
+/Users/eduardo/Downloads/00. local/denguesphere/estudo/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py:4786: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+  arr.partition(
+/Users/eduardo/Downloads/00. local/denguesphere/estudo/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py:4786: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+  arr.partition(
+/Users/eduardo/Downloads/00. local/denguesphere/estudo/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py:4786: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+  arr.partition(
+/Users/eduardo/Downloads/00. local/denguesphere/estudo/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py:4786: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+  arr.partition(
+/Users/eduardo/Downloads/00. local/denguesphere/estudo/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py:4786: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+  arr.partition(
+/Users/eduardo/Downloads/00. local/denguesphere/estudo/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py:4786: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+  arr.partition(
+/Users/eduardo/Downloads/00. local/denguesphere/estudo/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py:4786: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+  arr.partition(
+/Users/eduardo/Downloads/00. local/denguesphere/estudo/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py:4786: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+  arr.partition(
+/Users/eduardo/Downloads/00. local/denguesphere/estudo/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py:4786: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+  arr.partition(
+/Users/eduardo/Downloads/00. local/denguesphere/estudo/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py:4786: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+  arr.partition(
+/Users/eduardo/Downloads/00. local/denguesphere/estudo/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py:4786: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+  arr.partition(
+'created' timestamp seems very low; regarding as unix timestamp
+'modified' timestamp seems very low; regarding as unix timestamp
+'created' timestamp seems very low; regarding as unix timestamp
+'modified' timestamp seems very low; regarding as unix timestamp
+(14 s)

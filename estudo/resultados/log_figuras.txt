@@ -1,0 +1,263 @@
+
+===== descritiva
+         notificados  confirmados  pct_nivel_rua  pct_centroide_bairro  pct_nao_encontrado  incidencia_100mil  pico_semanal  se_pico
+ano_epi                                                                                                                             
+2013          3262.0       1304.0           85.4                  14.6                 0.0               87.6          77.0     18.0
+2014          1159.0        363.0           85.7                  14.3                 0.0               24.4          24.0     20.0
+2015         34675.0      23576.0           80.8                  18.6                 0.5             1583.4        1573.0     14.0
+2016         18505.0      12083.0           81.6                  17.3                 1.0              811.5        1144.0      6.0
+2017          2445.0        955.0           81.9                  18.1                 0.0               64.1          41.0      2.0
+2018          2686.0       1207.0           81.3                  18.2                 0.5               81.1          53.0     19.0
+2019          7309.0       4102.0           81.3                  17.6                 1.0              275.5         190.0     34.0
+2020          3619.0       1544.0           81.0                  18.5                 0.5              103.7          79.0     30.0
+2021         10977.0       7435.0           82.4                  17.6                 0.0              499.4         569.0     22.0
+2022          2795.0       1291.0           83.5                  16.3                 0.2               86.7          55.0     31.0
+2023          3502.0       1414.0           86.0                  13.9                 0.1               95.0          57.0     11.0
+2024         10483.0       3007.0           87.8                  12.0                 0.2              202.0         160.0     10.0
+2025          9051.0       5066.0           87.0                  12.9                 0.1              340.2         215.0     31.0
+Total       110468.0      63347.0           82.4                  17.1                 0.5              327.3           NaN      NaN
+(3 s)
+
+===== sensibilidade
+                                             janelas            n_clusters               pct_ruido    pct_maior_cluster           silhueta  pct_janelas_com_cluster
+nivel                    eps_km min_samples                                                                                                                        
+alta (>400)              0.10   3                 28  60.50 [27.25–163.25]     61.27 [45.29–78.67]     1.85 [1.23–2.63]   0.87 [0.80–0.91]               100.000000
+                                5                 28    23.00 [6.75–64.50]     79.82 [67.35–91.94]     1.85 [1.23–2.63]   0.88 [0.80–0.94]               100.000000
+                                10                28     2.50 [0.75–13.50]     95.38 [88.15–99.01]     1.30 [0.61–2.42]   0.88 [0.86–0.96]                75.000000
+                                15                28      1.00 [0.00–6.00]    98.33 [94.66–100.00]     0.84 [0.00–1.68]   0.92 [0.89–0.96]                53.571429
+                                20                28      0.00 [0.00–2.00]   100.00 [97.18–100.00]     0.00 [0.00–1.22]   0.96 [0.95–0.98]                35.714286
+                         0.20   3                 28  82.50 [41.75–150.50]     36.94 [19.59–50.44]     5.06 [3.40–8.94]   0.65 [0.45–0.72]               100.000000
+                                5                 28   33.00 [17.50–80.75]     56.09 [34.16–73.81]     4.85 [3.12–8.70]   0.70 [0.48–0.79]               100.000000
+                                10                28     9.00 [2.00–28.50]     78.22 [63.65–93.70]     3.52 [2.77–5.11]   0.76 [0.65–0.93]                85.714286
+                                15                28     4.00 [0.75–12.25]     91.09 [78.07–97.79]     2.90 [1.40–4.58]   0.80 [0.73–0.86]                75.000000
+                                20                28      1.00 [0.00–7.00]    97.82 [87.29–100.00]     1.96 [0.00–3.80]   0.81 [0.78–0.88]                53.571429
+                         0.30   3                 28   59.50 [43.00–79.25]      20.25 [7.68–30.25]   12.94 [7.53–22.15]   0.47 [0.16–0.58]               100.000000
+                                5                 28   38.00 [21.75–52.00]     36.87 [16.75–53.79]   12.60 [6.14–19.53]   0.53 [0.24–0.64]               100.000000
+                                10                28    12.50 [5.00–34.00]     60.74 [34.01–81.51]    7.44 [5.25–12.86]   0.64 [0.42–0.79]                96.428571
+                                15                28     6.50 [1.75–18.50]     74.65 [53.23–95.83]    5.08 [3.60–10.81]   0.62 [0.52–0.75]                82.142857
+                                20                28     4.00 [0.00–10.50]    90.40 [68.08–100.00]     4.63 [0.00–9.56]   0.66 [0.58–0.70]                67.857143
+                         0.50   3                 28   28.00 [21.00–33.00]       4.51 [1.82–10.51]  38.56 [26.80–61.18]  0.18 [-0.07–0.30]               100.000000
+                                5                 28   18.00 [15.50–21.25]      12.70 [3.44–20.79]  38.08 [24.45–59.11]   0.30 [0.04–0.39]               100.000000
+                                10                28    11.00 [8.75–14.00]     30.99 [12.68–51.24]  27.06 [12.15–45.49]   0.46 [0.26–0.62]               100.000000
+                                15                28     9.00 [5.00–12.00]     47.97 [21.09–65.47]   19.36 [9.46–31.62]   0.60 [0.35–0.74]                96.428571
+                                20                28     5.00 [2.00–11.00]     60.39 [27.82–84.10]   15.36 [6.83–26.35]   0.60 [0.37–0.80]                85.714286
+                         0.75   3                 28     9.00 [4.75–13.25]        1.24 [0.24–2.75]  74.96 [45.57–96.34]  0.11 [-0.09–0.22]               100.000000
+                                5                 28     7.00 [4.00–11.25]        3.15 [0.62–7.24]  74.39 [43.34–96.18]  0.21 [-0.03–0.32]               100.000000
+                                10                28      7.00 [5.00–9.00]       9.96 [1.85–23.07]  45.39 [36.31–91.33]   0.31 [0.20–0.49]               100.000000
+                                15                28      5.00 [4.75–8.00]      20.55 [5.07–38.33]  41.60 [28.64–81.45]  0.45 [-0.04–0.60]               100.000000
+                                20                28      4.50 [3.75–6.00]      34.17 [9.98–53.82]  39.40 [20.55–60.76]   0.50 [0.30–0.65]               100.000000
+                         1.00   3                 28      4.00 [2.00–7.00]        0.28 [0.12–1.15]  93.72 [88.75–99.05]  0.07 [-0.17–0.17]               100.000000
+                                5                 28      3.00 [2.00–5.00]        0.74 [0.17–2.71]  93.03 [84.27–98.32]   0.14 [0.04–0.24]               100.000000
+                                10                28      4.00 [2.00–6.00]        2.32 [0.50–9.67]  90.32 [46.32–97.65]   0.28 [0.19–0.41]               100.000000
+                                15                28      3.50 [2.00–5.00]       8.76 [1.79–20.98]  66.81 [43.19–95.06]   0.44 [0.17–0.54]               100.000000
+                                20                28      3.00 [2.00–4.00]      14.01 [3.12–35.75]  58.84 [41.29–91.34]   0.56 [0.17–0.67]               100.000000
+baixa (<100 casos/4 sem) 0.10   3                 67      0.00 [0.00–1.00]   100.00 [95.51–100.00]     0.00 [0.00–4.23]   0.99 [0.97–1.00]                38.805970
+                                5                 67      0.00 [0.00–0.00]  100.00 [100.00–100.00]     0.00 [0.00–0.00]   0.93 [0.93–0.93]                 5.970149
+                                10                67      0.00 [0.00–0.00]  100.00 [100.00–100.00]     0.00 [0.00–0.00]   0.91 [0.91–0.91]                 1.492537
+                                15                67      0.00 [0.00–0.00]  100.00 [100.00–100.00]     0.00 [0.00–0.00]      nan [nan–nan]                 1.492537
+                                20                67      0.00 [0.00–0.00]  100.00 [100.00–100.00]     0.00 [0.00–0.00]      nan [nan–nan]                 0.000000
+                         0.20   3                 67      1.00 [0.00–2.00]    95.08 [90.14–100.00]     3.85 [0.00–5.73]   0.95 [0.90–0.98]                61.194030
+                                5                 67      0.00 [0.00–0.00]  100.00 [100.00–100.00]     0.00 [0.00–0.00]   0.92 [0.92–0.92]                11.940299
+                                10                67      0.00 [0.00–0.00]  100.00 [100.00–100.00]     0.00 [0.00–0.00]   0.91 [0.91–0.91]                 2.985075
+                                15                67      0.00 [0.00–0.00]  100.00 [100.00–100.00]     0.00 [0.00–0.00]   0.99 [0.99–0.99]                 1.492537
+                                20                67      0.00 [0.00–0.00]  100.00 [100.00–100.00]     0.00 [0.00–0.00]      nan [nan–nan]                 0.000000
+                         0.30   3                 67      2.00 [0.00–3.00]    90.28 [81.84–100.00]     5.21 [0.00–7.41]   0.90 [0.88–0.96]                73.134328
+                                5                 67      0.00 [0.00–0.00]  100.00 [100.00–100.00]     0.00 [0.00–0.00]   0.92 [0.90–0.95]                20.895522
+                                10                67      0.00 [0.00–0.00]  100.00 [100.00–100.00]     0.00 [0.00–0.00]   0.91 [0.91–0.91]                 2.985075
+                                15                67      0.00 [0.00–0.00]  100.00 [100.00–100.00]     0.00 [0.00–0.00]   0.99 [0.99–0.99]                 1.492537
+                                20                67      0.00 [0.00–0.00]  100.00 [100.00–100.00]     0.00 [0.00–0.00]      nan [nan–nan]                 0.000000
+                         0.50   3                 67      5.00 [2.00–6.00]     70.83 [60.72–85.28]    9.43 [6.42–11.05]   0.78 [0.71–0.86]                91.044776
+                                5                 67      1.00 [0.00–1.00]    92.86 [85.80–100.00]     6.59 [0.00–9.99]   0.79 [0.71–0.92]                56.716418
+                                10                67      0.00 [0.00–0.00]  100.00 [100.00–100.00]     0.00 [0.00–0.00]   0.98 [0.98–0.98]                 4.477612
+                                15                67      0.00 [0.00–0.00]  100.00 [100.00–100.00]     0.00 [0.00–0.00]   0.98 [0.98–0.98]                 1.492537
+                                20                67      0.00 [0.00–0.00]  100.00 [100.00–100.00]     0.00 [0.00–0.00]      nan [nan–nan]                 1.492537
+                         0.75   3                 67      6.00 [4.00–8.00]     49.18 [42.20–58.80]  14.75 [10.81–21.31]   0.70 [0.61–0.76]                98.507463
+                                5                 67      2.00 [1.00–3.00]     76.40 [64.33–89.82]   13.79 [8.38–17.48]   0.75 [0.66–0.90]                79.104478
+                                10                67      0.00 [0.00–0.00]  100.00 [100.00–100.00]     0.00 [0.00–0.00]   0.78 [0.69–0.88]                14.925373
+                                15                67      0.00 [0.00–0.00]  100.00 [100.00–100.00]     0.00 [0.00–0.00]   0.97 [0.97–0.97]                 5.970149
+                                20                67      0.00 [0.00–0.00]  100.00 [100.00–100.00]     0.00 [0.00–0.00]   0.97 [0.97–0.97]                 1.492537
+                         1.00   3                 67      6.00 [4.50–8.00]     32.56 [24.70–45.67]  22.95 [17.77–32.42]   0.60 [0.54–0.69]               100.000000
+                                5                 67      3.00 [1.00–4.00]     59.38 [46.28–78.66]  20.00 [13.30–28.19]   0.70 [0.61–0.78]                92.537313
+                                10                67      0.00 [0.00–1.00]   100.00 [82.65–100.00]    0.00 [0.00–16.76]   0.73 [0.69–0.81]                37.313433
+                                15                67      0.00 [0.00–0.00]  100.00 [100.00–100.00]     0.00 [0.00–0.00]   0.97 [0.97–0.97]                 7.462687
+                                20                67      0.00 [0.00–0.00]  100.00 [100.00–100.00]     0.00 [0.00–0.00]   0.97 [0.97–0.97]                 2.985075
+média (100–400)          0.10   3                 59      3.00 [2.00–8.00]     90.61 [84.00–96.38]     2.51 [1.73–3.62]   0.97 [0.93–0.98]                86.440678
+                                5                 59      1.00 [0.00–2.00]    98.13 [93.55–100.00]     1.63 [0.00–3.46]   0.98 [0.93–0.99]                54.237288
+                                10                59      0.00 [0.00–0.00]  100.00 [100.00–100.00]     0.00 [0.00–0.00]   0.79 [0.72–0.85]                11.864407
+                                15                59      0.00 [0.00–0.00]  100.00 [100.00–100.00]     0.00 [0.00–0.00]   0.99 [0.99–0.99]                 5.084746
+                                20                59      0.00 [0.00–0.00]  100.00 [100.00–100.00]     0.00 [0.00–0.00]   0.99 [0.99–0.99]                 3.389831
+                         0.20   3                 59     6.00 [3.00–15.50]     81.25 [70.68–89.90]     3.54 [2.70–4.95]   0.88 [0.83–0.93]               100.000000
+                                5                 59      2.00 [0.00–3.50]    94.06 [86.50–100.00]     3.14 [0.00–4.79]   0.89 [0.84–0.97]                71.186441
+                                10                59      0.00 [0.00–0.50]   100.00 [97.87–100.00]     0.00 [0.00–1.55]   0.97 [0.93–0.98]                25.423729
+                                15                59      0.00 [0.00–0.00]  100.00 [100.00–100.00]     0.00 [0.00–0.00]   0.95 [0.94–0.97]                10.169492
+                                20                59      0.00 [0.00–0.00]  100.00 [100.00–100.00]     0.00 [0.00–0.00]   0.95 [0.94–0.97]                 6.779661
+                         0.30   3                 59    12.00 [6.50–23.00]     67.38 [52.11–76.21]     5.23 [3.87–8.89]   0.77 [0.72–0.85]               100.000000
+                                5                 59      2.00 [1.00–6.50]     86.91 [77.11–95.06]     4.90 [3.16–8.23]   0.86 [0.80–0.90]                88.135593
+                                10                59      0.00 [0.00–1.00]   100.00 [90.98–100.00]     0.00 [0.00–5.21]   0.92 [0.84–0.96]                40.677966
+                                15                59      0.00 [0.00–0.00]  100.00 [100.00–100.00]     0.00 [0.00–0.00]   0.86 [0.81–0.92]                13.559322
+                                20                59      0.00 [0.00–0.00]  100.00 [100.00–100.00]     0.00 [0.00–0.00]   0.92 [0.89–0.95]                10.169492
+                         0.50   3                 59   17.00 [12.00–24.00]     41.90 [25.31–50.48]   10.56 [7.90–14.62]   0.66 [0.55–0.74]               100.000000
+                                5                 59     6.00 [3.50–13.50]     67.05 [46.23–76.35]    9.85 [6.67–12.51]   0.78 [0.64–0.86]                98.305085
+                                10                59      1.00 [0.00–2.50]    89.39 [79.66–100.00]    6.11 [0.00–10.48]   0.86 [0.77–0.93]                62.711864
+                                15                59      0.00 [0.00–1.00]   100.00 [93.35–100.00]     0.00 [0.00–6.23]   0.84 [0.79–0.90]                33.898305
+                                20                59      0.00 [0.00–0.00]  100.00 [100.00–100.00]     0.00 [0.00–0.00]   0.89 [0.85–0.92]                16.949153
+                         0.75   3                 59   14.00 [12.00–16.00]      19.15 [9.75–27.25]  22.22 [15.08–29.62]   0.51 [0.39–0.61]               100.000000
+                                5                 59     8.00 [6.00–10.00]     37.04 [21.35–53.74]  19.23 [12.30–25.83]   0.62 [0.50–0.70]               100.000000
+                                10                59      2.00 [1.00–6.00]     75.11 [51.83–91.09]   12.85 [7.89–19.96]   0.67 [0.61–0.79]                84.745763
+                                15                59      1.00 [0.00–2.00]    89.54 [77.23–100.00]    8.58 [0.00–13.56]   0.79 [0.70–0.83]                55.932203
+                                20                59      0.00 [0.00–1.00]   100.00 [88.86–100.00]     0.00 [0.00–8.97]   0.78 [0.59–0.85]                30.508475
+                         1.00   3                 59     9.00 [7.50–11.00]       8.51 [3.63–14.56]  38.61 [27.00–50.16]   0.39 [0.23–0.48]               100.000000
+                                5                 59      7.00 [5.00–8.00]      18.09 [8.35–33.68]  31.28 [24.02–43.31]   0.46 [0.35–0.58]               100.000000
+                                10                59      4.00 [2.00–5.00]     57.76 [32.98–72.71]  21.27 [12.28–32.90]   0.67 [0.54–0.75]                96.610169
+                                15                59      1.00 [1.00–3.00]     76.97 [49.99–90.82]   15.38 [8.53–24.97]   0.70 [0.63–0.77]                77.966102
+                                20                59      1.00 [0.00–2.00]    88.89 [68.11–100.00]   11.11 [0.00–18.46]   0.73 [0.62–0.81]                54.237288'created' timestamp seems very low; regarding as unix timestamp
+'modified' timestamp seems very low; regarding as unix timestamp
+
+(23 s)
+
+===== prospectiva
+área do município (polígonos OSM): 219.3 km²
+parâmetros escolhidos no treino: (np.float64(0.3), np.int64(3))
+                       nivel  eps_km  min_samples conjunto                            metodo  janelas  pct_janelas_com_alerta  captura_med  area_med  pai_med  pop_med  pai_pop_med
+0   baixa (<100 casos/4 sem)     0.5            3   treino             DBSCAN (DengueSphere)      145                   88.28        11.90      2.91     4.06     6.42         1.83
+1   baixa (<100 casos/4 sem)     0.5            3   treino                  KDE (mesma área)      128                     NaN        16.97      3.31     4.85     7.91         2.03
+2   baixa (<100 casos/4 sem)     0.5            3   treino            População (mesma área)      128                     NaN        12.69      3.31     3.85    16.40         0.82
+3   baixa (<100 casos/4 sem)     0.5            3   treino                Ranking de bairros      128                     NaN        10.53      3.85     2.63     5.51         1.94
+4   baixa (<100 casos/4 sem)     0.5            3   treino  Todos os casos (sem clusterizar)      128                     NaN        47.15     16.06     2.78    32.13         1.40
+5   baixa (<100 casos/4 sem)     0.5            3    teste             DBSCAN (DengueSphere)       97                   98.97        16.67      3.49     4.72     6.67         2.21
+6   baixa (<100 casos/4 sem)     0.5            3    teste                  KDE (mesma área)       96                     NaN        17.99      3.50     4.85     6.92         2.58
+7   baixa (<100 casos/4 sem)     0.5            3    teste            População (mesma área)       96                     NaN        11.54      3.50     3.67    17.13         0.72
+8   baixa (<100 casos/4 sem)     0.5            3    teste                Ranking de bairros       96                     NaN         9.40      4.85     2.15     4.10         2.43
+9   baixa (<100 casos/4 sem)     0.5            3    teste  Todos os casos (sem clusterizar)       96                     NaN        50.74     17.05     2.94    32.49         1.55
+10           média (100–400)     0.2            5   treino             DBSCAN (DengueSphere)       92                   80.43         3.48      0.22    12.00     0.56         5.61
+11           média (100–400)     0.2            5   treino                  KDE (mesma área)       74                     NaN         5.02      0.27    14.05     0.67         5.97
+12           média (100–400)     0.2            5   treino            População (mesma área)       74                     NaN         0.79      0.27     2.64     2.09         0.35
+13           média (100–400)     0.2            5   treino                Ranking de bairros       74                     NaN         2.18      0.45     3.58     0.75         2.72
+14           média (100–400)     0.2            5   treino  Todos os casos (sem clusterizar)       74                     NaN        41.20      8.33     4.52    18.40         2.01
+15           média (100–400)     0.2            5    teste             DBSCAN (DengueSphere)      149                   61.74         1.54      0.13    12.78     0.38         4.59
+16           média (100–400)     0.2            5    teste                  KDE (mesma área)       92                     NaN         6.45      0.26    16.47     0.70         5.93
+17           média (100–400)     0.2            5    teste            População (mesma área)       92                     NaN         0.67      0.26     1.39     2.03         0.19
+18           média (100–400)     0.2            5    teste                Ranking de bairros       92                     NaN         3.18      0.85     2.18     0.99         2.73
+19           média (100–400)     0.2            5    teste  Todos os casos (sem clusterizar)       92                     NaN        36.74      6.92     4.70    15.25         2.25
+20               alta (>400)     0.2           10   treino             DBSCAN (DengueSphere)       71                   94.37        18.60      3.26     4.74     8.24         2.00
+21               alta (>400)     0.2           10   treino                  KDE (mesma área)       67                     NaN        24.90      3.43     5.85     9.28         2.48
+22               alta (>400)     0.2           10   treino            População (mesma área)       67                     NaN        12.44      3.43     2.95    16.88         0.73
+23               alta (>400)     0.2           10   treino                Ranking de bairros       67                     NaN        13.02      4.13     2.99     7.32         2.09
+24               alta (>400)     0.2           10   treino  Todos os casos (sem clusterizar)       67                     NaN        77.53     27.44     2.80    56.35         1.35
+25               alta (>400)     0.2           10    teste             DBSCAN (DengueSphere)       39                   84.62         4.09      0.43     6.15     1.39         2.34
+26               alta (>400)     0.2           10    teste                  KDE (mesma área)       33                     NaN         5.64      0.56     8.19     1.60         2.68
+27               alta (>400)     0.2           10    teste            População (mesma área)       33                     NaN         1.58      0.56     3.18     3.79         0.47
+28               alta (>400)     0.2           10    teste                Ranking de bairros       33                     NaN         5.62      1.37     3.35     2.50         2.15
+29               alta (>400)     0.2           10    teste  Todos os casos (sem clusterizar)       33                     NaN        66.10     19.10     3.23    41.69         1.51
+                                           janelas  pct_alerta  captura_med  area_med  pai_med  pai_p25  pai_p75  pop_med  pai_pop_med  pai_pop_p25  pai_pop_p75
+conjunto metodo                                                                                                                                                 
+teste    DBSCAN (DengueSphere)                 285       97.19        12.39      1.74     4.73     3.54     7.97     4.04         2.14         1.58         3.42
+         KDE (mesma área)                      277      100.00        15.66      1.77     5.52     3.97     8.65     4.25         2.34         1.72         3.63
+         População (mesma área)                277      100.00         6.61      1.77     3.22     2.28     4.03     9.86         0.70         0.41         0.96
+         Ranking de bairros                    277      100.00         9.72      3.28     2.16     1.31     3.64     3.63         2.13         1.54         3.16
+         Todos os casos (sem clusterizar)      277      100.00        44.96     11.85     3.37     2.72     4.14    24.20         1.68         1.34         1.99
+treino   DBSCAN (DengueSphere)                 308       85.06        12.29      1.31     4.86     2.79     7.77     3.20         2.13         1.32         3.16
+         KDE (mesma área)                      262      100.00        20.82      2.21     5.38     2.92     9.03     5.38         2.32         1.35         3.43
+         População (mesma área)                262      100.00         8.58      2.21     3.04     2.12     4.14    11.80         0.81         0.43         1.01
+         Ranking de bairros                    262      100.00        16.07      3.52     2.53     1.45     4.14     4.66         1.82         1.28         2.86
+         Todos os casos (sem clusterizar)      262      100.00        46.71     13.98     3.20     2.56     3.91    28.89         1.54         1.28         1.82
+   metrica                        referencia  janelas  pct_janelas_dbscan_melhor  dif_mediana  wilcoxon_p
+0      pai                  KDE (mesma área)      277                    18.7726      -0.3620      0.0000
+1      pai            População (mesma área)      277                    72.5632       1.3351      0.0000
+2      pai                Ranking de bairros      277                    91.3357       2.3961      0.0000
+3      pai  Todos os casos (sem clusterizar)      277                    88.8087       1.4886      0.0000
+4  pai_pop                  KDE (mesma área)      277                    28.1588      -0.0952      0.0000
+5  pai_pop            População (mesma área)      277                    96.7509       1.4067      0.0000
+6  pai_pop                Ranking de bairros      277                    45.1264      -0.0725      0.2862
+7  pai_pop  Todos os casos (sem clusterizar)      277                    83.7545       0.5511      0.0000/Users/eduardo/Downloads/00. local/denguesphere/estudo/analises.py:971: DeprecationWarning: The `resolution` argument to `buffer` is deprecated, `quad_segs` should be used instead to align with shapely.
+  ETAPAS[nome]()
+/Users/eduardo/Downloads/00. local/denguesphere/estudo/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py:4786: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+  arr.partition(
+/Users/eduardo/Downloads/00. local/denguesphere/estudo/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py:4786: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+  arr.partition(
+/Users/eduardo/Downloads/00. local/denguesphere/estudo/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py:4786: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+  arr.partition(
+/Users/eduardo/Downloads/00. local/denguesphere/estudo/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py:4786: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+  arr.partition(
+/Users/eduardo/Downloads/00. local/denguesphere/estudo/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py:4786: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+  arr.partition(
+/Users/eduardo/Downloads/00. local/denguesphere/estudo/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py:4786: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+  arr.partition(
+'created' timestamp seems very low; regarding as unix timestamp
+'modified' timestamp seems very low; regarding as unix timestamp
+'created' timestamp seems very low; regarding as unix timestamp
+'modified' timestamp seems very low; regarding as unix timestamp
+'created' timestamp seems very low; regarding as unix timestamp
+'modified' timestamp seems very low; regarding as unix timestamp
+/Users/eduardo/Downloads/00. local/denguesphere/estudo/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py:4786: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+  arr.partition(
+/Users/eduardo/Downloads/00. local/denguesphere/estudo/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py:4786: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+  arr.partition(
+/Users/eduardo/Downloads/00. local/denguesphere/estudo/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py:4786: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+  arr.partition(
+/Users/eduardo/Downloads/00. local/denguesphere/estudo/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py:4786: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+  arr.partition(
+/Users/eduardo/Downloads/00. local/denguesphere/estudo/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py:4786: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+  arr.partition(
+/Users/eduardo/Downloads/00. local/denguesphere/estudo/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py:4786: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+  arr.partition(
+/Users/eduardo/Downloads/00. local/denguesphere/estudo/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py:4786: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+  arr.partition(
+/Users/eduardo/Downloads/00. local/denguesphere/estudo/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py:4786: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+  arr.partition(
+/Users/eduardo/Downloads/00. local/denguesphere/estudo/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py:4786: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+  arr.partition(
+/Users/eduardo/Downloads/00. local/denguesphere/estudo/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py:4786: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+  arr.partition(
+/Users/eduardo/Downloads/00. local/denguesphere/estudo/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py:4786: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+  arr.partition(
+/Users/eduardo/Downloads/00. local/denguesphere/estudo/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py:4786: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+  arr.partition(
+/Users/eduardo/Downloads/00. local/denguesphere/estudo/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py:4786: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+  arr.partition(
+'created' timestamp seems very low; regarding as unix timestamp
+'modified' timestamp seems very low; regarding as unix timestamp
+'created' timestamp seems very low; regarding as unix timestamp
+'modified' timestamp seems very low; regarding as unix timestamp
+
+                                                                         janelas  pct_alerta  captura_med  area_med  pai_med  pai_pop_med
+variante                               metodo                                                                                            
+confirmados, incl. centroide de bairro DBSCAN (DengueSphere)                 606       95.05        16.67      1.97     5.33         2.41
+                                       KDE (mesma área)                      576      100.00        20.06      2.14     6.34         2.68
+                                       População (mesma área)                576      100.00         8.55      2.14     3.27         0.78
+                                       Ranking de bairros                    576      100.00        11.87      4.46     2.44         2.17
+                                       Todos os casos (sem clusterizar)      576      100.00        48.98     12.75     3.43         1.70
+confirmados, nível de rua              DBSCAN (DengueSphere)                 593       90.89        12.33      1.52     4.79         2.14
+                                       KDE (mesma área)                      539      100.00        17.98      1.93     5.46         2.33
+                                       População (mesma área)                539      100.00         6.78      1.93     3.16         0.75
+                                       Ranking de bairros                    539      100.00        11.35      3.32     2.27         2.00
+                                       Todos os casos (sem clusterizar)      539      100.00        45.98     12.31     3.30         1.58
+não descartados, nível de rua          DBSCAN (DengueSphere)                 595       91.43        12.79      1.74     4.64         2.05
+                                       KDE (mesma área)                      544      100.00        18.58      2.10     5.21         2.26
+                                       População (mesma área)                544      100.00         7.52      2.10     3.24         0.78
+                                       Ranking de bairros                    544      100.00        10.92      3.56     2.20         1.90
+                                       Todos os casos (sem clusterizar)      544      100.00        46.50     12.74     3.18         1.54
+(66 s)
+
+===== persistencia
+     ano  ano_seguinte  spearman_celulas_500m  jaccard_top10pct  pct_casos_seguinte_no_top10_anterior  pct_area_top10  spearman_incidencia_bairro
+0   2013          2014                  0.374             0.229                                32.154          12.352                       0.379
+1   2014          2015                  0.379             0.109                                18.771          12.183                      -0.170
+2   2015          2016                  0.788             0.290                                25.165          10.152                       0.535
+3   2016          2017                  0.452             0.270                                26.471          10.152                       0.262
+4   2017          2018                  0.459             0.240                                33.537          16.920                       0.447
+5   2018          2019                  0.585             0.195                                27.998          13.706                       0.442
+6   2019          2020                  0.533             0.183                                23.661          11.168                       0.328
+7   2020          2021                  0.512             0.245                                26.261          12.860                       0.382
+8   2021          2022                  0.595             0.229                                24.861          10.321                       0.397
+9   2022          2023                  0.457             0.305                                30.839          12.352                       0.380
+10  2023          2024                  0.511             0.191                                21.886          10.829                       0.495
+11  2024          2025                  0.601             0.196                                23.384          11.337                       0.305
+(2 s)
+
+===== mapas_calor
+(21 s)
+
+===== populacao
+setor em destaque: 261160605190013 826 células: 10 soma: 826.0
+(2 s)

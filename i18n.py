@@ -49,7 +49,7 @@ e o suporte à tomada de decisões estratégicas no controle da doença.
         "about_team_header": "Equipe de desenvolvimento",
         "about_team_list": """
 - **Eduardo da Silva** — Doutorando do Programa de Pós-Graduação em Engenharia de Produção (PPGEP/UFPE) - (2025 - Atual) <eduardo.es@ufpe.br>
-- **Profa. Dra. Maísa Mendonça Silva** — Orientadora, Docente Permanente do PPGEP/UFPE  
+- **Profa. Dra. Maisa Mendonça Silva** — Orientadora, Docente Permanente do PPGEP/UFPE  
 - **Grupo de Pesquisa em Sistemas de Informação e Decisão (GPSID)** — PPGEP/UFPE  
 """,
         "about_objectives_header": "Objetivos principais",
@@ -64,7 +64,7 @@ e o suporte à tomada de decisões estratégicas no controle da doença.
   - Análises estatísticas
 """,
         "about_footer": """
-Versão 1.0 – Desenvolvido por Eduardo da Silva sob orientação da Profa. Dra. Maísa Mendonça Silva.<br>
+Versão 1.0 – Desenvolvido por Eduardo da Silva sob orientação da Profa. Dra. Maisa Mendonça Silva.<br>
 Grupo de Pesquisa em Sistemas de Informação e Decisão (GPSID) – PPGEP/UFPE.
 """,
 
@@ -202,7 +202,7 @@ the mapping of risk areas, and to support strategic decision-making in disease c
         "about_team_header": "Development team",
         "about_team_list": """
 - **Eduardo da Silva** — PhD student, Graduate Program in Production Engineering (PPGEP/UFPE) - (2025 - Present) <eduardo.es@ufpe.br>
-- **Prof. Maísa Mendonça Silva, PhD** — Supervisor, permanent faculty member of PPGEP/UFPE  
+- **Prof. Maisa Mendonça Silva, PhD** — Supervisor, permanent faculty member of PPGEP/UFPE  
 - **Information and Decision Systems Research Group (GPSID)** — PPGEP/UFPE  
 """,
         "about_objectives_header": "Main objectives",
@@ -217,7 +217,7 @@ the mapping of risk areas, and to support strategic decision-making in disease c
   - Statistical analyses
 """,
         "about_footer": """
-Version 1.0 – Developed by Eduardo da Silva under the supervision of Prof. Maísa Mendonça Silva, PhD.<br>
+Version 1.0 – Developed by Eduardo da Silva under the supervision of Prof. Maisa Mendonça Silva, PhD.<br>
 Information and Decision Systems Research Group (GPSID) – PPGEP/UFPE.
 """,
 

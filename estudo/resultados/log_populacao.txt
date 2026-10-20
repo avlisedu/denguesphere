@@ -1,0 +1,112 @@
+
+===== descritiva
+         notificados  confirmados  pct_nivel_rua  pct_centroide_bairro  pct_nao_encontrado  incidencia_100mil  pico_semanal  se_pico
+ano_epi                                                                                                                             
+2013          3262.0       1304.0           85.4                  14.6                 0.0               87.6          77.0     18.0
+2014          1159.0        363.0           85.7                  14.3                 0.0               24.4          24.0     20.0
+2015         34675.0      23576.0           80.8                  18.6                 0.5             1583.4        1573.0     14.0
+2016         18505.0      12083.0           81.6                  17.3                 1.0              811.5        1144.0      6.0
+2017          2445.0        955.0           81.9                  18.1                 0.0               64.1          41.0      2.0
+2018          2686.0       1207.0           81.3                  18.2                 0.5               81.1          53.0     19.0
+2019          7309.0       4102.0           81.3                  17.6                 1.0              275.5         190.0     34.0
+2020          3619.0       1544.0           81.0                  18.5                 0.5              103.7          79.0     30.0
+2021         10977.0       7435.0           82.4                  17.6                 0.0              499.4         569.0     22.0
+2022          2795.0       1291.0           83.5                  16.3                 0.2               86.7          55.0     31.0
+2023          3502.0       1414.0           86.0                  13.9                 0.1               95.0          57.0     11.0
+2024         10483.0       3007.0           87.8                  12.0                 0.2              202.0         160.0     10.0
+2025          9051.0       5066.0           87.0                  12.9                 0.1              340.2         215.0     31.0
+Total       110468.0      63347.0           82.4                  17.1                 0.5              327.3           NaN      NaN
+(3 s)
+
+===== prospectiva
+área do município (polígonos OSM): 219.3 km²
+parâmetros escolhidos no treino: (np.float64(0.3), np.int64(3))
+                       nivel  eps_km  min_samples conjunto                            metodo  janelas  pct_janelas_com_alerta  captura_med  area_med  pai_med  pop_med  pai_pop_med
+0   baixa (<100 casos/4 sem)     0.5            3   treino             DBSCAN (DengueSphere)      145                   88.28        11.90      2.91     4.06     6.42         1.83
+1   baixa (<100 casos/4 sem)     0.5            3   treino                  KDE (mesma área)      128                     NaN        16.97      3.31     4.85     7.91         2.03
+2   baixa (<100 casos/4 sem)     0.5            3   treino            População (mesma área)      128                     NaN        12.69      3.31     3.85    16.40         0.82
+3   baixa (<100 casos/4 sem)     0.5            3   treino                Ranking de bairros      128                     NaN        10.53      3.85     2.63     5.51         1.94
+4   baixa (<100 casos/4 sem)     0.5            3   treino  Todos os casos (sem clusterizar)      128                     NaN        47.15     16.06     2.78    32.13         1.40
+5   baixa (<100 casos/4 sem)     0.5            3    teste             DBSCAN (DengueSphere)       97                   98.97        16.67      3.49     4.72     6.67         2.21
+6   baixa (<100 casos/4 sem)     0.5            3    teste                  KDE (mesma área)       96                     NaN        17.99      3.50     4.85     6.92         2.58
+7   baixa (<100 casos/4 sem)     0.5            3    teste            População (mesma área)       96                     NaN        11.54      3.50     3.67    17.13         0.72
+8   baixa (<100 casos/4 sem)     0.5            3    teste                Ranking de bairros       96                     NaN         9.40      4.85     2.15     4.10         2.43
+9   baixa (<100 casos/4 sem)     0.5            3    teste  Todos os casos (sem clusterizar)       96                     NaN        50.74     17.05     2.94    32.49         1.55
+10           média (100–400)     0.2            5   treino             DBSCAN (DengueSphere)       92                   80.43         3.48      0.22    12.00     0.56         5.61
+11           média (100–400)     0.2            5   treino                  KDE (mesma área)       74                     NaN         5.02      0.27    14.05     0.67         5.97
+12           média (100–400)     0.2            5   treino            População (mesma área)       74                     NaN         0.79      0.27     2.64     2.09         0.35
+13           média (100–400)     0.2            5   treino                Ranking de bairros       74                     NaN         2.18      0.45     3.58     0.75         2.72
+14           média (100–400)     0.2            5   treino  Todos os casos (sem clusterizar)       74                     NaN        41.20      8.33     4.52    18.40         2.01
+15           média (100–400)     0.2            5    teste             DBSCAN (DengueSphere)      149                   61.74         1.54      0.13    12.78     0.38         4.59
+16           média (100–400)     0.2            5    teste                  KDE (mesma área)       92                     NaN         6.45      0.26    16.47     0.70         5.93
+17           média (100–400)     0.2            5    teste            População (mesma área)       92                     NaN         0.67      0.26     1.39     2.03         0.19
+18           média (100–400)     0.2            5    teste                Ranking de bairros       92                     NaN         3.18      0.85     2.18     0.99         2.73
+19           média (100–400)     0.2            5    teste  Todos os casos (sem clusterizar)       92                     NaN        36.74      6.92     4.70    15.25         2.25
+20               alta (>400)     0.2           10   treino             DBSCAN (DengueSphere)       71                   94.37        18.60      3.26     4.74     8.24         2.00
+21               alta (>400)     0.2           10   treino                  KDE (mesma área)       67                     NaN        24.90      3.43     5.85     9.28         2.48
+22               alta (>400)     0.2           10   treino            População (mesma área)       67                     NaN        12.44      3.43     2.95    16.88         0.73
+23               alta (>400)     0.2           10   treino                Ranking de bairros       67                     NaN        13.02      4.13     2.99     7.32         2.09
+24               alta (>400)     0.2           10   treino  Todos os casos (sem clusterizar)       67                     NaN        77.53     27.44     2.80    56.35         1.35
+25               alta (>400)     0.2           10    teste             DBSCAN (DengueSphere)       39                   84.62         4.09      0.43     6.15     1.39         2.34
+26               alta (>400)     0.2           10    teste                  KDE (mesma área)       33                     NaN         5.64      0.56     8.19     1.60         2.68
+27               alta (>400)     0.2           10    teste            População (mesma área)       33                     NaN         1.58      0.56     3.18     3.79         0.47
+28               alta (>400)     0.2           10    teste                Ranking de bairros       33                     NaN         5.62      1.37     3.35     2.50         2.15
+29               alta (>400)     0.2           10    teste  Todos os casos (sem clusterizar)       33                     NaN        66.10     19.10     3.23    41.69         1.51
+                                           janelas  pct_alerta  captura_med  area_med  pai_med  pai_p25  pai_p75  pop_med  pai_pop_med  pai_pop_p25  pai_pop_p75
+conjunto metodo                                                                                                                                                 
+teste    DBSCAN (DengueSphere)                 285       97.19        12.39      1.74     4.73     3.54     7.97     4.04         2.14         1.58         3.42
+         KDE (mesma área)                      277      100.00        15.66      1.77     5.52     3.97     8.65     4.25         2.34         1.72         3.63
+         População (mesma área)                277      100.00         6.61      1.77     3.22     2.28     4.03     9.86         0.70         0.41         0.96
+         Ranking de bairros                    277      100.00         9.72      3.28     2.16     1.31     3.64     3.63         2.13         1.54         3.16
+         Todos os casos (sem clusterizar)      277      100.00        44.96     11.85     3.37     2.72     4.14    24.20         1.68         1.34         1.99
+treino   DBSCAN (DengueSphere)                 308       85.06        12.29      1.31     4.86     2.79     7.77     3.20         2.13         1.32         3.16
+         KDE (mesma área)                      262      100.00        20.82      2.21     5.38     2.92     9.03     5.38         2.32         1.35         3.43
+         População (mesma área)                262      100.00         8.58      2.21     3.04     2.12     4.14    11.80         0.81         0.43         1.01
+         Ranking de bairros                    262      100.00        16.07      3.52     2.53     1.45     4.14     4.66         1.82         1.28         2.86
+         Todos os casos (sem clusterizar)      262      100.00        46.71     13.98     3.20     2.56     3.91    28.89         1.54         1.28         1.82
+   metrica                        referencia  janelas  pct_janelas_dbscan_melhor  dif_mediana  wilcoxon_p
+0      pai                  KDE (mesma área)      277                    18.7726      -0.3620      0.0000
+1      pai            População (mesma área)      277                    72.5632       1.3351      0.0000
+2      pai                Ranking de bairros      277                    91.3357       2.3961      0.0000
+3      pai  Todos os casos (sem clusterizar)      277                    88.8087       1.4886      0.0000
+4  pai_pop                  KDE (mesma área)      277                    28.1588      -0.0952      0.0000
+5  pai_pop            População (mesma área)      277                    96.7509       1.4067      0.0000
+6  pai_pop                Ranking de bairros      277                    45.1264      -0.0725      0.2862
+7  pai_pop  Todos os casos (sem clusterizar)      277                    83.7545       0.5511      0.0000
+                                                                         janelas  pct_alerta  captura_med  area_med  pai_med  pai_pop_med
+variante                               metodo                                                                                            
+confirmados, incl. centroide de bairro DBSCAN (DengueSphere)                 606       95.05        16.67      1.97     5.33         2.41
+                                       KDE (mesma área)                      576      100.00        20.06      2.14     6.34         2.68
+                                       População (mesma área)                576      100.00         8.55      2.14     3.27         0.78
+                                       Ranking de bairros                    576      100.00        11.87      4.46     2.44         2.17
+                                       Todos os casos (sem clusterizar)      576      100.00        48.98     12.75     3.43         1.70
+confirmados, nível de rua              DBSCAN (DengueSphere)                 593       90.89        12.33      1.52     4.79         2.14
+                                       KDE (mesma área)                      539      100.00        17.98      1.93     5.46         2.33
+                                       População (mesma área)                539      100.00         6.78      1.93     3.16         0.75
+                                       Ranking de bairros                    539      100.00        11.35      3.32     2.27         2.00
+                                       Todos os casos (sem clusterizar)      539      100.00        45.98     12.31     3.30         1.58
+não descartados, nível de rua          DBSCAN (DengueSphere)                 595       91.43        12.79      1.74     4.64         2.05
+                                       KDE (mesma área)                      544      100.00        18.58      2.10     5.21         2.26
+                                       População (mesma área)                544      100.00         7.52      2.10     3.24         0.78
+                                       Ranking de bairros                    544      100.00        10.92      3.56     2.20         1.90
+                                       Todos os casos (sem clusterizar)      544      100.00        46.50     12.74     3.18         1.54
+(65 s)
+
+===== persistencia
+     ano  ano_seguinte  spearman_celulas_500m  jaccard_top10pct  pct_casos_seguinte_no_top10_anterior  pct_area_top10  spearman_incidencia_bairro
+0   2013          2014                  0.374             0.229                                32.154          12.352                       0.379
+1   2014          2015                  0.379             0.109                                18.771          12.183                      -0.170
+2   2015          2016                  0.788             0.290                                25.165          10.152                       0.535
+3   2016          2017                  0.452             0.270                                26.471          10.152                       0.262
+4   2017          2018                  0.459             0.240                                33.537          16.920                       0.447
+5   2018          2019                  0.585             0.195                                27.998          13.706                       0.442
+6   2019          2020                  0.533             0.183                                23.661          11.168                       0.328
+7   2020          2021                  0.512             0.245                                26.261          12.860                       0.382
+8   2021          2022                  0.595             0.229                                24.861          10.321                       0.397
+9   2022          2023                  0.457             0.305                                30.839          12.352                       0.380
+10  2023          2024                  0.511             0.191                                21.886          10.829                       0.495
+11  2024          2025                  0.601             0.196                                23.384          11.337                       0.305
+(2 s)
+
+===== mapas_calor
+(4 s)
