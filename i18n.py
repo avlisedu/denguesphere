@@ -45,7 +45,7 @@ Utilize o menu no topo para navegar entre as seções.
         "home_dataset_license": "Licença ODbL",
         "home_dataset_update": "Atualização trimestral",
         "home_dataset_button": "Acessar a base no portal",
-        "home_footer": "Desenvolvido pelo Grupo de Pesquisa em Sistemas de Informação e Decisão (GPSID) do PPGEP/UFPE",
+        "app_footer": "Desenvolvido pelo Grupo de Pesquisa em Sistemas de Informação e Decisão (GPSID) do PPGEP/UFPE",
 
         # ---------------- Página Sobre ----------------
         "about_eyebrow": "Sistema de apoio à decisão para vigilância epidemiológica",
@@ -101,31 +101,52 @@ Utilize o menu no topo para navegar entre as seções.
 
 
         # ---------------- Página Coordenadas ----------------
-        "coords_title": "Tratamento de CEP e Geocodificação",
-        "coords_intro": """
-Esta ferramenta permite:
-- Escolher colunas com CEP, Rua e Bairro de qualquer planilha Excel  
-- Corrigir nomes de ruas automaticamente (fuzzy matching)  
-- Obter coordenadas geográficas via OpenStreetMap (Nominatim)  
-- Gerar e baixar um arquivo Excel com os resultados geocodificados
-""",
-        "coords_uploader_label": "Selecione o arquivo Excel (.xlsx)",
+        "coords_title": "Localizar Coordenadas",
+        "coords_lead": "Converta CEP, rua e bairro em latitude e longitude usando o OpenStreetMap, e baixe a base pronta para o Clusterizador.",
+        "coords_feat_columns": "Escolha as colunas de CEP, rua e bairro de qualquer planilha",
+        "coords_feat_fix": "Nomes de ruas são normalizados antes da busca",
+        "coords_feat_osm": "Coordenadas obtidas no OpenStreetMap (Nominatim)",
+        "coords_feat_download": "Baixe a planilha com latitude e longitude",
+        "coords_step_upload": "Envie a planilha",
+        "coords_uploader_label": "Planilha Excel (.xlsx) ou CSV",
         "coords_file_loaded": "Arquivo carregado com {n_rows} linhas e {n_cols} colunas.",
-        "coords_select_columns_subheader": "Selecione as colunas correspondentes",
+        "coords_preview": "Ver as primeiras linhas",
+        "coords_step_columns": "Indique as colunas",
         "coords_select_cep": "Coluna do CEP",
-        "coords_select_rua": "Coluna do nome da rua/logradouro",
+        "coords_select_rua": "Coluna da rua ou logradouro",
         "coords_select_bairro": "Coluna do bairro",
-        "coords_button_start": "Iniciar Geocodificação",
-        "coords_processing_info": "Processando endereços, isso pode levar alguns minutos dependendo da base...",
-        "coords_processing_done": "Geocodificação concluída.",
-        "coords_download_button": "Baixar arquivo Excel",
-        "coords_no_file_info": "Envie um arquivo Excel para começar.",
+        "coords_step_run": "Busque as coordenadas",
+        "coords_processing_info": "A busca consulta o OpenStreetMap com uma pausa de 1 segundo entre as requisições, então bases grandes podem levar bastante tempo. Você pode parar a qualquer momento e baixar o que já foi processado.",
+        "coords_button_start": "Iniciar busca",
+        "coords_button_stop": "Parar busca",
+        "coords_button_resume": "Continuar de onde parou",
+        "coords_button_restart": "Recomeçar do zero",
+        "coords_progress": "{done} de {total} linhas processadas",
+        "coords_stopped": "Busca interrompida com {done} de {total} linhas processadas. Você pode continuar de onde parou ou baixar o resultado parcial.",
+        "coords_processing_done": "Busca concluída para todas as {total} linhas.",
+        "coords_step_results": "Resultado",
+        "coords_match_cep": "Encontrados pelo CEP",
+        "coords_match_rua": "Encontrados por rua e bairro",
+        "coords_match_bairro": "Encontrados só pelo bairro",
+        "coords_match_none": "Não encontrados",
+        "coords_map_title": "Pontos encontrados",
+        "coords_download_button": "Baixar planilha (.xlsx)",
+        "coords_download_partial": "Baixar resultado parcial (.xlsx)",
+        "coords_no_file_info": "<strong>Não tem uma base em mãos?</strong> Teste com os <a href=\"{url}\" target=\"_blank\">casos de dengue dos dados abertos do Recife</a>: baixe o CSV de um ano e envie aqui.",
         "coords_logo_warning": "Logo não encontrada. Coloque o arquivo **logo.png** na pasta raiz do projeto.",
 
         # ---------------- Página Clusterizador ----------------
-        "cluster_title": "Clusterização Geográfica de Casos de Dengue",
+        "cluster_title": "Clusterizador",
+        "cluster_table_title": "Casos por cluster",
+        "cluster_error_coords": "A base precisa ter as colunas latitude e longitude (ou lat e long). Use Localizar Coordenadas para gerá-las.",
+        "cluster_req_link": "Sua base não tem coordenadas? Gere em Localizar Coordenadas",
+        "cluster_req_format": "Arquivo CSV ou Excel (.xlsx)",
+        "cluster_req_date": "Data de notificação em dt_notificacao ou dt_notific",
+        "cluster_req_coords": "Colunas latitude e longitude (ou lat e long)",
+        "cluster_upload_header": "Base de dados",
+        "cluster_lead": "Agrupe casos de dengue próximos no espaço e no tempo com o DBSCAN e veja os clusters no mapa, com estatísticas de cada um.",
         "cluster_upload_label": "Selecione um arquivo CSV ou XLSX",
-        "cluster_error_dt": "A base precisa conter a coluna 'dt_notificacao'.",
+        "cluster_error_dt": "A base precisa ter a data de notificação na coluna dt_notificacao ou dt_notific.",
         "cluster_sidebar_header": "Parâmetros DBSCAN",
         "cluster_eps_label": "EPS (distância em quilômetros)",
         "cluster_eps_help": "Define o raio máximo de vizinhança entre casos (em quilômetros). Valores menores detectam microáreas; valores maiores agrupam bairros próximos.",
@@ -133,11 +154,10 @@ Esta ferramenta permite:
         "cluster_year_label": "Ano epidemiológico",
         "cluster_weeks_label": "Semanas epidemiológicas",
         "cluster_warning_empty_period": "Não há registros para o período selecionado.",
-        "cluster_header_period": "Ano: {year} | Semanas selecionadas: {weeks}",
-        "cluster_stats_title": "Estatísticas Descritivas dos Clusters",
+        "cluster_header_period": "Clusters em {year}, semanas {weeks}",
+        "cluster_stats_title": "Estatísticas dos clusters",
         "cluster_metric_n_clusters": "Clusters identificados",
         "cluster_metric_noise": "Pontos isolados (ruído)",
-        "cluster_stats_comp_title": "Estatísticas Complementares dos Clusters",
         "cluster_metric_total_cases": "Total de Casos Agrupados",
         "cluster_metric_biggest_cluster_id": "Maior Cluster (ID)",
         "cluster_metric_biggest_cluster_cases": "Casos no Maior Cluster",
@@ -154,8 +174,6 @@ Esta ferramenta permite:
         "cluster_plot_trend_x": "Semana Epidemiológica",
         "cluster_plot_trend_y": "Número de Casos",
         "cluster_info_no_clusters": "Nenhum cluster identificado para os parâmetros atuais.",
-        "cluster_info_upload_start": "Carregue a base de dados para iniciar.",
-        "cluster_footer": "Versão 1.0 – Desenvolvido pelo Grupo de Pesquisa em Sistemas de Informação e Decisão (GPSID) - PPGEP/UFPE.",
     
             # ---------------- Análise Avançada / Validação ----------------
         "cluster_advanced_title": "Análise técnica do clustering",
@@ -194,7 +212,7 @@ Esta ferramenta permite:
         # ---------------- Global / Navigation ----------------
         "app_title": "DengueSphere v1.0",
         "nav_home": "Home",
-        "nav_coords": "Generate Coordinates by ZIP Code",
+        "nav_coords": "Locate Coordinates",
         "nav_cluster": "Clustering Tool",
         "nav_about": "About the Project",
         "lang_label": "Idioma / Language",
@@ -216,7 +234,7 @@ With the system, you can:
 - Visualize clusters on interactive maps;
 - Generate statistics on the distribution of clusters.
 
-> **Tip:** If your dataset **does not contain geographic coordinates**, use the **"Generate Coordinates by ZIP Code"** module to **automatically generate coordinates**, **download the updated dataset**, and then **load it into the "Clustering Tool" module**.  
+> **Tip:** If your dataset **does not contain geographic coordinates**, use the **"Locate Coordinates"** module to **automatically generate coordinates**, **download the updated dataset**, and then **load it into the "Clustering Tool" module**.  
 > Depending on the dataset size and request rate, this process may **take a few minutes**.
 
 Use the top menu to navigate between sections.
@@ -224,13 +242,13 @@ Use the top menu to navigate between sections.
         "home_dataset_header": "Sample dataset",
         "home_dataset_badge": "Open data from the City of Recife",
         "home_dataset_title": "Dengue, Zika and Chikungunya Cases",
-        "home_dataset_text": "Cases reported by public and private health units in Recife. The dengue files include neighborhood, street and ZIP code, but no latitude and longitude: run them through <strong>Generate Coordinates by ZIP Code</strong> first, then load the dataset into the <strong>Clustering Tool</strong>.",
+        "home_dataset_text": "Cases reported by public and private health units in Recife. The dengue files include neighborhood, street and ZIP code, but no latitude and longitude: run them through <strong>Locate Coordinates</strong> first, then load the dataset into the <strong>Clustering Tool</strong>.",
         "home_dataset_years": "Dengue: 2013–2025, one CSV per year",
         "home_dataset_publisher": "Recife Health Department",
         "home_dataset_license": "ODbL license",
         "home_dataset_update": "Updated quarterly",
         "home_dataset_button": "Open the dataset on the portal",
-        "home_footer": "Developed by the Information and Decision Systems Research Group (GPSID) at PPGEP/UFPE",
+        "app_footer": "Developed by the Information and Decision Systems Research Group (GPSID) at PPGEP/UFPE",
 
         # ---------------- About Page ----------------
         "about_eyebrow": "Decision support system for epidemiological surveillance",
@@ -286,31 +304,52 @@ Use the top menu to navigate between sections.
 
 
         # ---------------- Coordinates Page ----------------
-        "coords_title": "ZIP Code Processing and Geocoding",
-        "coords_intro": """
-This tool allows you to:
-- Choose columns with ZIP Code, Street and Neighborhood from any Excel spreadsheet  
-- Automatically correct street names (fuzzy matching)  
-- Obtain geographic coordinates via OpenStreetMap (Nominatim)  
-- Generate and download an Excel file with geocoded results
-""",
-        "coords_uploader_label": "Select the Excel file (.xlsx)",
+        "coords_title": "Locate Coordinates",
+        "coords_lead": "Turn ZIP codes, streets and neighborhoods into latitude and longitude with OpenStreetMap, and download a dataset ready for the Clustering Tool.",
+        "coords_feat_columns": "Pick the ZIP code, street and neighborhood columns from any spreadsheet",
+        "coords_feat_fix": "Street names are normalized before the search",
+        "coords_feat_osm": "Coordinates come from OpenStreetMap (Nominatim)",
+        "coords_feat_download": "Download the spreadsheet with latitude and longitude",
+        "coords_step_upload": "Upload the spreadsheet",
+        "coords_uploader_label": "Excel (.xlsx) or CSV file",
         "coords_file_loaded": "File loaded with {n_rows} rows and {n_cols} columns.",
-        "coords_select_columns_subheader": "Select the corresponding columns",
-        "coords_select_cep": "ZIP Code column",
-        "coords_select_rua": "Street / Address column",
+        "coords_preview": "Show the first rows",
+        "coords_step_columns": "Choose the columns",
+        "coords_select_cep": "ZIP code column",
+        "coords_select_rua": "Street column",
         "coords_select_bairro": "Neighborhood column",
-        "coords_button_start": "Start Geocoding",
-        "coords_processing_info": "Processing addresses; this may take a few minutes depending on the dataset...",
-        "coords_processing_done": "Geocoding completed.",
-        "coords_download_button": "Download Excel file",
-        "coords_no_file_info": "Upload an Excel file to begin.",
+        "coords_step_run": "Search for coordinates",
+        "coords_processing_info": "The search queries OpenStreetMap with a 1-second pause between requests, so large datasets can take a long time. You can stop at any moment and download what has been processed so far.",
+        "coords_button_start": "Start search",
+        "coords_button_stop": "Stop search",
+        "coords_button_resume": "Resume where it stopped",
+        "coords_button_restart": "Start over",
+        "coords_progress": "{done} of {total} rows processed",
+        "coords_stopped": "Search stopped with {done} of {total} rows processed. You can resume where it stopped or download the partial result.",
+        "coords_processing_done": "Search finished for all {total} rows.",
+        "coords_step_results": "Result",
+        "coords_match_cep": "Found by ZIP code",
+        "coords_match_rua": "Found by street and neighborhood",
+        "coords_match_bairro": "Found by neighborhood only",
+        "coords_match_none": "Not found",
+        "coords_map_title": "Points found",
+        "coords_download_button": "Download spreadsheet (.xlsx)",
+        "coords_download_partial": "Download partial result (.xlsx)",
+        "coords_no_file_info": "<strong>No dataset at hand?</strong> Try the <a href=\"{url}\" target=\"_blank\">dengue cases from Recife open data</a>: download one year as CSV and upload it here.",
         "coords_logo_warning": "Logo not found. Please place the **logo.png** file in the project root folder.",
 
         # ---------------- Cluster Page ----------------
-        "cluster_title": "Geographical Clustering of Dengue Cases",
+        "cluster_title": "Clustering Tool",
+        "cluster_table_title": "Cases per cluster",
+        "cluster_error_coords": "The dataset needs latitude and longitude columns (or lat and long). Use Locate Coordinates to generate them.",
+        "cluster_req_link": "No coordinates in your dataset? Generate them in Locate Coordinates",
+        "cluster_req_format": "CSV or Excel (.xlsx) file",
+        "cluster_req_date": "Notification date in dt_notificacao or dt_notific",
+        "cluster_req_coords": "latitude and longitude columns (or lat and long)",
+        "cluster_upload_header": "Dataset",
+        "cluster_lead": "Group dengue cases that are close in space and time with DBSCAN and see the clusters on the map, with statistics for each one.",
         "cluster_upload_label": "Select a CSV or XLSX file",
-        "cluster_error_dt": "The dataset must contain the 'dt_notificacao' column.",
+        "cluster_error_dt": "The dataset needs the notification date in a dt_notificacao or dt_notific column.",
         "cluster_sidebar_header": "DBSCAN Parameters",
         "cluster_eps_label": "EPS (distance in kilometers)",
         "cluster_eps_help": "Defines the maximum neighborhood radius between cases (in kilometers). Smaller values detect micro-areas; larger values group nearby neighborhoods.",
@@ -318,11 +357,10 @@ This tool allows you to:
         "cluster_year_label": "Epidemiological year",
         "cluster_weeks_label": "Epidemiological weeks",
         "cluster_warning_empty_period": "There are no records for the selected period.",
-        "cluster_header_period": "Year: {year} | Selected weeks: {weeks}",
-        "cluster_stats_title": "Descriptive Statistics of Clusters",
+        "cluster_header_period": "Clusters in {year}, weeks {weeks}",
+        "cluster_stats_title": "Cluster statistics",
         "cluster_metric_n_clusters": "Identified clusters",
         "cluster_metric_noise": "Isolated points (noise)",
-        "cluster_stats_comp_title": "Additional Cluster Statistics",
         "cluster_metric_total_cases": "Total Grouped Cases",
         "cluster_metric_biggest_cluster_id": "Largest Cluster (ID)",
         "cluster_metric_biggest_cluster_cases": "Cases in Largest Cluster",
@@ -339,8 +377,6 @@ This tool allows you to:
         "cluster_plot_trend_x": "Epidemiological Week",
         "cluster_plot_trend_y": "Number of Cases",
         "cluster_info_no_clusters": "No clusters identified for the current parameters.",
-        "cluster_info_upload_start": "Upload a dataset to start.",
-        "cluster_footer": "Version 1.0 – Developed by the Information and Decision Systems Research Group (GPSID) - PPGEP/UFPE.",
             # ---------------- Advanced Analysis / Validation ----------------
         "cluster_advanced_title": "Technical clustering analysis",
         "cluster_advanced_caption": "Section intended for methodological validation of the model. For technical use, research, and support in interpreting the identified clusters.",

@@ -1,2 +1,5 @@
 [server]
 fileWatcherType = "polling"
+
+[theme]
+primaryColor = "#0d47a1"

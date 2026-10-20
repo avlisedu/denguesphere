@@ -41,14 +41,18 @@ STYLES = """
 }
 .ds-hero-logo {
     flex: 0 0 auto;
-    background: #ffffff;
-    border-radius: 18px;
-    padding: 14px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
     position: relative;
     z-index: 1;
 }
-.ds-hero-logo img { width: 150px; height: auto; display: block; pointer-events: none; }
+.ds-hero-logo::before {
+    content: "";
+    position: absolute;
+    inset: -18%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.22) 0%, rgba(178, 235, 242, 0.10) 45%, transparent 70%);
+    z-index: -1;
+}
+.ds-hero-logo img { width: 190px; height: auto; display: block; pointer-events: none; filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.25)); }
 .ds-hero-body { position: relative; z-index: 1; }
 .ds-eyebrow {
     display: inline-flex;
@@ -274,6 +278,132 @@ STYLES = """
 .ds-release li .fi { color: #2e7d32; padding-top: 3px; }
 .ds-release.future li .fi { color: #00838f; }
 
+/* ---------- Cabeçalho compacto (páginas de ferramenta) ---------- */
+.ds-page-head {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 26px 30px;
+    border-radius: 18px;
+    color: #ffffff;
+    background:
+        radial-gradient(circle at 90% 10%, rgba(77, 208, 225, 0.35), transparent 45%),
+        linear-gradient(135deg, #0a2a66 0%, #0d47a1 55%, #00838f 100%);
+}
+.ds-page-head::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
+    background-size: 28px 28px;
+    pointer-events: none;
+}
+.ds-page-head-icon {
+    position: relative;
+    z-index: 1;
+    flex: 0 0 auto;
+    width: 58px;
+    height: 58px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+.ds-page-head-body { position: relative; z-index: 1; }
+.ds-page-head h1 { color: #ffffff !important; font-size: 1.9rem; margin: 0 0 4px 0; padding: 0; }
+.ds-page-head p { color: #e3f2fd; margin: 0; font-size: 0.98rem; line-height: 1.55; max-width: 820px; }
+
+/* ---------- Passo numerado ---------- */
+.ds-step-badge {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #ffffff;
+    background: linear-gradient(135deg, #0d47a1, #00acc1);
+}
+
+/* ---------- Cards compactos ---------- */
+.ds-mini { display: flex; gap: 12px; align-items: center; padding: 14px 16px; }
+.ds-mini .ds-icon { width: 38px; height: 38px; font-size: 17px; margin: 0; flex: 0 0 auto; }
+.ds-mini p { color: #263238; }
+
+/* ---------- Componentes do Streamlit na paleta ---------- */
+[data-testid="stMetric"] {
+    background: #f7faff;
+    border: 1px solid #dbe7f7;
+    border-radius: 14px;
+    padding: 14px 16px;
+}
+[data-testid="stMetricLabel"] p { color: #546e7a; font-weight: 600; }
+[data-testid="stMetricValue"] { color: #0a2a66; }
+[data-testid="stFileUploaderDropzone"] {
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 30px 24px;
+    background:
+        radial-gradient(circle at 50% 0%, rgba(0, 172, 193, 0.10), transparent 60%),
+        #f7faff;
+    border: 2px dashed #90caf9;
+    border-radius: 18px;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+[data-testid="stFileUploaderDropzone"]:hover { border-color: #00acc1; background-color: #eefbfd; }
+[data-testid="stFileUploaderDropzoneInstructions"] {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
+    margin: 0;
+}
+[data-testid="stFileUploaderDropzoneInstructions"] > div:first-child,
+[data-testid="stFileUploaderDropzoneInstructions"] > span:first-child {
+    width: 64px;
+    height: 64px;
+    margin: 0;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    background: linear-gradient(135deg, #0d47a1, #00acc1);
+    box-shadow: 0 8px 20px rgba(13, 71, 161, 0.2);
+}
+[data-testid="stFileUploaderDropzoneInstructions"] svg { width: 32px; height: 32px; color: #ffffff; fill: currentColor; }
+[data-testid="stFileUploaderDropzoneInstructions"] span { font-size: 1.05rem; font-weight: 600; color: #0a2a66; }
+[data-testid="stFileUploaderDropzoneInstructions"] small { color: #78909c; }
+[data-testid="stFileUploaderDropzone"] [data-testid="stBaseButton-secondary"] {
+    border-radius: 10px;
+    border-color: #90caf9;
+    color: #0d47a1;
+    font-weight: 600;
+}
+
+/* ---------- Dica com link ---------- */
+.ds-tip a { color: #006064; font-weight: 600; }
+[data-testid="stBaseButton-primary"] {
+    background: linear-gradient(135deg, #0d47a1, #00838f);
+    border: none;
+}
+[data-testid="stBaseButton-primary"]:hover { filter: brightness(1.1); border: none; }
+[data-testid="stProgress"] [role="progressbar"] > div > div > div { background: linear-gradient(90deg, #0d47a1, #00acc1); }
+
 @media (max-width: 1100px) {
     .ds-grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
@@ -281,6 +411,7 @@ STYLES = """
     .ds-hero { flex-direction: column; align-items: flex-start; padding: 28px 22px; }
     .ds-grid-4, .ds-grid-3, .ds-grid-2 { grid-template-columns: 1fr; }
     .ds-pub { flex-direction: column; }
+    .ds-page-head { flex-direction: column; align-items: flex-start; padding: 22px; }
 }
 </style>
 """
@@ -296,7 +427,8 @@ def html(markup: str):
 
 
 def logo_html() -> str:
-    logo_path = Path("img/logo.png")
+    """Logo para fundos escuros (hero): versão com texto branco."""
+    logo_path = Path("img/logo_dark.png")
     if not logo_path.exists():
         return ""
     logo_b64 = base64.b64encode(logo_path.read_bytes()).decode()
@@ -313,3 +445,32 @@ def section(icon: str, title: str) -> str:
 
 def footer(text: str):
     html(f'<div class="ds-footer">{text}</div>')
+
+
+def page_header(icon: str, title: str, lead: str):
+    html(f"""
+    <div class="ds-page-head">
+        <div class="ds-page-head-icon"><i class="fi {icon}"></i></div>
+        <div class="ds-page-head-body"><h1>{title}</h1><p>{lead}</p></div>
+    </div>
+    """)
+
+
+def step(number: int, title: str) -> str:
+    return f'<div class="ds-section"><span class="ds-step-badge">{number}</span>{title}</div>'
+
+
+def mini_cards(items) -> str:
+    """items: lista de (ícone, texto)."""
+    cards = "".join(
+        f'<div class="ds-card ds-mini"><div class="ds-icon"><i class="fi {icon}"></i></div><p>{text}</p></div>'
+        for icon, text in items
+    )
+    return f'<div class="ds-grid ds-grid-{min(len(items), 4)}">{cards}</div>'
+
+
+DATASET_URL = "https://dados.recife.pe.gov.br/sv/dataset/casos-de-dengue-zika-e-chikungunya"
+
+
+def tip(text: str, icon: str = "fi-rr-bulb"):
+    html(f'<div class="ds-tip"><i class="fi {icon}"></i><div>{text}</div></div>')

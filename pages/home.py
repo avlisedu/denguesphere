@@ -2,9 +2,7 @@ import streamlit as st
 import base64
 from pathlib import Path
 from i18n import t
-from ui import inject_styles, html, section, footer
-
-DATASET_URL = "https://dados.recife.pe.gov.br/sv/dataset/casos-de-dengue-zika-e-chikungunya"
+from ui import inject_styles, html, section, footer, DATASET_URL
 
 # ======================================
 # CONFIGURAÇÃO DE ESTILO (paleta da página Sobre)
@@ -137,7 +135,7 @@ html(f"""
 </div>
 """)
 
-footer(t("home_footer"))
+footer(t("app_footer"))
 
 # ======================================
 # FUNDO ANIMADO (casos formando clusters)
