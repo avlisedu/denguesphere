@@ -3,7 +3,7 @@ import pandas as pd
 from geopy.geocoders import Nominatim
 from rapidfuzz import process, fuzz
 import unicodedata, re, io
-from time import sleep
+from time import sleep, monotonic
 from i18n import t
 from ui import inject_styles, html, page_header, step, mini_cards, footer, tip, DATASET_URL
 
@@ -150,19 +150,76 @@ if state.get("geo_sig") != assinatura:
     state.geo_results = []
     state.geo_cache = {}
     state.geo_status = "idle"  # idle | running | stopped | done
+    state.geo_elapsed = 0.0     # segundos acumulados nas buscas já paradas ou concluídas
+    state.geo_run_start = None  # início da execução atual (monotonic)
 
 
 def iniciar():
     state.geo_results = []
     state.geo_status = "running"
+    state.geo_elapsed = 0.0
+    state.geo_run_start = monotonic()
 
 
 def continuar():
     state.geo_status = "running"
+    state.geo_run_start = monotonic()
+
+
+def encerrar_cronometro():
+    if state.geo_run_start is not None:
+        state.geo_elapsed += monotonic() - state.geo_run_start
+        state.geo_run_start = None
 
 
 def parar():
     state.geo_status = "stopped"
+    encerrar_cronometro()
+
+
+def tempo_decorrido():
+    extra = monotonic() - state.geo_run_start if state.geo_run_start is not None else 0
+    return state.geo_elapsed + extra
+
+
+def formatar_tempo(segundos):
+    segundos = int(segundos)
+    h, resto = divmod(segundos, 3600)
+    m, seg = divmod(resto, 60)
+    return f"{h}:{m:02d}:{seg:02d}" if h else f"{m:02d}:{seg:02d}"
+
+
+def cronometro(rotulo, ao_vivo):
+    """Relógio do tempo de busca; ao vivo, o navegador avança o contador a cada segundo."""
+    segundos = tempo_decorrido()
+    classe = "ds-timer live" if ao_vivo else "ds-timer"
+    marcador = f"ds-timer-{len(state.geo_results)}-{int(segundos * 1000)}"
+    script = f"""
+    <script>
+    (() => {{
+        const base = {segundos:.3f}, inicio = performance.now();
+        const fmt = s => {{
+            s = Math.floor(s);
+            const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), seg = s % 60;
+            const dd = n => String(n).padStart(2, "0");
+            return h ? `${{h}}:${{dd(m)}}:${{dd(seg)}}` : `${{dd(m)}}:${{dd(seg)}}`;
+        }};
+        let tentativas = 0;
+        const id = setInterval(() => {{
+            const el = document.getElementById("{marcador}");
+            if (!el) {{ if (++tentativas > 5) clearInterval(id); return; }}
+            tentativas = 0;
+            el.textContent = fmt(base + (performance.now() - inicio) / 1000);
+        }}, 250);
+    }})();
+    </script>
+    """ if ao_vivo else ""
+    st.html(
+        f'<div class="{classe}"><i class="fi fi-rr-stopwatch"></i>'
+        f'<span><small>{rotulo}</small><b id="{marcador}">{formatar_tempo(segundos)}</b></span></div>{script}',
+        width="content",
+        unsafe_allow_javascript=ao_vivo,
+    )
 
 
 # ============================================================
@@ -273,7 +330,11 @@ if state.geo_status == "idle":
 elif state.geo_status == "running":
     st.caption(t("coords_processing_info"))
     # O botão precisa existir antes do laço: clicar nele interrompe a execução atual
-    st.button(t("coords_button_stop"), icon=":material/stop_circle:", on_click=parar)
+    with st.container(horizontal=True, vertical_alignment="center", gap="small"):
+        st.button(t("coords_button_stop"), icon=":material/stop_circle:", on_click=parar)
+        if state.geo_run_start is None:  # execução retomada sem passar pelos botões
+            state.geo_run_start = monotonic()
+        cronometro(t("coords_timer_running"), ao_vivo=True)
     barra = st.progress(len(resultados) / total, text=t("coords_progress").format(done=len(resultados), total=total))
     ao_vivo = st.empty()
 
@@ -283,11 +344,13 @@ elif state.geo_status == "running":
         with ao_vivo.container():
             mostrar_contagens(contar_por_tipo(resultados))
 
+    encerrar_cronometro()
     state.geo_status = "done"
     st.rerun()
 
 elif state.geo_status == "stopped":
     st.warning(t("coords_stopped").format(done=len(resultados), total=total))
+    cronometro(t("coords_timer_total"), ao_vivo=False)
     col_continuar, col_recomecar, _ = st.columns([1, 1, 2])
     with col_continuar:
         st.button(t("coords_button_resume"), type="primary", icon=":material/play_arrow:",
@@ -297,6 +360,7 @@ elif state.geo_status == "stopped":
 
 else:  # done
     st.success(t("coords_processing_done").format(total=total))
+    cronometro(t("coords_timer_total"), ao_vivo=False)
     st.button(t("coords_button_restart"), icon=":material/restart_alt:", on_click=iniciar)
 
 # ============================================================

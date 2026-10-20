@@ -395,6 +395,29 @@ STYLES = """
     font-weight: 600;
 }
 
+[data-testid="stFileUploader"]:has([data-testid="stFileUploaderFile"]) [data-testid="stFileUploaderDropzone"] {
+    min-height: 0;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px 16px;
+}
+[data-testid="stFileUploader"]:has([data-testid="stFileUploaderFile"]) [data-testid="stFileUploaderDropzoneInstructions"] {
+    flex-direction: row;
+    text-align: left;
+    gap: 12px;
+}
+[data-testid="stFileUploader"]:has([data-testid="stFileUploaderFile"]) [data-testid="stFileUploaderDropzoneInstructions"] > div:first-child,
+[data-testid="stFileUploader"]:has([data-testid="stFileUploaderFile"]) [data-testid="stFileUploaderDropzoneInstructions"] > span:first-child {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    box-shadow: none;
+}
+[data-testid="stFileUploader"]:has([data-testid="stFileUploaderFile"]) [data-testid="stFileUploaderDropzoneInstructions"] svg { width: 20px; height: 20px; }
+[data-testid="stFileUploader"]:has([data-testid="stFileUploaderFile"]) [data-testid="stFileUploaderDropzoneInstructions"] span { font-size: 0.92rem; }
+.ds-mini p small { color: #78909c; font-weight: 600; font-size: 0.78rem; }
+.ds-mini p b { color: #0a2a66; }
+
 /* ---------- Dica com link ---------- */
 .ds-tip a { color: #006064; font-weight: 600; }
 [data-testid="stBaseButton-primary"] {
@@ -403,6 +426,37 @@ STYLES = """
 }
 [data-testid="stBaseButton-primary"]:hover { filter: brightness(1.1); border: none; }
 [data-testid="stProgress"] [role="progressbar"] > div > div > div { background: linear-gradient(90deg, #0d47a1, #00acc1); }
+
+/* ---------- Cronômetro (mesma altura de um botão do Streamlit) ---------- */
+.ds-timer {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    height: 2.5rem;
+    box-sizing: border-box;
+    padding: 0 14px 0 6px;
+    border-radius: 0.5rem;
+    background: #f7faff;
+    border: 1px solid #dbe7f7;
+    white-space: nowrap;
+}
+.ds-timer .fi {
+    width: 28px; height: 28px;
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; color: #ffffff;
+    background: linear-gradient(135deg, #0d47a1, #00acc1);
+}
+.ds-timer span { display: inline-flex; align-items: baseline; gap: 8px; }
+.ds-timer small { font-size: 0.85rem; color: #546e7a; }
+.ds-timer b {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 1.05rem;
+    color: #0a2a66;
+    font-variant-numeric: tabular-nums;
+}
+.ds-timer.live .fi { animation: ds-tick 1s steps(2, start) infinite; }
+@keyframes ds-tick { 50% { filter: brightness(1.25); } }
 
 @media (max-width: 1100px) {
     .ds-grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }

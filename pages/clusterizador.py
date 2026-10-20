@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import io
+import re
+import unicodedata
 from sklearn.cluster import DBSCAN
 import folium
 from folium import Circle
@@ -22,15 +24,40 @@ page_header("fi-rr-chart-network", t("cluster_title"), t("cluster_lead"))
 # ------------------------------------------------------------
 # FUNÇÕES AUXILIARES
 # ------------------------------------------------------------
-def calcular_semana_epi(data):
-    """Retorna (semana_epi, ano_epi) padronizada S01–S52"""
-    if pd.isna(data):
-        return None, None
-    data = pd.to_datetime(data, errors="coerce", dayfirst=True)
-    if pd.isna(data):
-        return None, None
-    iso = data.isocalendar()
-    return f"S{iso.week:02d}", iso.year
+def normalizar_nome(nome):
+    nome = unicodedata.normalize("NFD", str(nome).strip().lower())
+    nome = "".join(c for c in nome if unicodedata.category(c) != "Mn")
+    return re.sub(r"[^a-z0-9]+", "_", nome).strip("_")
+
+
+def detectar_coluna(colunas, aliases):
+    """Encontra a coluna pelo nome, ignorando maiúsculas, acentos e espaços."""
+    nomes = {normalizar_nome(c): c for c in colunas}
+    for alias in aliases:
+        if alias in nomes:
+            return nomes[alias]
+    return None
+
+
+def milhar(n):
+    """Separador de milhar conforme o idioma (1.219 em português, 1,219 em inglês)."""
+    texto = f"{n:,}"
+    return texto.replace(",", ".") if st.session_state.get("lang", "pt") == "pt" else texto
+
+
+def para_numero(serie):
+    """Converte coordenadas, aceitando vírgula decimal ("-8,05")."""
+    if serie.dtype == object:
+        serie = serie.astype(str).str.strip().str.replace(",", ".", regex=False)
+    return pd.to_numeric(serie, errors="coerce")
+
+
+def semanas_epidemiologicas(datas):
+    """Retorna (semana_epi 'S01'–'S53', ano_epi) a partir de datas já convertidas."""
+    iso = datas.dt.isocalendar()
+    semana = iso["week"].map(lambda w: f"S{int(w):02d}" if pd.notna(w) else None)
+    ano = iso["year"].map(lambda a: int(a) if pd.notna(a) else None)
+    return semana.astype(object), ano.astype(object)
 
 
 def executar_clusterizacao(df, eps, min_samples):
@@ -156,23 +183,89 @@ if not uploaded_file:
     footer(t("app_footer"))
     st.stop()
 
-df = ler_base(uploaded_file.getvalue(), uploaded_file.name).copy()
-
-# renomeia colunas para padrão esperado (inclui o nome usado nos dados abertos do Recife)
-df.rename(columns={"lat": "latitude", "long": "longitude"}, inplace=True)
-if "dt_notificacao" not in df.columns and "dt_notific" in df.columns:
-    df.rename(columns={"dt_notific": "dt_notificacao"}, inplace=True)
-
-if "dt_notificacao" not in df.columns:
-    st.error(t("cluster_error_dt"))
-    st.stop()
-if not {"latitude", "longitude"}.issubset(df.columns):
-    st.error(t("cluster_error_coords"))
+try:
+    with st.spinner(t("cluster_loading")):
+        df = ler_base(uploaded_file.getvalue(), uploaded_file.name).copy()
+except Exception as erro:
+    st.error(t("cluster_read_error").format(error=erro))
     st.stop()
 
-# adiciona colunas epidemiológicas
-semanas, anos = zip(*df["dt_notificacao"].apply(calcular_semana_epi))
-df["semana_epi"], df["ano_epi"] = semanas, anos
+if df.empty:
+    st.error(t("cluster_empty_file"))
+    st.stop()
+
+# --------------------------------------------------------
+# COLUNAS: detecção automática, com escolha manual quando necessário
+# --------------------------------------------------------
+ALIASES = {
+    "data": ["dt_notificacao", "dt_notific", "data_notificacao", "data_de_notificacao", "dt_notif",
+             "data", "date", "dt_sin_pri", "dt_diagnostico_sintoma", "data_sintomas"],
+    "lat": ["latitude", "lat", "y"],
+    "lon": ["longitude", "long", "lon", "lng", "x"],
+}
+colunas = list(df.columns)
+detectadas = {campo: detectar_coluna(colunas, aliases) for campo, aliases in ALIASES.items()}
+faltando = [campo for campo, coluna in detectadas.items() if coluna is None]
+rotulos = {"data": t("cluster_col_date"), "lat": t("cluster_col_lat"), "lon": t("cluster_col_lon")}
+
+with st.expander(t("cluster_columns_title"), expanded=bool(faltando), icon=":material/view_column:"):
+    if faltando:
+        st.warning(t("cluster_columns_missing").format(missing=", ".join(rotulos[c] for c in faltando)))
+    c1, c2, c3 = st.columns(3)
+    escolhidas = {}
+    for col, campo in zip((c1, c2, c3), ("data", "lat", "lon")):
+        with col:
+            escolhidas[campo] = st.selectbox(
+                rotulos[campo],
+                options=colunas,
+                index=colunas.index(detectadas[campo]) if detectadas[campo] is not None else None,
+                placeholder=t("cluster_col_placeholder"),
+                key=f"cluster_col_{campo}",
+            )
+
+if any(coluna is None for coluna in escolhidas.values()):
+    st.stop()
+
+# --------------------------------------------------------
+# VALIDAÇÃO DOS DADOS
+# --------------------------------------------------------
+datas = pd.to_datetime(df[escolhidas["data"]], errors="coerce", dayfirst=True, format="mixed")
+if datas.notna().sum() == 0:
+    exemplos = ", ".join(map(str, df[escolhidas["data"]].dropna().astype(str).unique()[:3])) or "–"
+    st.error(t("cluster_error_dates").format(col=escolhidas["data"], examples=exemplos))
+    st.stop()
+
+lat = para_numero(df[escolhidas["lat"]])
+lon = para_numero(df[escolhidas["lon"]])
+coord_ok = lat.between(-90, 90) & lon.between(-180, 180)
+if not coord_ok.any():
+    st.error(t("cluster_error_no_coords").format(lat=escolhidas["lat"], lon=escolhidas["lon"]))
+    st.page_link("pages/coordenadas.py", label=t("cluster_req_link"), icon=":material/my_location:")
+    st.stop()
+
+df["latitude"] = lat.where(coord_ok)
+df["longitude"] = lon.where(coord_ok)
+df["semana_epi"], df["ano_epi"] = semanas_epidemiologicas(datas)
+
+# --------------------------------------------------------
+# RESUMO DA BASE CARREGADA
+# --------------------------------------------------------
+validos = datas.notna() & coord_ok
+periodo = f"{datas.min():%d/%m/%Y} – {datas.max():%d/%m/%Y}"
+html(f"""
+<div class="ds-grid ds-grid-4" style="margin-top: 6px">
+    <div class="ds-card ds-mini"><div class="ds-icon"><i class="fi fi-rr-table-list"></i></div>
+        <p><small>{t("cluster_summary_rows")}</small><br><b>{milhar(len(df))}</b></p></div>
+    <div class="ds-card ds-mini"><div class="ds-icon"><i class="fi fi-rr-marker"></i></div>
+        <p><small>{t("cluster_summary_coords")}</small><br><b>{milhar(int(coord_ok.sum()))}</b> ({coord_ok.mean():.0%})</p></div>
+    <div class="ds-card ds-mini"><div class="ds-icon"><i class="fi fi-rr-calendar-lines"></i></div>
+        <p><small>{t("cluster_summary_period")}</small><br><b>{periodo}</b></p></div>
+    <div class="ds-card ds-mini"><div class="ds-icon"><i class="fi fi-rr-table-columns"></i></div>
+        <p><small>{t("cluster_summary_columns")}</small><br><b>{escolhidas["data"]}, {escolhidas["lat"]}, {escolhidas["lon"]}</b></p></div>
+</div>
+""")
+if (~validos).sum():
+    st.caption(t("cluster_summary_dropped").format(n=int((~validos).sum())))
 
 # --------------------------------------------------------
 # PARÂMETROS DBSCAN
@@ -191,12 +284,17 @@ eps = eps_km / 6371.0088  # conversão para radianos
 
 min_samples = st.sidebar.slider(t("cluster_min_samples_label"), 2, 20, 5, 1)
 
+# Abre no ano e na semana com mais casos com coordenadas, para o primeiro mapa já mostrar clusters
+df_geo = df[validos]
 anos_disp = sorted(df["ano_epi"].dropna().unique())
-ano_sel = st.sidebar.selectbox(t("cluster_year_label"), anos_disp)
+ano_padrao = df_geo["ano_epi"].mode().iloc[0] if not df_geo.empty else anos_disp[0]
+ano_sel = st.sidebar.selectbox(t("cluster_year_label"), anos_disp, index=anos_disp.index(ano_padrao))
 
 semanas_disp = sorted(df.loc[df["ano_epi"] == ano_sel, "semana_epi"].dropna().unique())
+semanas_ano = df_geo.loc[df_geo["ano_epi"] == ano_sel, "semana_epi"]
+semana_padrao = [semanas_ano.mode().iloc[0]] if not semanas_ano.empty else semanas_disp[:1]
 semanas_sel = st.sidebar.multiselect(
-    t("cluster_weeks_label"), semanas_disp, default=semanas_disp[:1]
+    t("cluster_weeks_label"), semanas_disp, default=semana_padrao
 )
 
 df_filtro = df[(df["ano_epi"] == ano_sel) & (df["semana_epi"].isin(semanas_sel))].copy()
