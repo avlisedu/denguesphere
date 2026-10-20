@@ -7,7 +7,26 @@ from time import sleep, monotonic
 from i18n import t
 from ui import inject_styles, html, page_header, step, mini_cards, footer, tip, DATASET_URL
 
-COLUNAS_RESULTADO = ["CEP_processado", "latitude", "longitude", "bairro_utilizado", "tipo_match"]
+COLUNAS_RESULTADO = ["CEP_processado", "latitude", "longitude", "bairro_utilizado", "municipio_encontrado", "tipo_match"]
+
+# Municípios da Região Metropolitana do Recife: (sul, norte, oeste, leste), limites administrativos do OpenStreetMap
+CIDADES_RMR = {
+    "Recife": (-8.1552, -7.9290, -35.0186, -34.8515),
+    "Olinda": (-8.0509, -7.9547, -34.9170, -34.8266),
+    "Jaboatão dos Guararapes": (-8.2424, -8.0564, -35.0970, -34.9089),
+    "Paulista": (-7.9813, -7.8380, -35.0310, -34.8192),
+    "Camaragibe": (-8.0376, -7.9247, -35.0349, -34.9597),
+    "São Lourenço da Mata": (-8.0924, -7.9411, -35.2223, -34.9932),
+    "Abreu e Lima": (-7.9356, -7.7923, -35.1400, -34.8600),
+    "Igarassu": (-7.9000, -7.6907, -35.0998, -34.8320),
+    "Cabo de Santo Agostinho": (-8.3664, -8.1841, -35.2660, -34.9210),
+    "Ipojuca": (-8.6078, -8.3099, -35.2381, -34.9464),
+    "Moreno": (-8.2248, -8.0751, -35.2273, -35.0601),
+    "Itapissuma": (-7.8081, -7.6824, -34.9433, -34.8624),
+    "Ilha de Itamaracá": (-7.8164, -7.6878, -34.8902, -34.8233),
+    "Araçoiaba": (-7.8800, -7.7226, -35.1400, -35.0204),
+    "Goiana": (-7.7147, -7.4620, -35.0770, -34.8062),
+}
 
 inject_styles()
 
@@ -140,11 +159,30 @@ with col3:
     bairro_col = st.selectbox(t("coords_select_bairro"), options=colunas,
                               index=adivinhar_coluna(colunas, ["nm_bairro", "bairro"], ["bairro", "neighborhood"]))
 
+
+def incluir_rmr():
+    st.session_state["geo_cidades"] = list(CIDADES_RMR)
+
+
+if "geo_cidades" not in st.session_state:
+    st.session_state["geo_cidades"] = ["Recife"]
+col_cidades, col_rmr = st.columns([3, 1], vertical_alignment="bottom")
+with col_cidades:
+    cidades = st.multiselect(t("coords_cities"), options=list(CIDADES_RMR), key="geo_cidades")
+with col_rmr:
+    st.button(t("coords_cities_all"), icon=":material/add_location_alt:", on_click=incluir_rmr, width="stretch")
+st.caption(t("coords_cities_help"))
+
+if not cidades:
+    st.warning(t("coords_cities_empty"))
+    footer(t("app_footer"))
+    st.stop()
+
 # ============================================================
 # 4. Estado da busca (permite parar e continuar)
 # ============================================================
 state = st.session_state
-assinatura = (uploaded_file.name, uploaded_file.size, cep_col, rua_col, bairro_col)
+assinatura = (uploaded_file.name, uploaded_file.size, cep_col, rua_col, bairro_col, tuple(cidades))
 if state.get("geo_sig") != assinatura:
     state.geo_sig = assinatura
     state.geo_results = []
@@ -229,6 +267,29 @@ ruas_unicas = sorted(set(df[rua_col].dropna().apply(normalizar_texto)))
 geolocator = Nominatim(user_agent="geo_ferramenta_cep")
 cache = state.geo_cache
 
+# Área de busca: retângulo que cobre as cidades escolhidas (com folga de ~1 km)
+caixas = [CIDADES_RMR[c] for c in cidades]
+area_busca = [
+    (min(c[0] for c in caixas) - 0.01, min(c[2] for c in caixas) - 0.01),
+    (max(c[1] for c in caixas) + 0.01, max(c[3] for c in caixas) + 0.01),
+]
+cidades_norm = {normalizar_texto(c): c for c in cidades}
+
+
+def municipio_valido(location):
+    """Devolve o município escolhido em que o resultado caiu, ou None se caiu fora deles."""
+    endereco = location.raw.get("address", {})
+    for chave in ("city", "town", "municipality", "village"):
+        nome = endereco.get(chave)
+        if nome:
+            return cidades_norm.get(normalizar_texto(nome))
+    # Sem município no endereço: aceita se o ponto estiver dentro do limite de uma cidade escolhida
+    for cidade in cidades:
+        sul, norte, oeste, leste = CIDADES_RMR[cidade]
+        if sul <= location.latitude <= norte and oeste <= location.longitude <= leste:
+            return cidade
+    return None
+
 
 def corrigir_nome_rua(rua_digitada):
     if not rua_digitada:
@@ -251,12 +312,13 @@ def get_coordinates(row):
     rua_corrigida = corrigir_nome_rua(rua)
     cache_key = f"cep:{cep}|rua:{rua_corrigida}|bairro:{bairro}"
 
-    def build_payload(latitude=None, longitude=None, tipo_match="nao_encontrado"):
+    def build_payload(latitude=None, longitude=None, municipio=None, tipo_match="nao_encontrado"):
         return {
             "CEP_processado": cep,
             "latitude": latitude,
             "longitude": longitude,
             "bairro_utilizado": bairro,
+            "municipio_encontrado": municipio,
             "tipo_match": tipo_match,
         }
 
@@ -266,18 +328,29 @@ def get_coordinates(row):
     def tentar_geocodificar(consultas, tipo_match):
         for consulta in consultas:
             try:
-                location = geolocator.geocode(consulta, timeout=10)
+                # Busca só dentro da área das cidades escolhidas e confere o município de cada candidato:
+                # um bairro com o mesmo nome em outra cidade não é aceito
+                candidatos = geolocator.geocode(
+                    consulta, timeout=10, exactly_one=False, limit=5,
+                    viewbox=area_busca, bounded=True, country_codes="br", addressdetails=True,
+                )
                 sleep(1)
-                if location:
-                    return build_payload(
-                        latitude=location.latitude,
-                        longitude=location.longitude,
-                        tipo_match=tipo_match,
-                    )
+                for location in candidatos or []:
+                    municipio = municipio_valido(location)
+                    if municipio:
+                        return build_payload(
+                            latitude=location.latitude,
+                            longitude=location.longitude,
+                            municipio=municipio,
+                            tipo_match=tipo_match,
+                        )
             except Exception:
                 sleep(1)
                 continue
         return None
+
+    # Com uma cidade, o nome dela entra na consulta; com várias, a área de busca e a conferência do município decidem
+    local = f"{cidades[0]}, Pernambuco, Brasil" if len(cidades) == 1 else "Pernambuco, Brasil"
 
     if cep:
         resultado = tentar_geocodificar(
@@ -294,10 +367,10 @@ def get_coordinates(row):
     if rua_corrigida and bairro:
         resultado = tentar_geocodificar(
             [
-                f"{rua_corrigida}, {bairro}, Recife, Pernambuco, Brasil",
-                f"rua {rua_corrigida}, {bairro}, Recife, Pernambuco, Brasil",
-                f"avenida {rua_corrigida}, {bairro}, Recife, Pernambuco, Brasil",
-                f"travessa {rua_corrigida}, {bairro}, Recife, Pernambuco, Brasil",
+                f"{rua_corrigida}, {bairro}, {local}",
+                f"rua {rua_corrigida}, {bairro}, {local}",
+                f"avenida {rua_corrigida}, {bairro}, {local}",
+                f"travessa {rua_corrigida}, {bairro}, {local}",
             ],
             "rua_bairro",
         )
@@ -307,7 +380,7 @@ def get_coordinates(row):
 
     if bairro:
         resultado = tentar_geocodificar(
-            [f"{bairro}, Recife, Pernambuco, Brasil"],
+            [f"{bairro}, {local}"],
             "bairro",
         )
         if resultado:
