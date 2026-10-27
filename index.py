@@ -14,7 +14,7 @@ from i18n import t, lang_selector
 # CONFIGURAÇÃO GERAL DO SISTEMA
 # ======================================
 st.set_page_config(
-    page_title="DengueSphere - Web App",
+    page_title="DengueSphere",
     page_icon=str(Path("img/barra.png")),
     layout="wide",
 )
