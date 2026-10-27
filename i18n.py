@@ -43,7 +43,6 @@ Utilize o menu no topo para navegar entre as seções.
         "home_dataset_license": "Licença ODbL",
         "home_dataset_update": "Atualização trimestral",
         "home_dataset_button": "Acessar a base no portal",
-        "app_footer": "Desenvolvido pelo Grupo de Pesquisa em Sistemas de Informação e Decisão (GPSID) do PPGEP/UFPE",
 
         # ---------------- Página Sobre ----------------
         "about_eyebrow": "Sistema de apoio à decisão para vigilância epidemiológica",
@@ -299,7 +298,6 @@ Use the top menu to navigate between sections.
         "home_dataset_license": "ODbL license",
         "home_dataset_update": "Updated quarterly",
         "home_dataset_button": "Open the dataset on the portal",
-        "app_footer": "Developed by the Information and Decision Systems Research Group (GPSID) at PPGEP/UFPE",
 
         # ---------------- About Page ----------------
         "about_eyebrow": "Decision support system for epidemiological surveillance",

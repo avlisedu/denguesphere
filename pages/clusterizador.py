@@ -22,7 +22,7 @@ import plotly.express as px
 from i18n import t
 from sklearn.metrics import silhouette_score, silhouette_samples
 from sklearn.metrics import adjusted_rand_score
-from ui import inject_styles, html, page_header, section, mini_cards, footer
+from ui import inject_styles, html, page_header, section, mini_cards
 
 # Escala de cor dos gráficos, na paleta do app
 ESCALA = ["#b2ebf2", "#00acc1", "#0d47a1"]
@@ -495,7 +495,6 @@ if not uploaded_file:
     ]))
     st.write("")
     st.page_link("pages/coordenadas.py", label=t("cluster_req_link"), icon=":material/my_location:")
-    footer(t("app_footer"))
     st.stop()
 
 try:
@@ -768,7 +767,6 @@ html(section("fi-rr-stats", t("cluster_stats_title")))
 
 if df_cluster["cluster"].max() < 0:
     st.info(t("cluster_info_no_clusters"))
-    footer(t("app_footer"))
     st.stop()
 
 resumo = (
@@ -988,8 +986,3 @@ if mostrar_analise_avancada:
                         st.info(t("cluster_ari_interp_mid"))
                     else:
                         st.warning(t("cluster_ari_interp_low"))
-
-# ------------------------------------------------------------
-# RODAPÉ
-# ------------------------------------------------------------
-footer(t("app_footer"))

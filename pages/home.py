@@ -2,7 +2,7 @@ import streamlit as st
 import base64
 from pathlib import Path
 from i18n import t
-from ui import inject_styles, html, section, footer, DATASET_URL
+from ui import inject_styles, html, section, DATASET_URL
 
 # ======================================
 # CONFIGURAÇÃO DE ESTILO (paleta da página Sobre)
@@ -134,8 +134,6 @@ html(f"""
     </div>
 </div>
 """)
-
-footer(t("app_footer"))
 
 # ======================================
 # FUNDO ANIMADO (casos formando clusters)
