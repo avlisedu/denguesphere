@@ -180,12 +180,22 @@ def avatar(foto, icon):
     return f'<img class="ds-avatar" src="data:image/jpeg;base64,{dados}" alt="">'
 
 
-# (foto, ícone sem foto, nome, papel, resumo, e-mail)
+ICONE_ORCID = base64.b64encode(Path("img/orcid.svg").read_bytes()).decode()
+
+
+def link_orcid(orcid):
+    return (f'<a href="https://orcid.org/{orcid}" target="_blank" rel="noopener">'
+            f'<img src="data:image/svg+xml;base64,{ICONE_ORCID}" width="15" height="15" alt="ORCID">{orcid}</a>')
+
+
+# (foto, ícone sem foto, nome, papel, resumo, e-mail, ORCID)
 team = [
     ("eduardo.jpg", "fi-rr-graduation-cap", "Eduardo da Silva", t("about_team_eduardo_role"), None,
-     "eduardo.es@ufpe.br"),
-    ("maisa.jpg", "fi-rr-chalkboard-user", t("about_team_maisa_name"), t("about_team_maisa_role"), None, None),
-    ("theo.jpg", "fi-rr-chart-histogram", t("about_team_theo_name"), t("about_team_theo_role"), None, None),
+     "eduardo.es@ufpe.br", None),
+    ("maisa.jpg", "fi-rr-chalkboard-user", t("about_team_maisa_name"), t("about_team_maisa_role"), None, None,
+     "0000-0003-4223-2769"),
+    ("theo.jpg", "fi-rr-chart-histogram", t("about_team_theo_name"), t("about_team_theo_role"), None, None,
+     "0000-0001-8697-1518"),
 ]
 team_cards = "".join(
     f"""
@@ -196,10 +206,11 @@ team_cards = "".join(
             <p>{role}</p>
             {f'<p class="ds-bio">{bio}</p>' if bio else ""}
             {f'<a href="mailto:{email}"><i class="fi fi-rr-envelope"></i>{email}</a>' if email else ""}
+            {link_orcid(orcid) if orcid else ""}
         </div>
     </div>
     """
-    for foto, icon, name, role, bio, email in team
+    for foto, icon, name, role, bio, email, orcid in team
 )
 
 html(f"""

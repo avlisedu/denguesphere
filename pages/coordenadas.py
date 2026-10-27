@@ -5,7 +5,7 @@ from rapidfuzz import process, fuzz
 import unicodedata, re, io
 from time import sleep, monotonic
 from i18n import t
-from ui import inject_styles, html, page_header, step, mini_cards, footer, tip, DATASET_URL
+from ui import inject_styles, html, page_header, step, mini_cards, tip, DATASET_URL
 
 COLUNAS_RESULTADO = ["CEP_processado", "latitude", "longitude", "bairro_utilizado", "municipio_encontrado", "tipo_match"]
 
@@ -134,7 +134,6 @@ uploaded_file = st.file_uploader(t("coords_uploader_label"), type=["xlsx", "csv"
 
 if uploaded_file is None:
     tip(t("coords_no_file_info").format(url=DATASET_URL), icon="fi-rr-database")
-    footer(t("app_footer"))
     st.stop()
 
 df = ler_planilha(uploaded_file.getvalue(), uploaded_file.name)
@@ -175,7 +174,6 @@ st.caption(t("coords_cities_help"))
 
 if not cidades:
     st.warning(t("coords_cities_empty"))
-    footer(t("app_footer"))
     st.stop()
 
 # ============================================================
@@ -467,5 +465,3 @@ if resultados and state.geo_status in ("stopped", "done"):
         type="primary",
         icon=":material/download:",
     )
-
-footer(t("app_footer"))

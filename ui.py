@@ -181,18 +181,8 @@ STYLES = """
 .ds-person .ds-icon { margin-bottom: 0; flex: 0 0 auto; border-radius: 50%; }
 .ds-avatar { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; flex: 0 0 auto; border: 2px solid #dbe7f7; }
 .ds-person .ds-bio { font-size: 0.88rem; color: #546e7a; margin-top: 6px; }
-.ds-person a { font-size: 0.88rem; color: #0d47a1; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; }
-
-/* ---------- Rodapé ---------- */
-.ds-footer {
-    margin-top: 44px;
-    padding: 16px;
-    border-radius: 12px;
-    background: #0a2a66;
-    color: #bbdefb;
-    font-size: 13px;
-    text-align: center;
-}
+.ds-person a { font-size: 0.88rem; color: #0d47a1; text-decoration: none; display: flex; align-items: center; gap: 6px; margin-top: 8px; }
+.ds-person a + a { margin-top: 4px; }
 
 /* ---------- Passos (Home) ---------- */
 .ds-step { position: relative; }
@@ -507,10 +497,6 @@ def chips(items) -> str:
 
 def section(icon: str, title: str) -> str:
     return f'<div class="ds-section"><i class="fi {icon}"></i>{title}</div>'
-
-
-def footer(text: str):
-    html(f'<div class="ds-footer">{text}</div>')
 
 
 def page_header(icon: str, title: str, lead: str):
