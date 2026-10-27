@@ -98,7 +98,7 @@ Utilize o menu no topo para navegar entre as seções.
         ],
 
         "about_team_header": "Equipe",
-        "about_team_eduardo_role": "Doutorando no Programa de Pós-Graduação em Engenharia de Produção (PPGEP/UFPE) desde 2025 e pesquisador visitante na University of Exeter de outubro de 2026 a março de 2027",
+        "about_team_eduardo_role": "Doutorando no PPGEP/UFPE desde 2025 e pesquisador visitante na University of Exeter (out/2026 a mar/2027)",
         "about_team_maisa_name": "Profa. Dra. Maisa Mendonça Silva",
         "about_team_maisa_role": "Orientadora e docente permanente do PPGEP/UFPE",
         "about_team_theo_name": "Theo Economou, PhD",
@@ -354,7 +354,7 @@ Use the top menu to navigate between sections.
         ],
 
         "about_team_header": "Team",
-        "about_team_eduardo_role": "PhD student, Graduate Program in Production Engineering (PPGEP/UFPE) since 2025, and visiting researcher at the University of Exeter from October 2026 to March 2027",
+        "about_team_eduardo_role": "PhD student at PPGEP/UFPE since 2025 and visiting researcher at the University of Exeter (Oct 2026 to Mar 2027)",
         "about_team_maisa_name": "Prof. Maisa Mendonça Silva, PhD",
         "about_team_maisa_role": "Supervisor and permanent faculty member of PPGEP/UFPE",
         "about_team_theo_name": "Theo Economou, PhD",
