@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import io
+import json
 import re
 import sqlite3
 import unicodedata
@@ -13,7 +14,9 @@ from shapely.geometry import mapping
 from shapely.ops import unary_union
 from sklearn.cluster import DBSCAN
 import folium
+from branca.element import MacroElement, Template
 from folium import Circle
+from folium.elements import JSCSSMixin
 from streamlit_folium import st_folium
 import plotly.express as px
 from i18n import t
@@ -195,7 +198,18 @@ MODELO_DISTRITOS = (
     "Casa Amarela,DS III\n"
 )
 
-# Ícone (Font Awesome, já carregado pelo folium) e cor do marcador conforme palavras do tipo
+# Desenhos dos ícones em SVG (Font Awesome Free). SVG embutido aparece também na imagem baixada do mapa,
+# o que não acontece com a fonte de ícones carregada de outro domínio
+ICONES_SVG = json.loads(Path("assets/icones_mapa.json").read_text(encoding="utf-8"))
+
+
+def svg_icone(nome, tamanho, cor="white"):
+    icone = ICONES_SVG[nome]
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{icone["viewBox"]}" width="{tamanho}" '
+            f'height="{tamanho}" fill="{cor}"><path d="{icone["d"]}"/></svg>')
+
+
+# Ícone e cor do marcador conforme palavras do tipo
 ICONES_TIPO = [
     (("sede", "distrito"), "building-flag", "#0D47A1"),
     (("zoonose",), "shield-virus", "#2E7D32"),
@@ -383,8 +397,7 @@ def desenhar_pontos_fixos(mapa, pontos):
         marcador = (
             f'<div style="width: 22px; height: 22px; border-radius: 50%; background: {cor}; '
             f'border: 2px solid white; box-shadow: 0 1px 3px rgba(0,0,0,.45); display: flex; '
-            f'align-items: center; justify-content: center; color: white; font-size: 11px">'
-            f'<i class="fa-solid fa-{icone}"></i></div>'
+            f'align-items: center; justify-content: center">{svg_icone(icone, 12)}</div>'
         )
         for _, row in grupo_df.iterrows():
             folium.Marker(
@@ -394,6 +407,59 @@ def desenhar_pontos_fixos(mapa, pontos):
                 popup=folium.Popup(row["_popup"], max_width=320),
             ).add_to(grupo)
         grupo.add_to(mapa)
+
+
+class BotaoImagemMapa(JSCSSMixin, MacroElement):
+    """Botão no canto do mapa que baixa um PNG do que está na tela, com o tamanho exato do mapa."""
+    # O st_folium só carrega scripts declarados em default_js, como nos plugins do folium
+    default_js = [("dom_to_image", "https://unpkg.com/dom-to-image@2.6.0/dist/dom-to-image.min.js")]
+    _template = Template("""
+        {% macro script(this, kwargs) %}
+            var BotaoImagem = L.Control.extend({
+                options: { position: "topleft" },
+                onAdd: function (mapa) {
+                    var div = L.DomUtil.create("div", "leaflet-bar leaflet-control");
+                    var link = L.DomUtil.create("a", "", div);
+                    link.href = "#";
+                    link.title = {{ this.titulo|tojson }};
+                    link.setAttribute("role", "button");
+                    link.style.display = "flex";
+                    link.style.alignItems = "center";
+                    link.style.justifyContent = "center";
+                    link.innerHTML = {{ this.icone|tojson }};
+                    L.DomEvent.disableClickPropagation(div);
+                    L.DomEvent.on(link, "click", function (e) {
+                        L.DomEvent.preventDefault(e);
+                        var area = mapa.getContainer();
+                        domtoimage.toPng(area, {
+                            width: area.clientWidth,
+                            height: area.clientHeight,
+                            // Sem os botões do topo; a atribuição dos mapas base (rodapé) fica na imagem
+                            filter: function (no) {
+                                return !(no.classList && (no.classList.contains("leaflet-top")));
+                            }
+                        }).then(function (url) {
+                            var a = document.createElement("a");
+                            a.download = {{ this.arquivo|tojson }} + ".png";
+                            a.href = url;
+                            document.body.appendChild(a);
+                            a.click();
+                            a.remove();
+                        });
+                    });
+                    return div;
+                }
+            });
+            new BotaoImagem().addTo({{ this._parent.get_name() }});
+        {% endmacro %}
+    """)
+
+    def __init__(self, titulo, arquivo):
+        super().__init__()
+        self._name = "BotaoImagemMapa"
+        self.titulo = titulo
+        self.arquivo = arquivo
+        self.icone = svg_icone("camera", 14, "#333")
 
 
 # ------------------------------------------------------------
@@ -635,16 +701,20 @@ if len(perto) > 1:
                      [perto["latitude"].max(), perto["longitude"].max()]])
 
 # Mapas base gratuitos (sem chave de API); o primeiro é o padrão e os demais começam ocultos
+# cross_origin carrega os tiles com CORS, sem o que o botão de imagem do mapa sairia sem o fundo
 esri = "https://server.arcgisonline.com/ArcGIS/rest/services/{}/MapServer/tile/{{z}}/{{y}}/{{x}}"
 atrib_esri = "Tiles &copy; Esri &mdash; Esri, HERE, Garmin, &copy; OpenStreetMap contributors"
-folium.TileLayer(esri.format("Canvas/World_Light_Gray_Base"), attr=atrib_esri, name="Cinza claro").add_to(mapa)
-folium.TileLayer("OpenStreetMap", name="OpenStreetMap", show=False).add_to(mapa)
-folium.TileLayer(esri.format("World_Street_Map"), attr=atrib_esri, name="Ruas", show=False).add_to(mapa)
-folium.TileLayer(esri.format("World_Imagery"), attr=atrib_esri, name="Satélite", show=False).add_to(mapa)
+folium.TileLayer(esri.format("Canvas/World_Light_Gray_Base"), attr=atrib_esri, name="Cinza claro",
+                 cross_origin=True).add_to(mapa)
+folium.TileLayer("OpenStreetMap", name="OpenStreetMap", show=False, cross_origin=True).add_to(mapa)
+folium.TileLayer(esri.format("World_Street_Map"), attr=atrib_esri, name="Ruas", show=False,
+                 cross_origin=True).add_to(mapa)
+folium.TileLayer(esri.format("World_Imagery"), attr=atrib_esri, name="Satélite", show=False,
+                 cross_origin=True).add_to(mapa)
 # Nomes de bairros e ruas sobrepostos ao mapa base
 folium.TileLayer(
     esri.format("Canvas/World_Light_Gray_Reference"), attr=atrib_esri,
-    name="Nomes (bairros e ruas)", overlay=True, control=True,
+    name="Nomes (bairros e ruas)", overlay=True, control=True, cross_origin=True,
 ).add_to(mapa)
 
 cores = [
@@ -660,6 +730,7 @@ desenhar_clusters(mapa, df_cluster, cores, eps_km)
 if not pontos_fixos.empty:
     desenhar_pontos_fixos(mapa, pontos_fixos)
 folium.LayerControl(collapsed=True).add_to(mapa)
+BotaoImagemMapa(t("cluster_map_print"), f"denguesphere_{ano_sel}_{'_'.join(semanas_sel)}").add_to(mapa)
 
 semanas_str = ", ".join(semanas_sel)
 html(section("fi-rr-map", t("cluster_header_period").format(year=ano_sel, weeks=semanas_str)))

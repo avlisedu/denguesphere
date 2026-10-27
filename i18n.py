@@ -82,6 +82,7 @@ Utilize o menu no topo para navegar entre as seções.
             "Divisão por Distritos Sanitários: bairros desenhados com os limites do IBGE (Censo 2022), coloridos pelo distrito e com os indicadores da planilha ao passar o mouse",
             "Camadas prontas do Recife: 182 unidades de saúde (Dados Abertos da Prefeitura), sedes e os 8 Distritos Sanitários com seus 94 bairros",
             "Mapa enquadrado na área dos casos, sem ser deslocado por pontos geocodificados longe",
+            "Botão no mapa para baixar a imagem (PNG) do que está na tela",
             "Geocodificação restrita às cidades escolhidas da Região Metropolitana do Recife",
         ],
         "about_release_10_items": [
@@ -173,6 +174,7 @@ Utilize o menu no topo para navegar entre as seções.
         "cluster_summary_period": "Período",
         "cluster_summary_columns": "Colunas usadas",
         "cluster_summary_dropped": "{n} registros sem data ou sem coordenadas válidas ficaram de fora da análise.",
+        "cluster_map_print": "Baixar imagem do mapa (PNG)",
 
         # ---------------- Camadas de referência ----------------
         "layers_title": "Camadas de referência (opcional)",
@@ -338,6 +340,7 @@ Use the top menu to navigate between sections.
             "Health District division: neighborhoods drawn with IBGE boundaries (2022 Census), colored by district and showing the spreadsheet indicators on hover",
             "Ready-made Recife layers: 182 health units (City Hall Open Data), headquarters and the 8 Health Districts with their 94 neighborhoods",
             "Map framed on the area of the cases, without being shifted by points geocoded far away",
+            "Map button to download an image (PNG) of the current view",
             "Geocoding restricted to the chosen cities of the Recife Metropolitan Region",
         ],
         "about_release_10_items": [
@@ -429,6 +432,7 @@ Use the top menu to navigate between sections.
         "cluster_summary_period": "Period",
         "cluster_summary_columns": "Columns used",
         "cluster_summary_dropped": "{n} records without a valid date or coordinates were left out of the analysis.",
+        "cluster_map_print": "Download map image (PNG)",
 
         # ---------------- Reference layers ----------------
         "layers_title": "Reference layers (optional)",
