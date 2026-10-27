@@ -271,6 +271,13 @@ STYLES = """
 }
 .ds-release li .fi { color: #2e7d32; padding-top: 3px; }
 .ds-release.future li .fi { color: #00838f; }
+/* Cada versão abre e fecha; só a atual começa aberta */
+.ds-release-list { display: flex; flex-direction: column; gap: 12px; }
+.ds-release summary { list-style: none; cursor: pointer; margin-bottom: 0; }
+.ds-release summary::-webkit-details-marker { display: none; }
+.ds-release[open] summary { margin-bottom: 12px; }
+.ds-release-toggle { margin-left: auto; color: #0d47a1; transition: transform 0.2s; }
+.ds-release[open] .ds-release-toggle { transform: rotate(180deg); }
 
 /* ---------- Cabeçalho compacto (páginas de ferramenta) ---------- */
 .ds-page-head {

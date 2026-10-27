@@ -144,30 +144,25 @@ def release_items(key, icon):
     return "".join(f'<li><i class="fi {icon}"></i><span>{item}</span></li>' for item in items)
 
 
+def release_card(version, badge, items_key, aberto=False, future=False):
+    icon = "fi-rr-time-forward" if future else "fi-rr-check-circle"
+    return f"""
+    <details class="ds-release{' future' if future else ''}"{' open' if aberto else ''}>
+        <summary class="ds-release-head">
+            <span class="ds-release-version">{version}</span>
+            <span class="ds-badge{' teal' if future else ''}">{badge}</span>
+            <i class="fi fi-rr-angle-small-down ds-release-toggle"></i>
+        </summary>
+        <ul>{release_items(items_key, icon)}</ul>
+    </details>"""
+
+
 html(f"""
 {section("fi-rr-code-commit", t("about_releases_header"))}
-<div class="ds-grid ds-grid-2">
-    <div class="ds-release">
-        <div class="ds-release-head">
-            <span class="ds-release-version">v1.1</span>
-            <span class="ds-badge">{t("about_release_current")}</span>
-        </div>
-        <ul>{release_items("about_release_11_items", "fi-rr-check-circle")}</ul>
-    </div>
-    <div class="ds-release future">
-        <div class="ds-release-head">
-            <span class="ds-release-version">{t("about_release_future_title")}</span>
-            <span class="ds-badge teal">{t("about_release_future")}</span>
-        </div>
-        <ul>{release_items("about_release_future_items", "fi-rr-time-forward")}</ul>
-    </div>
-    <div class="ds-release">
-        <div class="ds-release-head">
-            <span class="ds-release-version">v1.0</span>
-            <span class="ds-badge">{t("about_release_previous")}</span>
-        </div>
-        <ul>{release_items("about_release_10_items", "fi-rr-check-circle")}</ul>
-    </div>
+<div class="ds-release-list">
+    {release_card("v1.1", t("about_release_current"), "about_release_11_items", aberto=True)}
+    {release_card(t("about_release_future_title"), t("about_release_future"), "about_release_future_items", future=True)}
+    {release_card("v1.0", t("about_release_previous"), "about_release_10_items")}
 </div>
 """)
 
