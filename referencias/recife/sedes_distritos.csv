@@ -1,0 +1,9 @@
+tipo,nome,endereco,bairro,telefone,latitude,longitude,precisao
+sede de distrito,DS I,"Rua Mário Domingues, 70",Boa Vista,(81) 3355-1543,-8.060044,-34.896217,rua
+sede de distrito,DS II,"Rua Antônio Rangel, 208",Encruzilhada,(81) 3355-4317,-8.037456,-34.887607,numero
+sede de distrito,DS III,"Rua Xavantes, 205",Casa Amarela,(81) 3355-5404,-8.023639,-34.916245,numero
+sede de distrito,DS IV,"Rua Cantora Clara Nunes, s/n",Torre,(81) 3355-7550,-8.044510,-34.914958,rua
+sede de distrito,DS V,"Rua Emília Torreão, 135",Afogados,(81) 3355-9562,-8.082157,-34.909521,numero
+sede de distrito,DS VI,"Av. Jean Emile Favre, 1636",Ipsep,(81) 3355-1958,-8.109255,-34.917485,rua
+sede de distrito,DS VII,"Rua Domingos Sávio, 172",Alto José Bonifácio,(81) 3442-2710,-8.018544,-34.911210,rua
+sede de distrito,DS VIII,"Rua Escola de Sagres, 22",Jordão,,-8.136429,-34.937831,rua
