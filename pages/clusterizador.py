@@ -3,7 +3,14 @@ import pandas as pd
 import numpy as np
 import io
 import re
+import sqlite3
 import unicodedata
+from html import escape
+from pathlib import Path
+from rapidfuzz import fuzz, process
+from shapely import wkb
+from shapely.geometry import mapping
+from shapely.ops import unary_union
 from sklearn.cluster import DBSCAN
 import folium
 from folium import Circle
@@ -167,6 +174,229 @@ def avaliar_estabilidade_ari(df_base, eps_base, min_samples_base, eps_fatores=(0
 
 
 # ------------------------------------------------------------
+# CAMADAS DE REFERÊNCIA (pontos fixos e distritos sanitários)
+# ------------------------------------------------------------
+MALHA_BAIRROS = Path("estudo/dados/ibge/PE_bairros_CD2022.gpkg")
+SEDES_DISTRITOS = Path("referencias/recife/sedes_distritos.csv")
+UNIDADES_SAUDE = Path("referencias/recife/unidades_saude.csv")
+BAIRROS_DISTRITOS = Path("referencias/recife/bairros_distritos.csv")
+
+MODELO_PONTOS = (
+    "tipo,nome,latitude,longitude\n"
+    "unidade de saude,USF Exemplo,-8.0476,-34.8770\n"
+    "armadilha,Ovitrampa 001,-8.0631,-34.8711\n"
+    "imovel abandonado,Rua Exemplo 100,-8.0539,-34.8811\n"
+)
+MODELO_DISTRITOS = (
+    "bairro,distrito\n"
+    "Boa Vista,DS I\n"
+    "Santo Amaro,DS I\n"
+    "Encruzilhada,DS II\n"
+    "Casa Amarela,DS III\n"
+)
+
+# Ícone (Font Awesome, já carregado pelo folium) e cor do marcador conforme palavras do tipo
+ICONES_TIPO = [
+    (("sede", "distrito"), "building-flag", "#0D47A1"),
+    (("zoonose",), "shield-virus", "#2E7D32"),
+    (("hospital", "maternidade"), "hospital", "#880E4F"),
+    (("pronto_atendimento", "upa"), "truck-medical", "#B71C1C"),
+    (("saude", "ubs", "usf", "posto", "policlinica", "clinica"), "house-medical", "#E53935"),
+    (("armadilha", "ovitrampa", "larvitrampa", "trampa"), "mosquito", "#EF6C00"),
+    (("abandonad", "baldio", "terreno", "desocupad", "imovel"), "house-crack", "#37474F"),
+    (("estrategico", "borracharia", "ferro_velho", "cemiterio", "reciclagem", "deposito"),
+     "triangle-exclamation", "#6A1B9A"),
+]
+
+CORES_DISTRITOS = [
+    "#4E79A7", "#F28E2B", "#59A14F", "#B07AA1", "#EDC948",
+    "#76B7B2", "#FF9DA7", "#9C755F", "#E15759", "#BAB0AC",
+]
+ROMANOS = {"i": 1, "v": 5, "x": 10}
+
+
+def icone_do_tipo(tipo):
+    chave = normalizar_nome(tipo)
+    for palavras, icone, cor in ICONES_TIPO:
+        if any(palavra in chave for palavra in palavras):
+            return icone, cor
+    return "location-dot", "#00838F"
+
+
+def numero_distrito(nome):
+    """Número do distrito em 'DS II', 'VIII' ou '3' (None se não houver)."""
+    fim = normalizar_nome(nome).split("_")[-1]
+    if fim.isdigit():
+        return int(fim)
+    if fim and re.fullmatch(r"x{0,3}(ix|iv|v?i{0,3})", fim):
+        valores = [ROMANOS[c] for c in fim]
+        return sum(-v if i + 1 < len(valores) and v < valores[i + 1] else v for i, v in enumerate(valores))
+    return None
+
+
+def nome_distrito(valor):
+    """'II' vira 'DS II'; nomes completos ('Distrito Norte', 'DS II') ficam como estão."""
+    texto = str(valor).strip()
+    sozinho = "_" not in normalizar_nome(texto)
+    return f"DS {texto}" if sozinho and numero_distrito(texto) is not None else texto
+
+
+def preparar_pontos(df, nome_arquivo):
+    """Pontos fixos com _tipo, _nome, _lat, _lon e o HTML do popup (demais colunas do arquivo)."""
+    col_lat = detectar_coluna(df.columns, ALIASES["lat"])
+    col_lon = detectar_coluna(df.columns, ALIASES["lon"])
+    if col_lat is None or col_lon is None:
+        return pd.DataFrame()
+    lat, lon = para_numero(df[col_lat]), para_numero(df[col_lon])
+    ok = lat.between(-90, 90) & lon.between(-180, 180)
+    pontos = df[ok].copy()
+    pontos["_lat"], pontos["_lon"] = lat[ok], lon[ok]
+
+    # Sem coluna de tipo (ou com tipo vazio), o nome do arquivo identifica a camada
+    col_tipo = detectar_coluna(df.columns, ["tipo", "categoria", "classe", "type", "category"])
+    padrao = Path(nome_arquivo).stem.replace("_", " ")
+    tipos = pontos[col_tipo].fillna("").astype(str).str.strip() if col_tipo else pd.Series("", index=pontos.index)
+    pontos["_tipo"] = tipos.mask(tipos == "", padrao)
+
+    col_nome = detectar_coluna(df.columns, ["nome", "name", "estabelecimento", "unidade", "descricao",
+                                            "identificacao", "codigo", "id"])
+    pontos["_nome"] = pontos[col_nome].fillna("").astype(str) if col_nome else ""
+
+    extras = [c for c in df.columns if c not in (col_lat, col_lon, col_tipo, col_nome)]
+    pontos["_popup"] = [
+        f"<b>{escape(row['_nome'] or row['_tipo'])}</b><br><small>{escape(row['_tipo'])}</small>"
+        + "".join(f"<br>{escape(str(c))}: {escape(str(row[c]))}" for c in extras if pd.notna(row[c]))
+        for _, row in pontos.iterrows()
+    ]
+    return pontos[["_tipo", "_nome", "_lat", "_lon", "_popup"]]
+
+
+@st.cache_data(show_spinner=False)
+def carregar_bairros():
+    """Bairros de Pernambuco (malha do IBGE, Censo 2022) com polígonos simplificados."""
+    con = sqlite3.connect(MALHA_BAIRROS)
+    try:
+        linhas = con.execute("SELECT NM_MUN, NM_BAIRRO, geom FROM PE_bairros_CD2022").fetchall()
+    finally:
+        con.close()
+    bairros = []
+    for municipio, nome, blob in linhas:
+        # Geometria GeoPackage: cabeçalho de 8 bytes e envelope (0, 32, 48 ou 64 bytes) antes do WKB
+        envelope = (0, 32, 48, 48, 64)[(blob[3] >> 1) & 7]
+        geom = wkb.loads(bytes(blob[8 + envelope:])).simplify(0.00003)
+        bairros.append({"municipio": municipio, "bairro": nome, "geom": geom})
+    return pd.DataFrame(bairros)
+
+
+def associar_distritos(tabela, bairros):
+    """
+    Liga cada bairro do arquivo ao polígono do IBGE, no município com mais bairros em comum.
+    Retorna (bairros do município com 'distrito' e colunas extras, município, nomes sem par, colunas extras)
+    ou None se faltarem as colunas de bairro e distrito.
+    """
+    col_bairro = detectar_coluna(tabela.columns, ["bairro", "nm_bairro", "bairros", "neighborhood"])
+    col_ds = detectar_coluna(tabela.columns, ["ds", "distrito", "distrito_sanitario", "nm_distrito", "district"])
+    if col_bairro is None or col_ds is None:
+        return None
+
+    tabela = tabela.dropna(subset=[col_bairro]).copy()
+    tabela["_chave"] = tabela[col_bairro].map(normalizar_nome)
+    bairros = bairros.assign(_chave=bairros["bairro"].map(normalizar_nome))
+    comuns = bairros[bairros["_chave"].isin(tabela["_chave"])]
+    if comuns.empty:
+        return pd.DataFrame(), None, [], []
+    municipio = comuns["municipio"].value_counts().idxmax()
+    bairros = bairros[bairros["municipio"] == municipio].copy()
+
+    # Nomes que não batem exatamente ("AFOGAGOS", "SITIO DOS PINTOS") usam o bairro mais parecido
+    chaves_ibge = list(bairros["_chave"])
+    nao_encontrados = []
+    for i, chave in tabela["_chave"].items():
+        if chave not in chaves_ibge:
+            par = process.extractOne(chave, chaves_ibge, scorer=fuzz.WRatio, score_cutoff=85)
+            if par:
+                tabela.at[i, "_chave"] = par[0]
+            else:
+                nao_encontrados.append(str(tabela.at[i, col_bairro]))
+
+    extras = [c for c in tabela.columns if c not in (col_bairro, col_ds, "_chave")]
+    tabela["distrito"] = tabela[col_ds].map(lambda v: nome_distrito(v) if pd.notna(v) else None)
+    tabela = tabela.drop_duplicates("_chave")[["_chave", "distrito"] + extras]
+    return bairros.merge(tabela, on="_chave", how="left"), municipio, nao_encontrados, extras
+
+
+def desenhar_distritos(mapa, bairros_ds, extras):
+    """Bairros coloridos pelo distrito, contorno de cada distrito e o nome no centro."""
+    grupo = folium.FeatureGroup(name=t("layers_districts_title"))
+    distritos = sorted(bairros_ds["distrito"].dropna().unique(),
+                       key=lambda d: (numero_distrito(d) is None, numero_distrito(d) or 0, d))
+    cor_de = {d: CORES_DISTRITOS[i % len(CORES_DISTRITOS)] for i, d in enumerate(distritos)}
+
+    rotulo_bairro, rotulo_ds = t("layers_tooltip_bairro"), t("layers_tooltip_distrito")
+    feicoes = []
+    for _, row in bairros_ds.iterrows():
+        props = {rotulo_bairro: row["bairro"], rotulo_ds: row["distrito"] or t("layers_no_district"),
+                 "_cor": cor_de.get(row["distrito"])}
+        props.update({str(c): (str(row[c]) if pd.notna(row[c]) else "–") for c in extras})
+        feicoes.append({"type": "Feature", "geometry": mapping(row["geom"]), "properties": props})
+
+    folium.GeoJson(
+        {"type": "FeatureCollection", "features": feicoes},
+        style_function=lambda f: {
+            "color": f["properties"]["_cor"] or "#9E9E9E",
+            "weight": 1,
+            "fillColor": f["properties"]["_cor"] or "#9E9E9E",
+            "fillOpacity": 0.18 if f["properties"]["_cor"] else 0.04,
+            "dashArray": None if f["properties"]["_cor"] else "4 4",
+        },
+        highlight_function=lambda f: {"weight": 3, "fillOpacity": 0.35},
+        tooltip=folium.GeoJsonTooltip(fields=[rotulo_bairro, rotulo_ds] + [str(c) for c in extras]),
+    ).add_to(grupo)
+
+    for distrito in distritos:
+        area = unary_union(list(bairros_ds.loc[bairros_ds["distrito"] == distrito, "geom"]))
+        folium.GeoJson(
+            mapping(area),
+            style_function=lambda f, cor=cor_de[distrito]: {"color": cor, "weight": 3, "fill": False},
+            interactive=False,
+        ).add_to(grupo)
+        centro = area.representative_point()
+        folium.Marker(
+            [centro.y, centro.x],
+            icon=folium.DivIcon(
+                html=f'<div style="transform: translate(-50%, -50%); width: max-content; padding: 2px 8px; '
+                     f'border-radius: 10px; background: white; border: 2px solid {cor_de[distrito]}; '
+                     f'font: 600 12px sans-serif; color: #263238">{escape(distrito)}</div>',
+                icon_size=(0, 0),
+            ),
+            interactive=False,
+        ).add_to(grupo)
+    grupo.add_to(mapa)
+
+
+def desenhar_pontos_fixos(mapa, pontos):
+    """Uma camada por tipo de ponto fixo, com ícone conforme o tipo."""
+    for tipo, grupo_df in pontos.groupby("_tipo", sort=True):
+        icone, cor = icone_do_tipo(tipo)
+        grupo = folium.FeatureGroup(name=f"{tipo[:1].upper()}{tipo[1:]} ({milhar(len(grupo_df))})")
+        # Círculo pequeno com o ícone: com centenas de unidades, alfinetes grandes escondem os clusters
+        marcador = (
+            f'<div style="width: 22px; height: 22px; border-radius: 50%; background: {cor}; '
+            f'border: 2px solid white; box-shadow: 0 1px 3px rgba(0,0,0,.45); display: flex; '
+            f'align-items: center; justify-content: center; color: white; font-size: 11px">'
+            f'<i class="fa-solid fa-{icone}"></i></div>'
+        )
+        for _, row in grupo_df.iterrows():
+            folium.Marker(
+                [row["_lat"], row["_lon"]],
+                icon=folium.DivIcon(html=marcador, icon_size=(26, 26), icon_anchor=(13, 13)),
+                tooltip=row["_nome"] or tipo,
+                popup=folium.Popup(row["_popup"], max_width=320),
+            ).add_to(grupo)
+        grupo.add_to(mapa)
+
+
+# ------------------------------------------------------------
 # UPLOAD E PRÉ-PROCESSAMENTO
 # ------------------------------------------------------------
 html(section("fi-rr-file-upload", t("cluster_upload_header")))
@@ -268,6 +498,85 @@ if (~validos).sum():
     st.caption(t("cluster_summary_dropped").format(n=int((~validos).sum())))
 
 # --------------------------------------------------------
+# CAMADAS DE REFERÊNCIA (opcional): pontos fixos e distritos sanitários
+# --------------------------------------------------------
+pontos_fixos = pd.DataFrame()
+bairros_ds, extras_ds = None, []
+with st.expander(t("layers_title"), icon=":material/layers:"):
+    st.caption(t("layers_lead"))
+    col_pontos, col_distritos = st.columns(2, gap="large")
+
+    with col_pontos:
+        st.markdown(f"**{t('layers_points_title')}**")
+        st.caption(t("layers_points_help"))
+        arquivos_pontos = st.file_uploader(
+            t("layers_points_upload"), type=["csv", "xlsx"], accept_multiple_files=True, key="layers_points"
+        )
+        incluir_unidades = st.checkbox(t("layers_points_unidades"), key="layers_unidades")
+        incluir_sedes = st.checkbox(t("layers_points_sedes"), key="layers_sedes")
+        st.download_button(t("layers_points_template"), MODELO_PONTOS.encode("utf-8-sig"),
+                           "modelo_pontos_fixos.csv", "text/csv", icon=":material/download:")
+
+        fontes = [(arquivo.name, arquivo.getvalue()) for arquivo in arquivos_pontos or []]
+        for incluir, arquivo in ((incluir_unidades, UNIDADES_SAUDE), (incluir_sedes, SEDES_DISTRITOS)):
+            if incluir:
+                fontes.append((arquivo.name, arquivo.read_bytes()))
+        lidos = []
+        for nome, dados in fontes:
+            try:
+                pontos = preparar_pontos(ler_base(dados, nome), nome)
+            except Exception as erro:
+                st.warning(t("layers_points_error").format(file=nome, error=erro))
+                continue
+            if pontos.empty:
+                st.warning(t("layers_points_no_coords").format(file=nome))
+            else:
+                lidos.append(pontos)
+        if lidos:
+            pontos_fixos = pd.concat(lidos, ignore_index=True)
+            contagem = pontos_fixos["_tipo"].value_counts()
+            st.caption(t("layers_points_loaded").format(
+                n=milhar(len(pontos_fixos)), k=len(contagem),
+                types=", ".join(f"{tipo} ({milhar(int(n))})" for tipo, n in contagem.items()),
+            ))
+
+    with col_distritos:
+        st.markdown(f"**{t('layers_districts_title')}**")
+        st.caption(t("layers_districts_help"))
+        usar_recife = st.checkbox(t("layers_districts_recife"), key="layers_districts_recife")
+        arquivo_ds = st.file_uploader(t("layers_districts_upload"), type=["csv", "xlsx"], key="layers_districts")
+        st.download_button(t("layers_districts_template"), MODELO_DISTRITOS.encode("utf-8-sig"),
+                           "modelo_distritos.csv", "text/csv", icon=":material/download:")
+
+        # Um arquivo enviado tem prioridade sobre a divisão pronta do Recife
+        fonte_ds = (arquivo_ds.name, arquivo_ds.getvalue()) if arquivo_ds else \
+            (BAIRROS_DISTRITOS.name, BAIRROS_DISTRITOS.read_bytes()) if usar_recife else None
+        if fonte_ds:
+            try:
+                tabela_ds = ler_base(fonte_ds[1], fonte_ds[0])
+                resultado = associar_distritos(tabela_ds, carregar_bairros())
+            except Exception as erro:
+                st.warning(t("layers_points_error").format(file=fonte_ds[0], error=erro))
+            else:
+                if resultado is None:
+                    st.warning(t("layers_districts_missing_cols").format(cols=", ".join(map(str, tabela_ds.columns))))
+                    # Arquivo de pontos (com coordenadas) enviado no campo errado
+                    if detectar_coluna(tabela_ds.columns, ALIASES["lat"]) and detectar_coluna(tabela_ds.columns, ALIASES["lon"]):
+                        st.info(t("layers_districts_points_hint"))
+                elif resultado[1] is None:
+                    st.warning(t("layers_districts_no_match"))
+                else:
+                    bairros_ds, municipio_ds, nao_encontrados, extras_ds = resultado
+                    com_ds = bairros_ds["distrito"].notna()
+                    st.caption(t("layers_districts_loaded").format(
+                        n=int(com_ds.sum()), mun=municipio_ds, k=bairros_ds["distrito"].nunique()
+                    ))
+                    if (~com_ds).sum():
+                        st.caption(t("layers_districts_unassigned").format(n=int((~com_ds).sum()), mun=municipio_ds))
+                    if nao_encontrados:
+                        st.warning(t("layers_districts_unmatched").format(names=", ".join(nao_encontrados)))
+
+# --------------------------------------------------------
 # PARÂMETROS DBSCAN
 # --------------------------------------------------------
 st.sidebar.header(t("cluster_sidebar_header"))
@@ -312,8 +621,18 @@ df_cluster = executar_clusterizacao(df_validos, eps, min_samples)
 # --------------------------------------------------------
 # MAPA INTERATIVO
 # --------------------------------------------------------
-centro = [df_cluster["latitude"].mean(), df_cluster["longitude"].mean()]
+# Enquadra os casos a até 50 km da mediana: alguns pontos geocodificados longe (outro estado)
+# puxariam a média e abririam o mapa no lugar errado
+centro = [df_cluster["latitude"].median(), df_cluster["longitude"].median()]
+dist_km = 6371.0088 * np.hypot(
+    np.radians(df_cluster["latitude"] - centro[0]),
+    np.radians(df_cluster["longitude"] - centro[1]) * np.cos(np.radians(centro[0])),
+)
+perto = df_cluster[dist_km <= 50]
 mapa = folium.Map(location=centro, zoom_start=12, tiles=None)
+if len(perto) > 1:
+    mapa.fit_bounds([[perto["latitude"].min(), perto["longitude"].min()],
+                     [perto["latitude"].max(), perto["longitude"].max()]])
 
 # Mapas base gratuitos (sem chave de API); o primeiro é o padrão e os demais começam ocultos
 esri = "https://server.arcgisonline.com/ArcGIS/rest/services/{}/MapServer/tile/{{z}}/{{y}}/{{x}}"
@@ -334,7 +653,12 @@ cores = [
     "#8E24AA", "#43A047", "#E53935", "#039BE5"
 ]
 
+# Distritos por baixo dos casos e pontos fixos por cima, para não esconder os clusters
+if bairros_ds is not None:
+    desenhar_distritos(mapa, bairros_ds, extras_ds)
 desenhar_clusters(mapa, df_cluster, cores, eps_km)
+if not pontos_fixos.empty:
+    desenhar_pontos_fixos(mapa, pontos_fixos)
 folium.LayerControl(collapsed=True).add_to(mapa)
 
 semanas_str = ", ".join(semanas_sel)

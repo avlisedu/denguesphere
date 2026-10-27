@@ -149,10 +149,10 @@ html(f"""
 <div class="ds-grid ds-grid-2">
     <div class="ds-release">
         <div class="ds-release-head">
-            <span class="ds-release-version">v1.0</span>
+            <span class="ds-release-version">v1.1</span>
             <span class="ds-badge">{t("about_release_current")}</span>
         </div>
-        <ul>{release_items("about_release_10_items", "fi-rr-check-circle")}</ul>
+        <ul>{release_items("about_release_11_items", "fi-rr-check-circle")}</ul>
     </div>
     <div class="ds-release future">
         <div class="ds-release-head">
@@ -160,6 +160,13 @@ html(f"""
             <span class="ds-badge teal">{t("about_release_future")}</span>
         </div>
         <ul>{release_items("about_release_future_items", "fi-rr-time-forward")}</ul>
+    </div>
+    <div class="ds-release">
+        <div class="ds-release-head">
+            <span class="ds-release-version">v1.0</span>
+            <span class="ds-badge">{t("about_release_previous")}</span>
+        </div>
+        <ul>{release_items("about_release_10_items", "fi-rr-check-circle")}</ul>
     </div>
 </div>
 """)
