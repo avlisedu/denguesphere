@@ -191,7 +191,7 @@ def link_orcid(orcid):
 # (foto, ícone sem foto, nome, papel, resumo, e-mail, ORCID)
 team = [
     ("eduardo.jpg", "fi-rr-graduation-cap", "Eduardo da Silva", t("about_team_eduardo_role"), None,
-     "eduardo.es@ufpe.br", None),
+     "eduardo.es@ufpe.br", "0000-0002-2455-2294"),
     ("maisa.jpg", "fi-rr-chalkboard-user", t("about_team_maisa_name"), t("about_team_maisa_role"), None, None,
      "0000-0003-4223-2769"),
     ("theo.jpg", "fi-rr-chart-histogram", t("about_team_theo_name"), t("about_team_theo_role"), None, None,
