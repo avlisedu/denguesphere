@@ -177,8 +177,10 @@ STYLES = """
 .ds-pub-cite small { display: block; color: #78909c; margin-bottom: 4px; }
 
 /* ---------- Equipe ---------- */
-.ds-person { display: flex; gap: 14px; align-items: flex-start; }
+.ds-person { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
 .ds-person .ds-icon { margin-bottom: 0; flex: 0 0 auto; border-radius: 50%; }
+.ds-avatar { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; flex: 0 0 auto; border: 2px solid #dbe7f7; }
+.ds-person .ds-bio { font-size: 0.88rem; color: #546e7a; margin-top: 6px; }
 .ds-person a { font-size: 0.88rem; color: #0d47a1; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; }
 
 /* ---------- Rodapé ---------- */

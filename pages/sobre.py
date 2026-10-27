@@ -1,6 +1,8 @@
+import base64
+from pathlib import Path
 import streamlit as st
 from i18n import t
-from ui import inject_styles, html, logo_html, chips, section, footer
+from ui import inject_styles, html, logo_html, chips, section
 
 # ============================================================
 # DADOS DA PUBLICAÇÃO
@@ -169,31 +171,38 @@ html(f"""
 # ============================================================
 # EQUIPE
 # ============================================================
+def avatar(foto, icon):
+    """Foto de perfil em img/equipe (embutida em base64); sem a foto, mostra o ícone."""
+    caminho = Path("img/equipe") / foto
+    if not caminho.exists():
+        return f'<div class="ds-icon"><i class="fi {icon}"></i></div>'
+    dados = base64.b64encode(caminho.read_bytes()).decode()
+    return f'<img class="ds-avatar" src="data:image/jpeg;base64,{dados}" alt="">'
+
+
+# (foto, ícone sem foto, nome, papel, resumo, e-mail)
 team = [
-    ("fi-rr-graduation-cap", "Eduardo da Silva", t("about_team_eduardo_role"), "eduardo.es@ufpe.br"),
-    ("fi-rr-chalkboard-user", t("about_team_maisa_name"), t("about_team_maisa_role"), None),
-    ("fi-rr-users", t("about_team_gpsid_name"), t("about_team_gpsid_role"), None),
+    ("eduardo.jpg", "fi-rr-graduation-cap", "Eduardo da Silva", t("about_team_eduardo_role"), None,
+     "eduardo.es@ufpe.br"),
+    ("maisa.jpg", "fi-rr-chalkboard-user", t("about_team_maisa_name"), t("about_team_maisa_role"), None, None),
+    ("theo.jpg", "fi-rr-chart-histogram", t("about_team_theo_name"), t("about_team_theo_role"), None, None),
 ]
 team_cards = "".join(
     f"""
     <div class="ds-card ds-person">
-        <div class="ds-icon"><i class="fi {icon}"></i></div>
+        {avatar(foto, icon)}
         <div>
             <h4>{name}</h4>
             <p>{role}</p>
+            {f'<p class="ds-bio">{bio}</p>' if bio else ""}
             {f'<a href="mailto:{email}"><i class="fi fi-rr-envelope"></i>{email}</a>' if email else ""}
         </div>
     </div>
     """
-    for icon, name, role, email in team
+    for foto, icon, name, role, bio, email in team
 )
 
 html(f"""
 {section("fi-rr-users", t("about_team_header"))}
 <div class="ds-grid ds-grid-3">{team_cards}</div>
 """)
-
-# ============================================================
-# RODAPÉ
-# ============================================================
-footer(t("about_footer"))
