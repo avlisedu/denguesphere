@@ -409,34 +409,49 @@ def desenhar_pontos_fixos(mapa, pontos):
         grupo.add_to(mapa)
 
 
-class BotaoImagemMapa(JSCSSMixin, MacroElement):
-    """Botão no canto do mapa que baixa um PNG do que está na tela, com o tamanho exato do mapa."""
+class ControlesMapa(JSCSSMixin, MacroElement):
+    """
+    Barra abaixo do zoom com dois botões: voltar ao enquadramento inicial dos casos e
+    baixar um PNG do que está na tela, com o tamanho exato do mapa.
+    """
     # O st_folium só carrega scripts declarados em default_js, como nos plugins do folium
     default_js = [("dom_to_image", "https://unpkg.com/dom-to-image@2.6.0/dist/dom-to-image.min.js")]
     _template = Template("""
         {% macro script(this, kwargs) %}
-            var BotaoImagem = L.Control.extend({
+            var ControlesMapa = L.Control.extend({
                 options: { position: "topleft" },
                 onAdd: function (mapa) {
                     var div = L.DomUtil.create("div", "leaflet-bar leaflet-control");
-                    var link = L.DomUtil.create("a", "", div);
-                    link.href = "#";
-                    link.title = {{ this.titulo|tojson }};
-                    link.setAttribute("role", "button");
-                    link.style.display = "flex";
-                    link.style.alignItems = "center";
-                    link.style.justifyContent = "center";
-                    link.innerHTML = {{ this.icone|tojson }};
                     L.DomEvent.disableClickPropagation(div);
-                    L.DomEvent.on(link, "click", function (e) {
-                        L.DomEvent.preventDefault(e);
+                    function botao(titulo, icone, acao) {
+                        var link = L.DomUtil.create("a", "", div);
+                        link.href = "#";
+                        link.title = titulo;
+                        link.setAttribute("role", "button");
+                        link.style.display = "flex";
+                        link.style.alignItems = "center";
+                        link.style.justifyContent = "center";
+                        link.innerHTML = icone;
+                        L.DomEvent.on(link, "click", function (e) {
+                            L.DomEvent.preventDefault(e);
+                            acao();
+                        });
+                    }
+
+                    var limites = {{ this.limites|tojson }};
+                    botao({{ this.titulo_enquadrar|tojson }}, {{ this.icone_enquadrar|tojson }}, function () {
+                        if (limites) { mapa.fitBounds(limites); }
+                        else { mapa.setView({{ this.centro|tojson }}, 12); }
+                    });
+
+                    botao({{ this.titulo_imagem|tojson }}, {{ this.icone_imagem|tojson }}, function () {
                         var area = mapa.getContainer();
                         domtoimage.toPng(area, {
                             width: area.clientWidth,
                             height: area.clientHeight,
                             // Sem os botões do topo; a atribuição dos mapas base (rodapé) fica na imagem
                             filter: function (no) {
-                                return !(no.classList && (no.classList.contains("leaflet-top")));
+                                return !(no.classList && no.classList.contains("leaflet-top"));
                             }
                         }).then(function (url) {
                             var a = document.createElement("a");
@@ -450,16 +465,20 @@ class BotaoImagemMapa(JSCSSMixin, MacroElement):
                     return div;
                 }
             });
-            new BotaoImagem().addTo({{ this._parent.get_name() }});
+            new ControlesMapa().addTo({{ this._parent.get_name() }});
         {% endmacro %}
     """)
 
-    def __init__(self, titulo, arquivo):
+    def __init__(self, titulo_enquadrar, centro, limites, titulo_imagem, arquivo):
         super().__init__()
-        self._name = "BotaoImagemMapa"
-        self.titulo = titulo
+        self._name = "ControlesMapa"
+        self.titulo_enquadrar = titulo_enquadrar
+        self.centro = [float(c) for c in centro]
+        self.limites = [[float(v) for v in canto] for canto in limites] if limites else None
+        self.icone_enquadrar = svg_icone("expand", 14, "#333")
+        self.titulo_imagem = titulo_imagem
         self.arquivo = arquivo
-        self.icone = svg_icone("camera", 14, "#333")
+        self.icone_imagem = svg_icone("camera", 14, "#333")
 
 
 # ------------------------------------------------------------
@@ -696,9 +715,11 @@ dist_km = 6371.0088 * np.hypot(
 )
 perto = df_cluster[dist_km <= 50]
 mapa = folium.Map(location=centro, zoom_start=12, tiles=None)
+limites = None
 if len(perto) > 1:
-    mapa.fit_bounds([[perto["latitude"].min(), perto["longitude"].min()],
-                     [perto["latitude"].max(), perto["longitude"].max()]])
+    limites = [[perto["latitude"].min(), perto["longitude"].min()],
+               [perto["latitude"].max(), perto["longitude"].max()]]
+    mapa.fit_bounds(limites)
 
 # Mapas base gratuitos (sem chave de API); o primeiro é o padrão e os demais começam ocultos
 # cross_origin carrega os tiles com CORS, sem o que o botão de imagem do mapa sairia sem o fundo
@@ -730,7 +751,10 @@ desenhar_clusters(mapa, df_cluster, cores, eps_km)
 if not pontos_fixos.empty:
     desenhar_pontos_fixos(mapa, pontos_fixos)
 folium.LayerControl(collapsed=True).add_to(mapa)
-BotaoImagemMapa(t("cluster_map_print"), f"denguesphere_{ano_sel}_{'_'.join(semanas_sel)}").add_to(mapa)
+ControlesMapa(
+    t("cluster_map_reset"), centro, limites,
+    t("cluster_map_print"), f"denguesphere_{ano_sel}_{'_'.join(semanas_sel)}",
+).add_to(mapa)
 
 semanas_str = ", ".join(semanas_sel)
 html(section("fi-rr-map", t("cluster_header_period").format(year=ano_sel, weeks=semanas_str)))
