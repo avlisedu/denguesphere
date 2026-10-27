@@ -10,12 +10,11 @@ from html import escape
 from pathlib import Path
 from rapidfuzz import fuzz, process
 from shapely import wkb
-from shapely.geometry import mapping
-from shapely.ops import unary_union
+from shapely.geometry import Point, mapping
+from shapely.ops import transform, unary_union
 from sklearn.cluster import DBSCAN
 import folium
 from branca.element import MacroElement, Template
-from folium import Circle
 from folium.elements import JSCSSMixin
 from streamlit_folium import st_folium
 import plotly.express as px
@@ -80,44 +79,60 @@ def executar_clusterizacao(df, eps, min_samples):
         metric="haversine"
     )
     df["cluster"] = db.fit_predict(coords)
+    # Núcleo: ponto com pelo menos min_samples vizinhos dentro do raio; os demais do cluster são borda
+    df["nucleo"] = False
+    df.iloc[db.core_sample_indices_, df.columns.get_loc("nucleo")] = True
     return df
 
 
+def area_do_cluster(nucleos, eps_km):
+    """
+    União dos círculos de raio eps em volta dos pontos núcleo: é a área que o DBSCAN considera do cluster.
+    Os círculos são feitos em metros, numa projeção local, e voltam para latitude e longitude.
+    """
+    lat0, lon0 = nucleos["latitude"].mean(), nucleos["longitude"].mean()
+    m_por_grau_lat = 6371008.8 * np.pi / 180
+    m_por_grau_lon = m_por_grau_lat * np.cos(np.radians(lat0))
+    circulos = [
+        Point((lon - lon0) * m_por_grau_lon, (lat - lat0) * m_por_grau_lat).buffer(eps_km * 1000, 24)
+        for lat, lon in zip(nucleos["latitude"], nucleos["longitude"])
+    ]
+    return transform(lambda x, y: (lon0 + x / m_por_grau_lon, lat0 + y / m_por_grau_lat), unary_union(circulos))
+
+
 def desenhar_clusters(mapa, df, cores, eps_km):
-    """Desenha clusters e ruídos no mapa folium"""
+    """
+    Desenha a área de cada cluster (círculos de raio eps em volta dos núcleos) e os casos coloridos pelo cluster.
+    Núcleos têm cor cheia e pontos de borda ficam mais claros; passar o mouse mostra o cluster e o tipo do ponto.
+    """
     for cluster_id in sorted(df["cluster"].unique()):
         cluster_df = df[df["cluster"] == cluster_id]
+        ruido = cluster_id == -1
+        cor = "#9E9E9E" if ruido else cores[cluster_id % len(cores)]
+        rotulo = None if ruido else t("cluster_point_label").format(id=cluster_id, n=milhar(len(cluster_df)))
 
-        # Cor diferenciada para ruídos
-        if cluster_id == -1:
-            cor = "#9E9E9E"  # cinza
-        else:
-            cor = cores[cluster_id % len(cores)]
-
-        lat_mean = cluster_df["latitude"].mean()
-        lon_mean = cluster_df["longitude"].mean()
-
-        # Círculo do cluster (não desenha para ruídos)
-        if cluster_id != -1:
-            Circle(
-                location=[lat_mean, lon_mean],
-                radius=eps_km * 1000,  # metros
-                color=cor,
-                fill=False,
-                weight=2,
-                opacity=0.5,
+        if not ruido:
+            folium.GeoJson(
+                mapping(area_do_cluster(cluster_df[cluster_df["nucleo"]], eps_km)),
+                style_function=lambda f, cor=cor: {"color": cor, "weight": 1.5, "fillColor": cor, "fillOpacity": 0.12},
+                tooltip=rotulo,
             ).add_to(mapa)
 
-        # Pontos individuais
         for _, row in cluster_df.iterrows():
+            if ruido:
+                texto, opacidade = t("cluster_point_noise"), 0.6
+            elif row["nucleo"]:
+                texto, opacidade = f"{rotulo} ({t('cluster_point_core')})", 0.9
+            else:
+                texto, opacidade = f"{rotulo} ({t('cluster_point_border')})", 0.35
             folium.CircleMarker(
                 location=[row["latitude"], row["longitude"]],
                 radius=6,
                 color=cor,
                 fill=True,
                 fill_color=cor,
-                fill_opacity=0.9 if cluster_id != -1 else 0.6,
-                popup=f"Cluster {cluster_id}" if cluster_id != -1 else "Ruído (isolado)",
+                fill_opacity=opacidade,
+                tooltip=texto,
             ).add_to(mapa)
 
 
@@ -446,9 +461,17 @@ class ControlesMapa(JSCSSMixin, MacroElement):
 
                     botao({{ this.titulo_imagem|tojson }}, {{ this.icone_imagem|tojson }}, function () {
                         var area = mapa.getContainer();
+                        // Desenha em escala 3x: pontos, áreas, rótulos e ícones (vetoriais) saem nítidos
+                        var escala = 3, largura = area.clientWidth, altura = area.clientHeight;
                         domtoimage.toPng(area, {
-                            width: area.clientWidth,
-                            height: area.clientHeight,
+                            width: largura * escala,
+                            height: altura * escala,
+                            style: {
+                                transform: "scale(" + escala + ")",
+                                transformOrigin: "top left",
+                                width: largura + "px",
+                                height: altura + "px"
+                            },
                             // Sem os botões do topo; a atribuição dos mapas base (rodapé) fica na imagem
                             filter: function (no) {
                                 return !(no.classList && no.classList.contains("leaflet-top"));
