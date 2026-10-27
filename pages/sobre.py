@@ -184,8 +184,8 @@ ICONE_ORCID = base64.b64encode(Path("img/orcid.svg").read_bytes()).decode()
 
 
 def link_orcid(orcid):
-    return (f'<a href="https://orcid.org/{orcid}" target="_blank" rel="noopener">'
-            f'<img src="data:image/svg+xml;base64,{ICONE_ORCID}" width="15" height="15" alt="ORCID">{orcid}</a>')
+    return (f'<a href="https://orcid.org/{orcid}" target="_blank" rel="noopener" title="orcid.org/{orcid}">'
+            f'<img src="data:image/svg+xml;base64,{ICONE_ORCID}" width="15" height="15" alt="">ORCID</a>')
 
 
 # (foto, ícone sem foto, nome, papel, resumo, e-mail, ORCID)
